@@ -1,4 +1,4 @@
-package com.programs.random.sorting;
+package com.programs.sorting;
 
 import java.util.Scanner;
 
