@@ -1,5 +1,11 @@
 package com.programs.random;
 
+/**
+ * class which will call appropriate method and classes
+ * for different problems
+ * @author anujjha
+ *
+ */
 public class Solution {
 
 	
