@@ -1,5 +1,11 @@
 package com.programs.trees;
 
+/**
+ * Basic interface with some utility methods which other tree class should implement
+ * @author anujjha
+ *
+ * @param <T>
+ */
 public interface ITree<T extends Comparable> {
 	void add(T data);
     boolean isEmpty();

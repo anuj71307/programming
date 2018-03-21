@@ -3,6 +3,12 @@ package com.programs.trees;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Simple binary tree with 2 nodes
+ * @author anujjha
+ *
+ * @param <T>
+ */
 public class BinaryTree<T extends  Comparable> implements ITree<T>
 {
     private T data;

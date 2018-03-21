@@ -68,17 +68,19 @@ public class TreeUtils {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		  BinaryTree<Integer> binaryTree = new BinaryTree<>(1);
-	        binaryTree.setLeftTree(new BinaryTree<>(2));
-	        binaryTree.setRightTree(new BinaryTree<>(3));
+ 		//create a binary tree
+		BinaryTree<Integer> binaryTree = new BinaryTree<>(1);
+	    binaryTree.setLeftTree(new BinaryTree<>(2));
+	    binaryTree.setRightTree(new BinaryTree<>(3));
 	        
-	        binaryTree.getLeftTree().setLeftTree(new BinaryTree<>(4));
-	        binaryTree.getLeftTree().setRightTree(new BinaryTree<>(5));
-	        binaryTree.getRightTree().setLeftTree(new BinaryTree<>(6));
-	        binaryTree.getRightTree().setRightTree(new BinaryTree<>(7));
-	        System.out.println("Size of tree is "+ findSizeifTreeWithoutRecursion(binaryTree));
-	        levelOrderTraversalInReverseOrder(binaryTree);
+	    binaryTree.getLeftTree().setLeftTree(new BinaryTree<>(4));
+	    binaryTree.getLeftTree().setRightTree(new BinaryTree<>(5));
+	    binaryTree.getRightTree().setLeftTree(new BinaryTree<>(6));
+	    binaryTree.getRightTree().setRightTree(new BinaryTree<>(7));
+	    //print size of tree
+	    System.out.println("Size of tree is "+ findSizeifTreeWithoutRecursion(binaryTree));
+	    //level order traversal without recursion
+	    levelOrderTraversalInReverseOrder(binaryTree);
 	        
 	}
 

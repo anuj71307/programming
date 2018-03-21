@@ -1,5 +1,11 @@
 package com.programs.trees;
 
+/**
+ * BST where left node is less than root and right node is greater than root
+ * @author anujjha
+ *
+ * @param <T>
+ */
 public class BinarySearchTree<T extends Comparable> implements ITree<T> {
 	 private static final String TAG = BinarySearchTree.class.getSimpleName();
 	    private T data;
