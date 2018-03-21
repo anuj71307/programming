@@ -8,4 +8,7 @@ public interface ITree<T extends Comparable> {
     int height();
     int depth();
     boolean isMemeber(T data);
+    public ITree<T> getLeftTree();
+    public ITree<T> getRightTree() ;
+    public T getData();
 }

@@ -115,12 +115,12 @@ public class BinarySearchTree<T extends Comparable> implements ITree<T> {
 	    {
 	        return data;
 	    }
-
+	    @Override
 	    public ITree getLeftTree()
 	    {
 	        return leftTree;
 	    }
-
+	    @Override
 	    public ITree getRightTree()
 	    {
 	        return rightTree;

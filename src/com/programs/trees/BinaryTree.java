@@ -52,7 +52,12 @@ public class BinaryTree<T extends  Comparable> implements ITree<T>
     @Override
     public int size()
     {
-        return 0;
+    	int size = 1;
+    	BinaryTree leftTree = this.getLeftTree();
+    	BinaryTree rightTree = this.getRightTree();
+    	if(leftTree!=null) size = size+leftTree.size();
+    	if(rightTree!=null) size = size+rightTree.size();
+    return size;
     }
 
     @Override
@@ -105,10 +110,12 @@ public class BinaryTree<T extends  Comparable> implements ITree<T>
         return false;
     }
 
+    @Override
 	public T getData() {
 		return data;
 	}
 
+	@Override
 	public BinaryTree<T> getLeftTree() {
 		return leftTree;
 	}
@@ -117,6 +124,7 @@ public class BinaryTree<T extends  Comparable> implements ITree<T>
 		this.leftTree = leftTree;
 	}
 
+	@Override
 	public BinaryTree<T> getRightTree() {
 		return rightTree;
 	}
