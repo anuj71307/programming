@@ -60,7 +60,7 @@ public class TreeUtils {
 			stack.push(temp);
 		}
 		
-		//Itrate all element of stack and print the data
+		//Iterate all element of stack and print the data
 		while(!stack.isStackEmpty()) {
 			System.out.print(stack.pop().getData()+" ");
 		}
