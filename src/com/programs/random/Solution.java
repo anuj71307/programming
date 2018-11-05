@@ -1,9 +1,8 @@
 package com.programs.random;
 
-import java.util.Comparator;
-import java.util.LinkedList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Queue;
-import java.util.Scanner;
 
 /**
  * class which will call appropriate method and classes
@@ -48,14 +47,62 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        int[] ar = new int[n];
-        for (int ar_i = 0; ar_i < n; ar_i++) {
-            ar[ar_i] = in.nextInt();
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String line = br.readLine();
+            int n = Integer.parseInt(line.trim());
+            for (int i = 0; i < n; i++) {
+                String lines = br.readLine();
+                String[] strs = lines.trim().split("\\s+");
+                int total = Integer.parseInt(strs[0]);
+                int targetSum = Integer.parseInt(strs[1]);
+                int arr[] = new int[total];
+                lines = br.readLine();
+                strs = lines.trim().split("\\s+");
+                for (int j = 0; j < strs.length; j++) {
+                    arr[j] = Integer.parseInt(strs[j]);
+                }
+                findSubArr(arr, targetSum);
+            }
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
         }
-        int result = migratoryBirds(n, ar);
-        System.out.println(result);
     }
+
+    /**
+     * Find continuous sub array with given sum
+     *
+     * @param ar        original array
+     * @param targetSum sum to found
+     */
+    private static void findSubArr(int[] ar, int targetSum) {
+        int currentSum = ar[0];
+        int startP = 0;
+        int endP = 0;
+        boolean found = false;
+
+        // 1 2 3 7 5
+        for (int i = 1; i <= ar.length; i++) {
+
+            while (currentSum > targetSum && startP < i) {
+                currentSum = currentSum - ar[startP];
+                startP++;
+            }
+
+            if (currentSum == targetSum) {
+                endP = i - 1;
+                found = true;
+                break;
+            }
+            currentSum += ar[i];
+        }
+        if (found) {
+            System.out.println((startP) + " " + (endP));
+        } else {
+            System.out.println(-1);
+        }
+    }
+
 
 }
