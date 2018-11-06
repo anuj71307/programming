@@ -1,7 +1,5 @@
 package com.programs.random;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Queue;
 
 /**
@@ -47,27 +45,9 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String line = br.readLine();
-            int n = Integer.parseInt(line.trim());
-            for (int i = 0; i < n; i++) {
-                String lines = br.readLine();
-                String[] strs = lines.trim().split("\\s+");
-                int total = Integer.parseInt(strs[0]);
-                int targetSum = Integer.parseInt(strs[1]);
-                int arr[] = new int[total];
-                lines = br.readLine();
-                strs = lines.trim().split("\\s+");
-                for (int j = 0; j < strs.length; j++) {
-                    arr[j] = Integer.parseInt(strs[j]);
-                }
-                findSubArr(arr, targetSum);
-            }
-        } catch (Exception e) {
 
-            System.out.println(e.getMessage());
-        }
+        int sum = findMaxValue("4567089");
+        System.out.println(sum);
     }
 
     /**
@@ -104,5 +84,65 @@ public class Solution {
         }
     }
 
+
+    /**
+     * given a integer find maximum possible value by doing addition or
+     * subtraction of digit - in any order
+     *
+     * @param num input num
+     * @return max value
+     */
+    public static int maxPossible(int num) {
+        int sum = 0;
+        int multi = 1;
+        while (num > 9) {
+            int remainder = num % 10;
+            if (remainder > 1) {
+                multi = multi * remainder;
+            } else {
+                sum = sum + remainder;
+            }
+            num = num / 10;
+        }
+
+        if (num > 1) {
+            multi = multi * num;
+        } else {
+            sum = sum + num;
+        }
+        if (sum <= 1) {
+            return multi + sum;
+        }
+
+        return multi * sum;
+    }
+
+
+    /**
+     * given a integer value as string find maximum possible value by inserting only + or * between them
+     *
+     * @param num input num
+     * @return max possible value
+     */
+    public static int findMaxValue(String num) {
+        if (num == null || num.length() < 1) {
+            return -1;
+        }
+        int maxValue = num.charAt(0) - '0';
+        for (int i = 1; i < num.length(); i++) {
+            int var = num.charAt(i) - '0';
+            if (var <= 1) {
+                maxValue += var;
+            } else {
+                if (maxValue <= 1) {
+                    maxValue = maxValue + var;
+                } else {
+                    maxValue = maxValue * var;
+                }
+            }
+        }
+
+        return maxValue;
+    }
 
 }
