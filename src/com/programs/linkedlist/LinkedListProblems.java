@@ -85,15 +85,69 @@ public class LinkedListProblems {
     public static void main(String[] args) {
         System.out.println("length of loop is ");
         LinkedList<Integer> linkedList1 = new LinkedList<>(1);
-        LinkedList<Integer> linkedList2 = new LinkedList<>(2);
+        LinkedList<Integer> linkedList2 = new LinkedList<>(0);
         linkedList1.setNext(linkedList2);
-        LinkedList<Integer> linkedList3 = new LinkedList<>(3);
+        LinkedList<Integer> linkedList3 = new LinkedList<>(0);
         linkedList2.setNext(linkedList3);
-        LinkedList<Integer> linkedList4 = new LinkedList<>(4);
-        linkedList3.setNext(linkedList4);
-        LinkedList<Integer> linkedList5 = new LinkedList<>(5);
-        linkedList4.setNext(linkedList5);
-        linkedList5.setNext(linkedList1);
-        int length = detectAndCountLoop(linkedList1);
+
+        LinkedList<Integer> node1 = new LinkedList<>(9);
+        LinkedList<Integer> node2 = new LinkedList<>(0);
+        node1.setNext(node2);
+        LinkedList<Integer> node3 = new LinkedList<>(5);
+        node2.setNext(node3);
+        LinkedList<Integer> head = sumList(linkedList1, node1);
+
+        System.out.println("Sum is " + getSum(head));
+    }
+
+
+    private static LinkedList<Integer> sumList(LinkedList<Integer> l1, LinkedList<Integer> l2) {
+        LinkedList<Integer> head = null;
+
+        int firstNum = getSum(l1);
+        int secondNum = getSum(l2);
+
+        int num = firstNum + secondNum;
+
+        while (num > 0) {
+            int rem = num % 10;
+            if (head == null) {
+                head = addNode(head, rem);
+            } else {
+                head = addNode(head, rem);
+            }
+            num = num/10;
+        }
+
+        return head;
+    }
+
+    private static LinkedList<Integer> addNode(LinkedList<Integer> head, int num) {
+
+        if (head == null) {
+            head = new LinkedList<>(num);
+        } else {
+            LinkedList<Integer> temp = new LinkedList<>(num);
+            temp.setNext(head);
+            head = temp;
+        }
+
+        return head;
+    }
+
+    private static int getSum(LinkedList<Integer> l1) {
+        if (l1 == null) return -1;
+        LinkedList<Integer> temp = l1;
+        int num = 0;
+        while (temp != null) {
+            if (num == 0) {
+                num = num + temp.getData();
+            } else {
+                num = (num * 10) + temp.getData();
+            }
+            temp = temp.getNext();
+        }
+
+        return num;
     }
 }

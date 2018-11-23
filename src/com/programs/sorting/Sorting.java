@@ -1,5 +1,6 @@
 package com.programs.sorting;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Sorting {
@@ -32,27 +33,46 @@ public class Sorting {
     }
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        System.out.println("Enter size of array");
-        Scanner scan = new Scanner(System.in);
-        int k = scan.nextInt();
-        int arr[] = new int[k];
+        int arr1[] = new int[]{2, 21};
+        int arr2[] = new int[]{2, 3, 8, 13};
+        mergeArr(arr1, arr2);
+        System.out.println(Arrays.toString(arr1));
+        System.out.println(Arrays.toString(arr2));
 
-        for (int i = 0; i < k; i++) {
-            arr[i] = scan.nextInt();
-        }
-        scan.close();
-        System.out.println("Array before sorted");
-        for (int j = 0; j < arr.length; j++) {
-            System.out.print(arr[j] + " ");
-        }
-        System.out.println();
-        quickSort(arr, 0, arr.length - 1);
-        System.out.println("Array after sorted");
-        for (int j = 0; j < arr.length; j++) {
-            System.out.print(arr[j] + " ");
-        }
+    }
 
+    /**
+     * merge two array in place
+     * time complexity O(m*n)
+     * m and n is size of respective array
+     *
+     * @param first
+     * @param second
+     */
+    public static void mergeArr(int first[], int second[]) {
+
+        int firstSize = first.length;
+        int secondSize = second.length;
+
+        for (int i = secondSize - 1; i >= 0; i--) {
+
+
+            int last = first[firstSize - 1];
+            int j;
+            for (j = firstSize - 2; j >= 0; j--) {
+                if (first[j] > second[i]) {
+                    first[j + 1] = second[j];
+                } else {
+                    break;
+                }
+            }
+
+            if (j != firstSize - 2 || last > second[i]) {
+                first[j + 1] = second[i];
+                second[i] = last;
+            }
+
+        }
     }
 
     /**
