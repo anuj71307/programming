@@ -33,8 +33,7 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
 
-        int[] arr = new int[]{1};
-        System.out.println("first element " + firstElementApperaEvenNumberTimes(arr));
+        System.out.println("first element " + maxPossible(12341));
     }
 
     /**
@@ -74,15 +73,14 @@ public class ArrayProblems {
 
     /**
      * given a integer find maximum possible value by doing addition or
-     * subtraction of digit - in any order
-     *
+     * multiplication of digit - in any order
      * @param num input num
      * @return max value
      */
     public static int maxPossible(int num) {
         int sum = 0;
         int multi = 1;
-        while (num > 9) {
+        while (num > 0) {
             int remainder = num % 10;
             if (remainder > 1) {
                 multi = multi * remainder;
@@ -91,13 +89,7 @@ public class ArrayProblems {
             }
             num = num / 10;
         }
-
-        if (num > 1) {
-            multi = multi * num;
-        } else {
-            sum = sum + num;
-        }
-        if (sum <= 1) {
+        if (sum <= 1&& multi>1) {
             return multi + sum;
         }
 
