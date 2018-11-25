@@ -1,10 +1,35 @@
 package com.programs.random;
 
+import com.programs.stack.Stack;
+
 public class StringProblems {
 
     public static void main(String[] args) {
 
-        System.out.println(isOneEditAway("s", "v"));
+        System.out.println(longestBalancedParenthesis("()((((()))))"));
+    }
+
+    public static int longestBalancedParenthesis(String str){
+        int length = 0;
+
+        Stack<Integer> stack = new Stack<>(str.length()+1);
+        stack.push(-1);
+        for(int i = 0;i<str.length();i++ ){
+            if(str.charAt(i)=='('){
+                stack.push(i);
+                continue;
+            }
+
+            stack.pop();
+            if(!stack.isStackEmpty()){
+                int temp = i-stack.top();
+                if(temp>length) length = temp;
+            }
+
+            else stack.push(i);
+        }
+
+        return length;
     }
 
     /**

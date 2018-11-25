@@ -47,7 +47,35 @@ public class Solution {
     public static void main(String[] args) {
 
         int sum = findMaxValue("4567089");
-        System.out.println(sum);
+        System.out.println(compareVersion("1.0","1"));
+    }
+
+    public static int compareVersion(String a, String b) {
+        String str1[] = a.split("\\.");
+        String str2[] = b.split("\\.");
+        int i = 0;
+        while(i<str1.length && i < str2.length){
+            double one = Double.parseDouble(str1[i]);
+            double two = Double.parseDouble(str2[i]);
+            if(one>two){
+                return 1;
+            }
+            else if(one<two){
+                return -1;
+            }
+            i++;
+
+        }
+
+        if(i==str1.length && i == str2.length){
+            return 0;
+        }
+
+        if(i<str1.length){
+            return 1;
+        }
+        return -1;
+
     }
 
     /**
