@@ -1,6 +1,7 @@
-package com.programs.trees;
+package com.programs.problems;
 
 import com.programs.stack.Stack;
+import com.programs.trees.BinaryTree;
 
 public class TreeProblems {
 

@@ -3,7 +3,7 @@ package com.programs.stack;
 import java.util.EmptyStackException;
 
 /**
- * Stack Implementation
+ * Stack Implementation using array
  *
  * @param <T>
  * @author anujjha

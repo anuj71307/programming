@@ -6,6 +6,7 @@ import java.util.EmptyStackException;
 /**
  * Stack Implementation using Stack
  * @param <T>
+ * @author anujjha
  */
 public class LLStack<T> implements IStack<T> {
     private LinkedList<T> head;

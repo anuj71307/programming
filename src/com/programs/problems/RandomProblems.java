@@ -1,4 +1,4 @@
-package com.programs.random;
+package com.programs.problems;
 
 import java.util.Queue;
 
@@ -8,7 +8,7 @@ import java.util.Queue;
  *
  * @author anujjha
  */
-public class Solution {
+public class RandomProblems {
 
 
     /**

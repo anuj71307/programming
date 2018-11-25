@@ -2,6 +2,11 @@ package com.programs.queue;
 
 import com.programs.linkedlist.LinkedList;
 
+/**
+ * Queue implementation using LinkedList
+ * @param <T>
+ * @author anujjha
+ */
 public class LLQueue<T> {
     private LinkedList<T> head;
     private LinkedList<T> rearNode;

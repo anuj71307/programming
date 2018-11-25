@@ -1,4 +1,4 @@
-package com.programs.random;
+package com.programs.problems;
 
 import com.programs.stack.Stack;
 

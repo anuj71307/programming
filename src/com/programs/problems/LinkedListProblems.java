@@ -1,5 +1,7 @@
-package com.programs.linkedlist;
+package com.programs.problems;
 
+
+import com.programs.linkedlist.LinkedList;
 
 public class LinkedListProblems {
 

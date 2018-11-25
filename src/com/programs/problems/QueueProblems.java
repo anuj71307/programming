@@ -1,4 +1,6 @@
-package com.programs.queue;
+package com.programs.problems;
+
+import com.programs.queue.LLQueue;
 
 public class QueueProblems {
 
