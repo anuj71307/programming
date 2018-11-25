@@ -6,9 +6,44 @@ public class StringProblems {
 
     public static void main(String[] args) {
 
-        System.out.println(longestBalancedParenthesis("()((((()))))"));
+        String str = "nama n";
+        System.out.print(checkPalindromeline(str));
     }
 
+    /**
+     * check if a string is palindrome or not by removing space
+     * Ref: https://practice.geeksforgeeks.org/problems/string-palindromic-ignoring-spaces/0
+     * @param str
+     * @return
+     */
+    public static boolean checkPalindromeline(String str){
+        if(str==null) return true;
+        str = str.trim();
+        if(str.isEmpty()) return true;
+
+        int i = 0;
+        int j = str.length()-1;
+
+        while(i<=j){
+            if(str.charAt(i)==' '){
+                i++;
+                continue;
+            }
+            if(str.charAt(j)==' '){
+                j--;
+                continue;
+            }
+
+            if(str.charAt(i)!=str.charAt(j)){
+                return false;
+            }
+            i++;
+            j--;
+        }
+
+        return true;
+
+    }
     public static int longestBalancedParenthesis(String str){
         int length = 0;
 
