@@ -29,10 +29,21 @@ public class TreeProblems {
         tree6.setLeftTree(tree9);
         tree4.setRightTree(tree8);
 
-
         zigzagTraversal(tree);
 
+    }
 
+    /**
+     * find min depth of a binary tree
+     * @param tree
+     * @return
+     */
+    public static int minDepth(BinaryTree tree) {
+        if (tree == null) return 0;
+        int left = minDepth(tree.getLeftTree());
+        int right = minDepth(tree.getRightTree());
+        if (left < right) return left + 1;
+        else return right + 1;
     }
 
     /**

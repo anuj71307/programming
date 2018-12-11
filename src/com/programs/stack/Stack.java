@@ -17,6 +17,10 @@ public class Stack<T> implements IStack<T> {
         this.mCapacity = capacity;
         mStackArr = new Object[capacity];
     }
+    public Stack() {
+        this.mCapacity = 100;
+        mStackArr = new Object[100];
+    }
 
     /**
      * add an elelmnt to stack
