@@ -2,13 +2,36 @@ package com.programs.problems;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Stack;
 
 public class StringProblems {
 
     public static void main(String[] args) {
+        System.out.println("Ans is "+ longestSubString("abcdeabdsgth"));
     }
 
+
+    private static int longestSubString(String string){
+        if(string==null||string.isEmpty()) return -1;
+
+        //abcabcbb
+        HashMap<Character, Integer> map = new HashMap<>();
+        int ans = 0;
+        int i = 0, j = 0;//j
+
+        for(;i<string.length();i++){
+            char c = string.charAt(i);
+            if(map.containsKey(c)){
+                j = Math.max(map.get(c),j);
+            }
+            ans = Math.max(ans, i-j+1);
+            map.put(c, i+1);
+
+        }
+
+        return  ans;
+    }
     /**
      * generate next greater number
      *

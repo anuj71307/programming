@@ -33,7 +33,42 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
 
-        System.out.println("first element " + maxPossible(12341));
+        quickSort(new int[]{4,3,2,1,5});
+    }
+
+
+    private static void quickSort(int[] arr){
+        quickSort(arr, 0, arr.length-1);
+        for(int i : arr){
+            System.out.print(i +" ");
+        }
+    }
+
+    private static void quickSort(int[] arr, int start, int end) {
+        if(start<end){
+            int position = quickPartition(arr, start, end);
+            quickSort(arr, start, position-1);
+            quickSort(arr, position+1, end);
+        }
+    }
+
+    private static int quickPartition(int[] arr, int start, int end) {
+        int pivot = arr[end];
+        int index = start;
+        for(int i = start; i<end;i++){
+           if(arr[i]<pivot){
+               int temp = arr[index];
+               arr[index] = arr[i];
+               arr[i] = temp;
+               index++;
+           }
+
+        }
+
+        arr[end] = arr[index];
+        arr[index] = pivot;
+
+        return  index;
     }
 
     /**
