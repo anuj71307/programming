@@ -3,7 +3,8 @@ package com.programs.problems;
 
 import com.programs.linkedlist.LinkedList;
 
-public class LinkedListProblems {
+public  class LinkedListProblems {
+
 
     /**
      * source: https://www.geeksforgeeks.org/delete-nodes-list-greater-x/

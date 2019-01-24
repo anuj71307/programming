@@ -1,91 +1,50 @@
 package com.programs.problems;
 
-import com.programs.stack.Stack;
-import com.programs.trees.BinaryTree;
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
 
 public class TreeProblems {
-
-    public static void main(String args[]) {
-        BinaryTree<Integer> tree = new BinaryTree<>(1);
-        BinaryTree<Integer> tree2 = new BinaryTree<>(2);
-        BinaryTree<Integer> tree3 = new BinaryTree<>(3);
-        tree.setLeftTree(tree2);
-        tree.setRightTree(tree3);
-
-        BinaryTree<Integer> tree4 = new BinaryTree<>(4);
-        BinaryTree<Integer> tree5 = new BinaryTree<>(5);
-        tree2.setLeftTree(tree4);
-        tree2.setRightTree(tree5);
-
-
-        BinaryTree<Integer> tree6 = new BinaryTree<>(6);
-        BinaryTree<Integer> tree7 = new BinaryTree<>(7);
-        tree3.setLeftTree(tree6);
-        tree3.setRightTree(tree7);
+    public static void main(String args[] ) throws Exception {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String str = null;
+        int square = 0;
+        int rect = 0;
+        int poly = 0;
+        while((str = reader.readLine())!=null){
+            System.out.println("str : " + str);
+            String arr[] = str.split(" ");
+            System.out.println(arr.length);
+            System.out.println(Arrays.toString(arr));
 
 
-        BinaryTree<Integer> tree8 = new BinaryTree<>(8);
-        BinaryTree<Integer> tree9 = new BinaryTree<>(9);
-        tree6.setLeftTree(tree9);
-        tree4.setRightTree(tree8);
+            if(Integer.parseInt(arr[0].trim())<0 || Integer.parseInt(arr[1].trim()) < 0 || Integer.parseInt(arr[2].trim()) < 0 || Integer.parseInt(arr[3].trim()) < 0){
 
-        zigzagTraversal(tree);
-
-    }
-
-    /**
-     * find min depth of a binary tree
-     * @param tree
-     * @return
-     */
-    public static int minDepth(BinaryTree tree) {
-        if (tree == null) return 0;
-        int left = minDepth(tree.getLeftTree());
-        int right = minDepth(tree.getRightTree());
-        if (left < right) return left + 1;
-        else return right + 1;
-    }
-
-    /**
-     * zig zag traversal of a tree
-     *
-     * @param tree
-     */
-    public static void zigzagTraversal(BinaryTree tree) {
-
-
-        if (tree == null) return;
-
-        boolean leftToRight = false;
-        Stack<BinaryTree> stack1 = new Stack<>(100);
-        Stack<BinaryTree> stack2 = new Stack<>(100);
-        stack1.push(tree);
-        while (true) {
-            while (!stack1.isStackEmpty()) {
-                BinaryTree tree1 = stack1.pop();
-                System.out.print(tree1.getData() + " ");
-                if (leftToRight) {
-                    if (tree1.getLeftTree() != null) {
-                        stack2.push(tree1.getLeftTree());
-                    }
-                    if (tree1.getRightTree() != null) {
-                        stack2.push(tree1.getRightTree());
-                    }
-                } else {
-                    if (tree1.getRightTree() != null) {
-                        stack2.push(tree1.getRightTree());
-                    }
-                    if (tree1.getLeftTree() != null) {
-                        stack2.push(tree1.getLeftTree());
-                    }
-                }
+                poly++;
             }
-            leftToRight = !leftToRight;
-            if (stack2.isStackEmpty()) {
-                break;
+
+            else if(arr[0].equals(arr[1])&& arr[1].equals(arr[2]) && arr[2].equals(arr[3])){
+                square++;
             }
-            stack1 = stack2;
-            stack2 = new Stack<>(100);
+
+            else if(arr[0].equals(arr[2]) && arr[1].equals(arr[3])){
+                rect++;
+            }
+            else{
+                poly++;
+            }
+
         }
+
+        System.out.println(square + " " + rect + " " + poly);
+
     }
+
+
+
+
 }
+

@@ -1,16 +1,216 @@
 package com.programs.problems;
 
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Stack;
+import com.programs.string.TempString;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class StringProblems {
 
-    public static void main(String[] args) {
-        System.out.println("Ans is "+ longestSubString("abcdeabdsgth"));
+
+
+    public static int vowelsubstring(String s) {
+        // Write your code here
+
+        if(s==null || s.length()==0) return 0;
+        int count = 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        int start = 0;
+        int end = 0;
+        for(int i = 0; i< s.length();i++){
+
+            char c = s.charAt(i);
+            if(isVowel(c)){
+                if(map.containsKey(c)) continue;
+                map.put(c,i);
+                if(map.size()==5){
+                    end = i;
+                }
+            }
+            else{
+                if(map.size()==5){
+                    int a = map.get('a');
+                    int u = map.get('u');
+                    //int end = i-1;
+                    count += findCount(start, end, a , u);
+                }
+                map.clear();
+                start = i+1;
+            }
+        }
+
+
+        return count;
     }
 
+    private static int findCount(int start, int end, int a, int u) {
+        int count = 1;
+        if(a>u){
+           count +=  end-a;
+           count+= u-start;
+        }
+        else{
+            count+= end-u;
+            count+= a-start;
+        }
+
+        return  count;
+    }
+
+    public static boolean isVowel(char c){
+
+        return (c=='a'|| c=='e'||c=='i'||c=='o'||c=='u');
+    }
+
+    public static String smallestNumber(String str){
+
+        char[] num = str.toCharArray();
+        int n = str.length();
+        int[] rightMin = new int[n];
+
+        // for the rightmost digit, there
+        // will be no smaller right digit
+        rightMin[n - 1] = -1;
+
+        // index of the smallest right digit
+        // till the current index from the
+        // right direction
+        int right = n - 1;
+
+        // traverse the array from second
+        // right element up to the left
+        // element
+        for (int i = n - 2; i >= 1; i--)
+        {
+            // if 'num[i]' is greater than
+            // the smallest digit
+            // encountered so far
+            if (num[i] > num[right])
+                rightMin[i] = right;
+
+            else
+            {
+                // there is no smaller right
+                // digit for 'num[i]'
+                rightMin[i] = -1;
+
+                // update 'right' index
+                right = i;
+            }
+        }
+
+        // special condition for the 1st
+        // digit so that it is not swapped
+        // with digit '0'
+        int small = -1;
+        for (int i = 1; i < n; i++)
+            if (num[i] != '0')
+            {
+                if (small == -1)
+                {
+                    if (num[i] < num[0])
+                        small = i;
+                }
+                else if (num[i] < num[small])
+                    small = i;
+            }
+
+        if (small != -1){
+            char temp;
+            temp = num[0];
+            num[0] = num[small];
+            num[small] = temp;
+        }
+        else
+        {
+            // traverse the 'rightMin[]'
+            // array from 2nd digit up
+            // to the last digit
+            for (int i = 1; i < n; i++)
+            {
+                // if for the current digit,
+                // smaller right digit exists,
+                // then swap it with its smaller
+                // right digit and break
+                if (rightMin[i] != -1)
+                {
+                    // performing the required
+                    // swap operation
+                    char temp;
+                    temp = num[i];
+                    num[i] = num[rightMin[i]];
+                    num[rightMin[i]] = temp;
+                    break;
+                }
+            }
+        }
+
+        // required smallest number
+        return (new String(num));
+    }
+
+    // driver function
+
+    public static ArrayList<String> getPerms(String str){
+
+        if(str==null) return  null;
+        ArrayList<String> perm = new ArrayList<>();
+        if(str.length()==0){
+            perm.add("");
+            return  perm;
+        }
+        char first = str.charAt(0);
+        String remainder = str.substring(1);
+        ArrayList<String> words = getPerms(remainder);
+        for(String word: words){
+            for(int j =0;j<=word.length();j++){
+                String temp = insertChar(word,first,j);
+                perm.add(temp);
+            }
+        }
+
+
+        return  perm;
+    }
+
+    private static String insertChar(String word, char first, int i) {
+        String start= word.substring(0,i);
+        String end = word.substring(i);
+        return start+first+end;
+
+    }
+
+    /*
+    longest palindromic substring
+     */
+    public static String longestPalindromic(String str){
+        if(str==null || str.length()<=1) return  str;
+        int start = 0;
+        int end = 0;
+        for(int i = 0; i< str.length();i++){
+            int len1 = expand(str,i,i);
+
+            int len2 = expand(str,i,i+1);
+            int len = Math.max(len1,len2);
+            if(len>end-start){
+                start = i-(len-1)/2;
+                end = i+len/2;
+            }
+
+        }
+
+        return  str.substring(start,end+1);
+    }
+
+    private static int expand(String str, int start, int end) {
+        while(start>=0 && end<str.length() && str.charAt(start)==str.charAt(end)){
+            start--;
+            end++;
+        }
+        return  end-start-1;
+    }
 
     private static int longestSubString(String string){
         if(string==null||string.isEmpty()) return -1;
@@ -376,6 +576,479 @@ public class StringProblems {
             }
         }
 
+        String result ="";
+        int k = Integer.parseInt(result.split(" ")[1]);
         return true;
     }
+
+    public static int[][] solution;
+    static int path = 1;
+    static String result = "";
+
+    // initialize the solution matrix in constructor.
+    public StringProblems(char[][] N) {
+        solution = new int[N.length][N[0].length];
+        for (int i = 0; i < solution.length; i++) {
+            for (int j = 0; j < solution[0].length; j++) {
+                solution[i][j] = 0;
+            }
+        }
+    }
+
+    public boolean searchWord(char[][] matrix, String word) {
+        if(word==null || word.length()==0 || matrix==null||matrix.length==0) return  false;
+        int N = matrix.length;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (search(matrix, word, i, j, 0, N, matrix[i].length, false)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+    public boolean search(char[][] matrix, String word, int row, int col,
+                          int index, int N, int M, boolean rc) {
+
+        // check if current cell not already used or character in it is not not
+
+        if (solution[row][col] != 0 || word.charAt(index) != matrix[row][col]) {
+            return false;
+        }
+
+        if (index == word.length() - 1) {
+            // word is found, return true
+            if(rc) result = result +'R';
+            else result = result+'D';
+            solution[row][col] = path++;
+            return true;
+        }
+
+        // mark the current cell as 1
+        solution[row][col] = path++;
+        if(rc) result = result +'R';
+        else result = result+'D';
+        // check if cell is already used
+
+        if (row + 1 < N && search(matrix, word, row + 1, col, index + 1, N, M, false)) { // go
+            // down
+            //charArr[k] = 'D';
+            return true;
+        }
+
+        if (col + 1 < M && search(matrix, word, row, col + 1, index + 1, N, M, true)) { // go
+            // right
+            return true;
+        }
+
+
+        // if none of the option works out, BACKTRACK and return false
+        solution[row][col] = 0;
+        path--;
+        result = result.substring(0, result.length()-1);
+        return false;
+    }
+
+    public void print() {
+        for (int i = 0; i < solution.length; i++) {
+            for (int j = 0; j < solution.length; j++) {
+                System.out.print(" " + solution[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
+
+        //System.out.println(find_smallest_numbers("45623"));
+        //System.out.println(removeWhiteSpcae(" Anuj Kumar  Jha"));
+        public static void main (String[] args) throws Exception {
+            //code
+            //code
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            int j = Integer.parseInt(reader.readLine());
+            String str = "";
+            Stack<String> stack = new Stack<>();
+            for(int k = 0; k<j;k++) {
+               String read = reader.readLine();
+               String arr[] = read.split(" ");
+               str = parseAction(str, stack, arr);
+            }
+
+    }
+
+    private static String parseAction(String str, Stack<String> stack, String[] arr) {
+        int action = Integer.parseInt(arr[0]);
+        //add
+        if(action==1){
+
+            stack.push(str);
+            str = str+arr[1];
+        }
+        //delete last charc
+        else if(action==2){
+            stack.push(str);
+            int count = Integer.parseInt(arr[1]);
+            str = str.substring(0, str.length()-count);
+
+        }
+        //print
+        else if(action ==3){
+            //str = abs
+            int count = Integer.parseInt(arr[1]);
+            if(count<=str.length()) {
+                System.out.println(str.charAt(count-1));
+            }
+
+        }
+        // undo last action
+        else{
+            if(!stack.isEmpty()){
+                str = stack.pop();
+            }
+        }
+
+        return str;
+    }
+
+    static String isBalanced(String s) {
+        if(s==null || s.trim().isEmpty()) return "YES";
+        Stack<Character> stack = new Stack();
+        for(char c:s.toCharArray()){
+            if(c==' ') continue;
+            if(isOpeningBracket(c)){
+                stack.push(c);
+            }
+            else{
+                if(stack.isEmpty()){
+                    return "NO";
+                }
+                char last = stack.pop();
+                if(!doesMatch(c, last)){
+                    return "NO";
+                }
+            }
+        }
+
+        if(!stack.isEmpty()) return "NO";
+        return "YES";
+
+    }
+
+    private static boolean doesMatch(char c, char last) {
+        boolean result = false;
+        if(c==')' && last == '(') result = true;
+        else if(c==']' && last == '[') result = true;
+        else if(c=='}' && last == '{') result = true;
+        return  result;
+    }
+
+
+    static boolean isOpeningBracket(char c){
+        return c=='(' || c=='{' || c=='[';
+    }
+
+    public static void groupAnagram(List<String> str){
+
+            TreeMap<String, List<String> > map = new TreeMap<>();
+
+            // loop over all words
+            for (int i = 0; i < str.size(); i++) {
+
+                // convert to char array, sort and
+                // then re-convert to string
+                String word = str.get(i);
+                String temp = word.replaceAll(" ", "");
+                char[] letters = temp.toCharArray();
+                Arrays.sort(letters);
+                String newWord = new String(letters);
+
+                // calculate hashcode of string
+                // after sorting
+                if (map.containsKey(newWord)) {
+
+                    // Here, we already have
+                    // a word for the hashcode
+                    List<String> words = map.get(newWord);
+                    words.add(word);
+                    map.put(newWord, words);
+                }
+                else {
+
+                    // This is the first time we are
+                    // adding a word for a specific
+                    // hashcode
+                    List<String> words = new ArrayList<>();
+                    words.add(word);
+                    map.put(newWord, words);
+                }
+            }
+
+            // print all the values where size is > 1
+            // If you want to print non-anagrams,
+            // just print the values having size = 1
+            for (String i : map.keySet()) {
+                List<String> values = map.get(i);
+                Collections.sort(values);
+                    for(int k = 0; k< values.size();k++){
+                        if(k==values.size()-1){
+                            System.out.print(values.get(k));
+                        }
+                        else System.out.print(values.get(k)+",");
+                    }
+                    System.out.println();
+            }
+
+    }
+
+
+
+    static HashMap<String, String> map = new HashMap<>();
+    private static String segment(String str, Set<String> dict){
+        if(dict.contains(str)) return  str;
+        if(map.containsKey(str)) return map.get(str);
+        for(int i = 1; i < str.length();i++){
+            String prefix = str.substring(0,i);
+            if(dict.contains(prefix)){
+                String suffix = segment(str.substring(i, str.length()), dict);
+                if(suffix!=null){
+                    String s  = prefix+" "+suffix;
+                    map.put(str, s);
+                    return s;
+                }
+            }
+        }
+        return null;
+    }
+    private static String removeWhiteSpcae(String str) {
+        if(str==null || str.length()<=0) return  str;
+        //Anuj Ku
+        char[] arr = str.toCharArray();
+        int i = 0;
+        int j = 0;
+        for(i =0; i< arr.length;i++){
+            if(arr[i]!=' '){
+                arr[j] = arr[i];
+                j++;
+            }
+        }
+        while(j<arr.length){
+            arr[j]= '-';
+            j++;
+        }
+        return new String(arr);
+    }
+
+
+    static String find_smallest_numbers(String str) {
+        if(str==null|| str.length()==0) return str;
+        char arr[] = str.toCharArray();
+        for(int i = 0 ; i < str.length();i++){
+            int small = str.length()-1;
+          for (int j = str.length()-1; j > i ; j --){
+              if(arr[j]<arr[i]&& arr[j]<arr[small]){
+                  small = j;
+              }
+          }
+          if(arr[small]<arr[i]){
+              char temp = arr[small];
+              arr[small] = arr[i];
+              arr[i] = temp;
+              break;
+          }
+
+        }
+        return new String(arr);
+
+    }
+    static String find_smallest_number(String str) {
+        if(str==null|| str.length()==0) return str;
+        int rightMin [] = new int[str.length()];
+        char [] arr = str.toCharArray();
+        int n = str.length();
+        rightMin[n-1] = -1;
+        int right = n-1;
+        for(int i = n-2; i>0;i--){
+            if(arr[i]>arr[right]){
+                rightMin[i] = right;
+            }
+            else{
+                rightMin[i] = -1;
+                right = i ;
+            }
+        }
+
+
+        for(int i = 1; i< n ; i++){
+            if(rightMin[i]!=-1){
+
+                char temp = arr[i];
+                arr[i] = arr[rightMin[i]];
+                arr[rightMin[i]] = temp;
+                break;
+            }
+        }
+
+        return (new String(arr));
+    }
+
+
+
+    public static String find_path(List<List<String>> matrix, String target_string) {
+        if(matrix==null || matrix.size()==0||target_string==null || target_string.length()==0) return result;
+        solution = new int[matrix.size()][matrix.get(0).size()];
+        for(int i = 0; i< matrix.size();i++){
+            for(int j = 0; j< matrix.get(i).size(); j++){
+                solution[i][j] = 0;
+            }
+        }
+
+        if(searchWord(matrix, target_string)){
+            return result.substring(0, result.length()-1);
+        }
+
+        return "NO PATH";
+    }
+
+    public static  boolean searchWord(List<List<String>> matrix, String word) {
+        if (word == null || word.length() == 0 || matrix == null || matrix.size() == 0)
+            return false;
+        int N = matrix.size();
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < matrix.get(i).size(); j++) {
+                if (search(matrix, word, i, j, 0, N, matrix.get(i).size(), false)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public static boolean search(List<List<String>> matrix, String word, int row, int col, int index, int N , int M , boolean rc ){
+
+        char p =matrix.get(row).get(col).charAt(0);
+        if(solution[row][col] !=0 || word.charAt(index)!=p){
+            return false;
+        }
+
+        if(index == word.length()-1){
+            if(rc) result = result +'R';
+            else result = result +'D';
+            solution[row][col] = path++;
+            return true;
+        }
+        solution[row][col] = path++;
+        if (rc) result = result + 'R';
+        else result = result + 'D';
+
+
+//GO down
+        if(row+1<N && search(matrix,word, row+1, col, index+1, N,M, false)){
+            return true;
+        }
+
+        if (col + 1 < M && search(matrix, word, row, col+1, index + 1, N, M, true)) {
+            return true;
+        }
+
+        solution[row][col] = 0;
+        path--;
+        result = result.substring(0, result.length()-1);
+        return false;
+    }
+
+
+
+    // function to form the smallest number
+    // using at most one swap operation
+    public static String smallestNumbers(String str){
+
+        char[] num = str.toCharArray();
+        int n = str.length();
+        int[] rightMin = new int[n];
+
+        // for the rightmost digit, there
+        // will be no smaller right digit
+        rightMin[n - 1] = -1;
+
+        // index of the smallest right digit
+        // till the current index from the
+        // right direction
+        int right = n - 1;
+
+        // traverse the array from second
+        // right element up to the left
+        // element
+        for (int i = n - 2; i >= 1; i--)
+        {
+            // if 'num[i]' is greater than
+            // the smallest digit
+            // encountered so far
+            if (num[i] > num[right])
+                rightMin[i] = right;
+
+            else
+            {
+                // there is no smaller right
+                // digit for 'num[i]'
+                rightMin[i] = -1;
+
+                // update 'right' index
+                right = i;
+            }
+        }
+
+        // special condition for the 1st
+        // digit so that it is not swapped
+        // with digit '0'
+        int small = -1;
+        for (int i = 1; i < n; i++)
+            if (num[i] != '0')
+            {
+                if (small == -1)
+                {
+                    if (num[i] < num[0])
+                        small = i;
+                }
+                else if (num[i] <= num[small])
+                    small = i;
+            }
+
+        if (small != -1){
+            char temp;
+            temp = num[0];
+            num[0] = num[small];
+            num[small] = temp;
+        }
+        else
+        {
+            // traverse the 'rightMin[]'
+            // array from 2nd digit up
+            // to the last digit
+            for (int i = 1; i < n; i++)
+            {
+                // if for the current digit,
+                // smaller right digit exists,
+                // then swap it with its smaller
+                // right digit and break
+                if (rightMin[i] != -1)
+                {
+                    // performing the required
+                    // swap operation
+                    char temp;
+                    temp = num[i];
+                    num[i] = num[rightMin[i]];
+                    num[rightMin[i]] = temp;
+                    break;
+                }
+            }
+        }
+
+        // required smallest number
+        return (new String(num));
+    }
+
 }

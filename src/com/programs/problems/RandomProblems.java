@@ -1,6 +1,6 @@
 package com.programs.problems;
 
-import java.util.Queue;
+import java.util.*;
 
 /**
  * class which will call appropriate method and classes
@@ -10,6 +10,19 @@ import java.util.Queue;
  */
 public class RandomProblems {
 
+
+    public int diffPossible(final List<Integer> a, int b) {
+        HashSet<Integer> hash = new HashSet<>();
+
+        // 1 3 5 2 
+        for(Integer k : a){
+            Integer diff = Math.abs(k-b);
+            if(hash.contains(diff)) return 1;
+            hash.add(k);
+        }
+
+        return  0;
+    }
 
     static int migratoryBirds(int n, int[] ar) {
         // Complete this function
@@ -29,7 +42,83 @@ public class RandomProblems {
     public static void main(String[] args) {
 
         int num = 152;
-        System.out.println(num==cubeSum(num));
+       // System.out.println(num==cubeSum(num));
+      // int[] arr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+
+        Integer[] arr={ 1000, 1000, 1000, 1000, 1001, 1002, 1003, 1003, 1004, 1010};
+        for(int i : arr){
+            System.out.print(i+" ");
+        }
+        System.out.println();
+        System.out.println("After");
+        ArrayList<Integer> list = new ArrayList<>();
+        Collections.addAll(list, arr);
+        int len = removeDuplicates(list);
+        for(Integer k: list){
+            System.out.print(k+" ");
+        }
+        System.out.println();
+
+
+    }
+
+    public static int removeDuplicates(ArrayList<Integer> a) {
+        if(a==null|| a.size()==0) return 0;
+        int length = a.size();//3
+        int i =0;
+        int j =0;
+        for( i =0;i<a.size();){
+            if(i+1<a.size()&& a.get(i).intValue()==a.get(i+1).intValue()){
+                Integer k = a.get(i);
+
+                a.set(j,k);
+                j++;
+                a.set(j,k);
+                j++;
+
+                while(i+1<a.size()&& a.get(i).intValue()==a.get(i+1).intValue()){
+                    i++;
+                }
+                i++;
+            }
+
+            else{
+                Integer k = a.get(i);
+
+                a.set(j,k);
+                j++;
+                i++;
+
+            }
+        }
+
+        return j;
+    }
+
+    public static int removeDuplicates(int[] a) {
+        if(a==null|| a.length==0) return 0;
+        int length = a.length;//3
+        int i =0;
+        int j =0;//2
+        for( i =0;i<a.length;){
+          if(i+1<a.length&& a[i]==a[i+1]){
+                a[j] =a[i];
+                j++;
+                a[j]=a[i];
+                j++;
+                while(i+1<a.length && a[i+1]==a[i]){
+                    i++;
+                }
+                i++;
+            }
+            else{
+                a[j] = a[i];
+                j++;
+                i++;
+            }
+        }
+
+        return j;
     }
 
     /**

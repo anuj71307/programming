@@ -1,5 +1,7 @@
 package com.programs.trie;
 
+import java.util.LinkedList;
+
 /**
  * Trie data structure using array
  */
@@ -9,6 +11,7 @@ public class Trie {
 
     public Trie() {
         root = new TrieNode();
+        root.count = 0;
     }
 
     /**
@@ -16,14 +19,15 @@ public class Trie {
      * @param word
      */
     public void insert(String word){
-        if(word==null || word.length()==0) return;
+        if(word==null || word.length()==0 || search(word)) return;
         TrieNode temp = root;
-        int index =0;
+        int index;
         for(int i =0; i< word.length();i++){
             index = word.charAt(i)-'a';
             if(temp.children[index]==null){
                 temp.children[index] = new TrieNode();
             }
+            temp.count++;
             temp = temp.children[index];
         }
 
@@ -53,13 +57,38 @@ public class Trie {
     }
 
 
+    public void delete(String word){
+        if(word==null || word.length()==0 || !search(word)) return;
+        TrieNode crawl = root;
+        int index = 0;
+        for(int i =0; i< word.length();i++) {
+            index = word.charAt(i) - 'a';
+            TrieNode temp  = crawl.children[index];
+            if(temp.count==1){
+                crawl.count--;
+                crawl.children[index] = null;
+                return;
+            }
+            else{
+                crawl.count--;
+                crawl = temp;
+            }
+
+        }
+
+        crawl.isWord = false;
+    }
+
+
 }
 
 class TrieNode{
     TrieNode [] children;
     boolean isWord;
+    int count ;
 
     public TrieNode() {
         this.children = new TrieNode[26];
+        count = 0;
     }
 }

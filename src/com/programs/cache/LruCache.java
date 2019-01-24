@@ -1,76 +1,60 @@
 package com.programs.cache;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class LruCache {
     private int capacity;
-    private HashMap<Integer,Node> hashMap;
-    Node head;
-    Node end;
+    private HashSet<Integer> hashMap;
+    Deque<Integer> queue;
 
     public LruCache(int capacity) {
         this.capacity = capacity;
-        this.hashMap = new HashMap<>(capacity);
+        this.hashMap = new HashSet<>(capacity);
+        queue = new LinkedList<>();
     }
 
-    public int get(int key){
 
-        if (hashMap.containsKey(key)) {
-            return hashMap.get(key).value;
+
+    public void updateQ(int x){
+        if(hashMap.contains(x)){
+            queue.remove(x);
+        }
+        else{
+            if(queue.size()==capacity){
+                int k = queue.removeLast();
+                hashMap.remove(k);
+            }
         }
 
-        return -1;
+        queue.push(x);
+        hashMap.add(x);
+
     }
 
-    public void set(int key, int value){
-
-       if(hashMap.containsKey(key)){
-           Node temp = hashMap.get(key);
-           remove(temp);
-           temp.value = value;
-           setHead(temp);
-       }
-       else{
-           Node temp = new Node(key,value);
-           if(hashMap.size()==capacity){
-               remove(end);
-           }
-           setHead(temp);
-           hashMap.put(key, temp);
-       }
-    }
-
-    private void remove(Node temp) {
-        if(temp.prev!=null) {
-            temp.prev.next = temp.next;
+    public void display(){
+        Iterator<Integer> itr = queue.iterator();
+        while(itr.hasNext()){
+            System.out.print(itr.next()+" ");
         }
-        else {
-            temp.next = head;
-            head = temp;
-        }
-        if(temp.next!=null) {
-            temp.next.prev = temp.prev;
-        }else{
-
-        }
+        System.out.println();
     }
 
-    private void setHead(Node temp) {
+
+    public static void main(String args[]){
+        LruCache cache = new LruCache(3);
+        cache.updateQ(1);
+        cache.updateQ(3);
+        cache.updateQ(4);
+        cache.updateQ(3);
+        cache.display();
+        cache.updateQ(6);
+        cache.updateQ(8);
+        cache.display();
+
     }
+
 
 }
 
 
 
-
- class Node {
-     int key;
-     int value;
-     Node next;
-     Node prev;
-
-     public Node(int key, int value) {
-         this.key = key;
-         this.value = value;
-     }
- }

@@ -33,11 +33,10 @@ public class Sorting {
     }
 
     public static void main(String[] args) {
-        int arr1[] = new int[]{2, 21};
-        int arr2[] = new int[]{2, 3, 8, 13};
-        mergeArr(arr1, arr2);
-        System.out.println(Arrays.toString(arr1));
+        int arr2[] = new int[]{2,2,4,1,3,2};
+        quickSort(arr2, 0, arr2.length-1);
         System.out.println(Arrays.toString(arr2));
+
 
     }
 
