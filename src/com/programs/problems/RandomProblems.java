@@ -45,21 +45,61 @@ public class RandomProblems {
        // System.out.println(num==cubeSum(num));
       // int[] arr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
 
-        Integer[] arr={ 1000, 1000, 1000, 1000, 1001, 1002, 1003, 1003, 1004, 1010};
-        for(int i : arr){
-            System.out.print(i+" ");
-        }
-        System.out.println();
-        System.out.println("After");
-        ArrayList<Integer> list = new ArrayList<>();
-        Collections.addAll(list, arr);
-        int len = removeDuplicates(list);
-        for(Integer k: list){
-            System.out.print(k+" ");
-        }
-        System.out.println();
+
+        System.out.println(floorSqrt(2147483647));
+        //System.out.println(sqrt(2147483647));
 
 
+
+    }
+
+    public int sqrt(int n) {
+        if(n==0) return 0;
+        if(n<4) return 1;
+
+        long start=1; long end = n;
+        long ans=0;
+        while(start<=end){
+            long mid  = (start+end)/2;
+            if(mid*mid==n) return (int)mid;
+            if(mid*mid>n)  end = mid-1;
+            else {
+                start = mid+1;
+                ans = mid;
+            }
+        }
+
+
+        return (int)ans;
+    }
+
+    public static int floorSqrt(int x)
+    {
+        // Base Cases
+        if (x == 0 || x == 1)
+            return x;
+
+        // Do Binary Search for floor(sqrt(x))
+        int start = 1, end = x, ans=0;
+        while (start <= end)
+        {
+            int mid = (start + end) / 2;
+
+            // If x is a perfect square
+            if (mid*mid == x)
+                return mid;
+
+            // Since we need floor, we update answer when mid*mid is
+            // smaller than x, and move closer to sqrt(x)
+            if (mid*mid < x)
+            {
+                start = mid + 1;
+                ans = mid;
+            }
+            else   // If mid*mid is greater than x
+                end = mid-1;
+        }
+        return ans;
     }
 
     public static int removeDuplicates(ArrayList<Integer> a) {

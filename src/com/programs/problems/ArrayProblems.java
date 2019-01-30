@@ -158,11 +158,170 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         //solve(table);
-        int [] arr = new int[]{1,2,3};
-        System.out.println(largestRectangle(arr));
+     int[] arr = new int []{ 1, -4, 0, 0, 5, -5, 1, 0, -2, 4, -4, 1, -1, -4, 3, 4, -1, -1, -3 };
+     int[][]res = threeSum(arr);
+     for(int i =0; i< res.length;i++){
+         System.out.println(Arrays.toString(res[i]));
+     }
+    }
+    public static int[][] threeSum(int[] A) {
+        if(A==null || A.length==0) return null;
+        Arrays.sort(A);
+        ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
+
+        for(int i =0; i< A.length-2;i++){
+            int l = i+1;
+            int r = A.length-1;
+            while(l<r){
+                if(A[i]+A[l]+A[r]==0){
+                    ArrayList<Integer> li = new ArrayList<>();
+                    li.add(A[i]);
+                    li.add(A[l]);
+                    li.add(A[r]);
+                    list.add(li);
+                    l++;
+                    r--;
+                }
+                else if(A[i]+A[l]+A[r]>0){
+                    r--;
+                }
+                else{
+                    l++;
+                }
+
+            }
+        }
+
+        int res [][] = new int[list.size()][3];
+        for(int i = 0; i< list.size();i++){
+            for(int j = 0; j < 3;j++){
+                res[i][j] = list.get(i).get(j);
+            }
+        }
+
+        return res;
     }
 
+    public static void rotate(ArrayList<ArrayList<Integer>> a) {
+
+        if(a==null || a.size()==0|| a.size()!=a.get(0).size()){
+            return;
+        }
+
+        for(int i = 0 ; i< a.size();i++){
+            for(int j =i; j<a.size();j++){
+                int temp = a.get(i).get(j);
+                int temp2 = a.get(j).get(i);
+                a.get(i).set(j,temp2);
+                a.get(j).set(i,temp);
+            }
+        }
+
+
+        for(int i =0; i< a.size();i++){
+            int j = 0;
+            int k = a.get(i).size()-1;
+            while(j<k){
+                int temp = a.get(i).get(j);
+                int temp2 = a.get(i).get(k);
+                a.get(i).set(j,temp2);
+                a.get(i).set(k,temp);
+                j++;
+                k--;
+            }
+        }
+    }
+
+    public static int[][] prettyPrint(int A) {
+        if(A<1) return null;
+        int n = A+(A-1);
+        int arr[][] = new int[n][n];
+        int numofRows = n;
+        int numOfCols = n;
+        int row = 0;
+        int col = 0;
+        int i;
+        n = A;
+
+        while(row<numofRows && col<numOfCols){
+            for(i = col; i < numOfCols;i++){
+                arr[row][i] = n;
+            }
+            row++;
+
+            for(i = row; i<numofRows;i++){
+                arr[i][numOfCols-1] = n;
+            }
+            numOfCols--;
+
+
+            if(row<numofRows){
+                for(i = numOfCols-1; i>=col;i--){
+                    arr[numofRows-1][i] = n;
+
+                }
+                numofRows--;
+            }
+
+            if(col<numOfCols){
+                for(i = numofRows-1; i>=row;i--){
+                    arr[i][col] = n;
+
+                }
+                col++;
+            }
+            n--;
+        }
+
+        return arr;
+
+    }
+
+    private static void printSpiralForm(int[][] arr) {
+        int numofRows = arr.length;
+        int numOfCols = arr[0].length;
+        int row = 0;
+        int col = 0;
+        int i;
+
+        while(row<numofRows && col<numOfCols){
+            for(i = col; i < numOfCols;i++){
+                System.out.print(arr[row][i]+" ");
+            }
+            row++;
+
+            for(i = row; i<numofRows;i++){
+                System.out.print(arr[i][numOfCols-1]+" ");
+            }
+            numOfCols--;
+
+
+            if(row<numofRows){
+                for(i = numOfCols-1; i>=col;i--){
+                    System.out.print(arr[numofRows-1][i]+" ");
+
+                }
+                numofRows--;
+            }
+
+            if(col<numOfCols){
+                for(i = numofRows-1; i>=row;i--){
+                    System.out.print(arr[i][col]+" ");
+
+                }
+                col++;
+            }
+        }
+
+    }
+
+    /**
+     * print largest rectangle from histogram
+     * @param h
+     * @return
+     */
     static long largestRectangle(int[] h) {
+        Arrays.sort(h);
         long area = 0;
         long area_so_far = 0;
         int i = 0;

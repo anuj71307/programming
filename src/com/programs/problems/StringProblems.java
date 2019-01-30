@@ -1,69 +1,12 @@
 package com.programs.problems;
 
 
-import com.programs.string.TempString;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class StringProblems {
 
 
-
-    public static int vowelsubstring(String s) {
-        // Write your code here
-
-        if(s==null || s.length()==0) return 0;
-        int count = 0;
-        HashMap<Character, Integer> map = new HashMap<>();
-        int start = 0;
-        int end = 0;
-        for(int i = 0; i< s.length();i++){
-
-            char c = s.charAt(i);
-            if(isVowel(c)){
-                if(map.containsKey(c)) continue;
-                map.put(c,i);
-                if(map.size()==5){
-                    end = i;
-                }
-            }
-            else{
-                if(map.size()==5){
-                    int a = map.get('a');
-                    int u = map.get('u');
-                    //int end = i-1;
-                    count += findCount(start, end, a , u);
-                }
-                map.clear();
-                start = i+1;
-            }
-        }
-
-
-        return count;
-    }
-
-    private static int findCount(int start, int end, int a, int u) {
-        int count = 1;
-        if(a>u){
-           count +=  end-a;
-           count+= u-start;
-        }
-        else{
-            count+= end-u;
-            count+= a-start;
-        }
-
-        return  count;
-    }
-
-    public static boolean isVowel(char c){
-
-        return (c=='a'|| c=='e'||c=='i'||c=='o'||c=='u');
-    }
-
+    //form smallest possible number from number given as string
     public static String smallestNumber(String str){
 
         char[] num = str.toCharArray();
@@ -151,7 +94,6 @@ public class StringProblems {
         return (new String(num));
     }
 
-    // driver function
 
     public static ArrayList<String> getPerms(String str){
 
@@ -183,7 +125,7 @@ public class StringProblems {
     }
 
     /*
-    longest palindromic substring
+    find longest palindromic substring from given string
      */
     public static String longestPalindromic(String str){
         if(str==null || str.length()<=1) return  str;
@@ -204,6 +146,14 @@ public class StringProblems {
         return  str.substring(start,end+1);
     }
 
+
+    /**
+     * check both left and right from given index
+     * @param str
+     * @param start
+     * @param end
+     * @return
+     */
     private static int expand(String str, int start, int end) {
         while(start>=0 && end<str.length() && str.charAt(start)==str.charAt(end)){
             start--;
@@ -212,6 +162,11 @@ public class StringProblems {
         return  end-start-1;
     }
 
+    /**
+     * length of longest substring without duplicate character
+     * @param string
+     * @return
+     */
     private static int longestSubString(String string){
         if(string==null||string.isEmpty()) return -1;
 
@@ -279,6 +234,7 @@ public class StringProblems {
      *
      * @param str number as string to decode
      * @return number of possible decoding
+     * 12
      */
     public static int decode(String str) {
         //index i-2
@@ -286,7 +242,7 @@ public class StringProblems {
         //index i-1
         int j = 1;
         //current count
-        int current = 0;
+        int current = 1;
 
         for (int k = 2; k <= str.length(); k++) {
             current = 0;
@@ -330,6 +286,11 @@ public class StringProblems {
         return maxValue;
     }
 
+    /**
+     * sort and given string in alphabetical order
+     * @param str
+     * @return
+     */
     public static String sortString(String str) {
         char[] temp = mergeSortString(str.toCharArray());
         int i = 0;
@@ -463,7 +424,7 @@ public class StringProblems {
      * @param str
      * @return
      */
-    public static boolean checkPalindromeline(String str) {
+    public static boolean checkPalindromline(String str) {
         if (str == null) return true;
         str = str.trim();
         if (str.isEmpty()) return true;
@@ -492,9 +453,15 @@ public class StringProblems {
 
     }
 
+    /**
+     * given paranthesis and string find longest balanced parenthsesis in that
+     * @param str
+     * @return
+     */
     public static int longestBalancedParenthesis(String str) {
         int length = 0;
 
+        //())))
         Stack<Integer> stack = new Stack<>();
         stack.push(-1);
         for (int i = 0; i < str.length(); i++) {
@@ -662,21 +629,66 @@ public class StringProblems {
     }
 
 
-        //System.out.println(find_smallest_numbers("45623"));
-        //System.out.println(removeWhiteSpcae(" Anuj Kumar  Jha"));
-        public static void main (String[] args) throws Exception {
-            //code
-            //code
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            int j = Integer.parseInt(reader.readLine());
-            String str = "";
-            Stack<String> stack = new Stack<>();
-            for(int k = 0; k<j;k++) {
-               String read = reader.readLine();
-               String arr[] = read.split(" ");
-               str = parseAction(str, stack, arr);
-            }
+    public static void main(String[] args) throws Exception {
 
+
+    }
+
+
+
+    public static String reverseWords(String a) {
+        if(a==null) return null;
+        if(a.trim().length()==0) return "";
+        String str[] = a.split(" ");
+        StringBuilder builder = new StringBuilder();
+        for(int i =str.length-1; i >=0; i--){
+            String s = str[i].trim();
+            if(s.length()==0) continue;
+            builder = builder.append(" ").append(s);
+        }
+        return builder.toString().trim();
+    }
+
+
+    public static  int evalRPN(String[] A) {
+        Stack<Integer> stack = new Stack();
+        for(String str: A){
+            if(isOperator(str)){
+                evaluate(str, stack);
+            }
+            else{
+                stack.push(Integer.parseInt(str));
+            }
+        }
+
+        return stack.pop();
+
+    }
+
+    /**
+     * Text Edit - > https://www.hackerrank.com/challenges/simple-text-editor/problem
+     * @param str
+     * @param stack
+     */
+    public static void evaluate(String str, Stack <Integer> stack){
+        int second = stack.pop();
+        int first = stack.pop();
+        if(str.equals("+")){
+            stack.push(first+second);
+        }
+        else  if(str.equals("-")){
+            stack.push(first-second);
+        }
+        else  if(str.equals("*")){
+            stack.push(first*second);
+        }
+        else  if(str.equals("/")){
+            stack.push(first/second);
+        }
+    }
+
+    public static boolean isOperator(String str){
+        return str.equals("+") ||str.equals("-") ||str.equals("*") ||str.equals("/");
     }
 
     private static String parseAction(String str, Stack<String> stack, String[] arr) {
@@ -713,6 +725,7 @@ public class StringProblems {
         return str;
     }
 
+    // balanced parenthesis
     static String isBalanced(String s) {
         if(s==null || s.trim().isEmpty()) return "YES";
         Stack<Character> stack = new Stack();
@@ -750,6 +763,10 @@ public class StringProblems {
         return c=='(' || c=='{' || c=='[';
     }
 
+    /**
+     * group anagrams
+     * @param str
+     */
     public static void groupAnagram(List<String> str){
 
             TreeMap<String, List<String> > map = new TreeMap<>();
@@ -806,13 +823,14 @@ public class StringProblems {
 
 
     static HashMap<String, String> map = new HashMap<>();
-    private static String segment(String str, Set<String> dict){
+    //https://www.geeksforgeeks.org/word-break-problem-dp-32/
+    private static String wordBreakProblems(String str, Set<String> dict){
         if(dict.contains(str)) return  str;
         if(map.containsKey(str)) return map.get(str);
         for(int i = 1; i < str.length();i++){
             String prefix = str.substring(0,i);
             if(dict.contains(prefix)){
-                String suffix = segment(str.substring(i, str.length()), dict);
+                String suffix = wordBreakProblems(str.substring(i, str.length()), dict);
                 if(suffix!=null){
                     String s  = prefix+" "+suffix;
                     map.put(str, s);
@@ -822,6 +840,9 @@ public class StringProblems {
         }
         return null;
     }
+
+
+
     private static String removeWhiteSpcae(String str) {
         if(str==null || str.length()<=0) return  str;
         //Anuj Ku
