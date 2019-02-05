@@ -159,13 +159,10 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         //solve(table);
-        int N = 7;
+        int N = 4;
         int[][] board = new int[N][N];
-        //solveNQ(board,0,N);
-        System.out.println("k is " + k);
-
-        int[] arr = new int[]{1, 5, 11, 5};
-
+        int arr[] = new int[N];
+        solveNQ(board,0,N, arr, 0);
     }
 
     /**
@@ -202,9 +199,9 @@ public class ArrayProblems {
       * N-Queen Problem
      https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/
      */
-    public static boolean solveNQ(int[][] board, int row, int N) {
+    public static boolean solveNQ(int[][] board, int row, int N, int[] arr, int j) {
         if (row >= N) {
-            printBoard(board);
+            printBoard(arr);
             k++;
             return true;
         }
@@ -212,7 +209,8 @@ public class ArrayProblems {
         for (int i = 0; i < N; i++) {
             if (isSafe(board, row, i)) {
                 board[row][i] = 1;
-                res = solveNQ(board, row + 1, N) || res;
+                arr[j] = i+1;
+                res = solveNQ(board, row + 1, N, arr,j+1) || res;
                 board[row][i] = 0;
             }
         }
@@ -236,15 +234,11 @@ public class ArrayProblems {
         return true;
     }
 
-    static void printBoard(int[][] board) {
+    static void printBoard(int[] board) {
         System.out.print("[");
         for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == 1) {
-                    System.out.print(j + 1 + " ");
-                }
+                    System.out.print(board[i]+" ");
             }
-        }
 
         System.out.print("]" + " ");
     }
