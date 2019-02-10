@@ -159,10 +159,116 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         //solve(table);
-        int N = 4;
-        int[][] board = new int[N][N];
-        int arr[] = new int[N];
-        solveNQ(board,0,N, arr, 0);
+        Integer[] arr = new Integer[]{4,-3,2,-1,-2, 3, 4};
+        //System.out.println(minSwaps(arr));
+        System.out.println(getPow(5,1));
+
+        HashMap<Integer, Integer> map = findOpposite(arr);
+        for(Integer key : map.keySet()){
+            System.out.println(key + " "+map.get(key));
+        }
+
+        Geek g1 = new Geek("aa", 1);
+        Geek g2 = new Geek("aa", 1);
+
+        // comparing above created Objects.
+
+
+            if(g1.equals(g2))
+                System.out.println("Both Objects are equal. ");
+            else
+                System.out.println("Both Objects are not equal. ");
+
+
+
+}
+
+   static class Geek
+    {
+
+        public String name;
+        public int id;
+
+        Geek(String name, int id)
+        {
+
+            this.name = name;
+            this.id = id;
+        }
+
+
+
+    }
+
+    private static HashMap<Integer,Integer> findOpposite(Integer[] arr) {
+        Comparator<Integer> comparator = new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if(o1!=o2 || o1 !=-02){
+                    return Math.abs(o1)-Math.abs(o2);
+                }
+                else{
+                    if(o1<o2) return 1;
+                    if(o1==o2) return  -1;
+                    else return  -1;
+                }
+            }
+        };
+
+
+        Arrays.sort(arr,comparator);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i =1; i< arr.length;i++){
+            if(arr[i]==-arr[i-1]){
+                map.put(arr[i], arr[i-1]);
+            }
+        }
+
+        return map;
+    }
+
+    /**
+     * get pow of a number
+     * @param x
+     * @param pow
+     * @return
+     */
+    static long getPow(int x , int pow){
+        if(pow==0) return 1;
+        if(pow%2==0){
+            return getPow(x*x, pow/2);
+        }
+        else{
+            return x*getPow(x*x,(pow-1)/2);
+        }
+    }
+
+
+    /**
+     * https://www.geeksforgeeks.org/minimum-number-swaps-required-sort-array/
+     * @param A
+     * @return
+     */
+    public static int minSwaps(int[] A)
+    {//add code here.
+
+        if(A==null||A.length<=1) return 0;
+        boolean [] visited = new boolean[A.length];
+        int swap = 0;
+        for(int i = 0 ; i < A.length;i++){
+            int j = i;
+            int cycle=0;
+            while(!visited[j]){
+                visited[j] = true;
+                j = A[j]-1;
+                cycle++;
+            }
+            if(cycle!=0){
+                swap+=cycle-1;
+            }
+        }
+
+        return swap;
     }
 
     /**
@@ -252,6 +358,7 @@ public class ArrayProblems {
             count = Math.abs(dungeon.get(0)) + 1;
             potion = dungeon.get(0) + count;
         } else {
+            count = dungeon.get(0);
             potion = dungeon.get(0);
         }
 
@@ -271,6 +378,9 @@ public class ArrayProblems {
     }
 
 
+    /*
+    find all triplets in array whose sum is zero
+     */
     public static int[][] threeSum(int[] A) {
         if (A == null || A.length == 0) return null;
         Arrays.sort(A);
@@ -337,51 +447,11 @@ public class ArrayProblems {
         }
     }
 
-    public static int[][] prettyPrint(int A) {
-        if (A < 1) return null;
-        int n = A + (A - 1);
-        int arr[][] = new int[n][n];
-        int numofRows = n;
-        int numOfCols = n;
-        int row = 0;
-        int col = 0;
-        int i;
-        n = A;
 
-        while (row < numofRows && col < numOfCols) {
-            for (i = col; i < numOfCols; i++) {
-                arr[row][i] = n;
-            }
-            row++;
-
-            for (i = row; i < numofRows; i++) {
-                arr[i][numOfCols - 1] = n;
-            }
-            numOfCols--;
-
-
-            if (row < numofRows) {
-                for (i = numOfCols - 1; i >= col; i--) {
-                    arr[numofRows - 1][i] = n;
-
-                }
-                numofRows--;
-            }
-
-            if (col < numOfCols) {
-                for (i = numofRows - 1; i >= row; i--) {
-                    arr[i][col] = n;
-
-                }
-                col++;
-            }
-            n--;
-        }
-
-        return arr;
-
-    }
-
+    /**
+     * print an array in spiral form
+     * @param arr
+     */
     private static void printSpiralForm(int[][] arr) {
         int numofRows = arr.length;
         int numOfCols = arr[0].length;
@@ -461,55 +531,11 @@ public class ArrayProblems {
         return area;
     }
 
-
-    static int getMaxArea(int hist[], int n) {
-        // Create an empty stack. The stack holds indexes of hist[] array
-        // The bars stored in stack are always in increasing order of their
-        // heights.
-        Stack<Integer> s = new Stack<>();
-
-        int max_area = 0; // Initialize max area
-        int tp;  // To store top of stack
-        int area_with_top; // To store area with top bar as the smallest bar
-
-        // Run through all bars of given histogram
-        int i = 0;
-        while (i < n) {
-            // If this bar is higher than the bar on top stack, push it to stack
-            if (s.isEmpty() || hist[s.peek()] <= hist[i])
-                s.push(i++);
-
-                // If this bar is lower than top of stack, then calculate area of rectangle
-                // with stack top as the smallest (or minimum height) bar. 'i' is
-                // 'right index' for the top and element before top in stack is 'left index'
-            else {
-                tp = s.peek();  // store the top index
-                s.pop();  // pop the top
-
-                // Calculate the area with hist[tp] stack as smallest bar
-                area_with_top = hist[tp] * (s.empty() ? i : i - s.peek() - 1);
-
-                // update max area, if needed
-                if (max_area < area_with_top)
-                    max_area = area_with_top;
-            }
-        }
-
-        // Now pop the remaining bars from stack and calculate area with every
-        // popped bar as the smallest bar
-        while (s.isEmpty()) {
-            tp = s.peek();
-            s.pop();
-            area_with_top = hist[tp] * (s.empty() ? i : i - s.peek() - 1);
-
-            if (max_area < area_with_top)
-                max_area = area_with_top;
-        }
-
-        return max_area;
-
-    }
-
+    /**
+     * search in rotated array
+     * @param arr array to be rotated
+     * @param k item to search
+     */
     public static void printResult(int[] arr, int k) {
 
         int low = 0;
@@ -536,6 +562,10 @@ public class ArrayProblems {
         System.out.println(-1);
     }
 
+    /**
+     * longest increasing subsequence
+     * @param arr
+     */
     public static void printResult(int[] arr) {
         int[] lis = new int[arr.length];
         for (int i = 0; i < lis.length; i++) {

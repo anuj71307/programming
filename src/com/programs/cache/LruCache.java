@@ -4,8 +4,11 @@ import java.util.*;
 
 public class LruCache {
     private int capacity;
-    private HashSet<Integer> hashMap;
+    private HashSet<Integer > hashMap;
     Deque<Integer> queue;
+
+
+
 
     public LruCache(int capacity) {
         this.capacity = capacity;
@@ -16,17 +19,18 @@ public class LruCache {
 
 
     public void updateQ(int x){
-        if(hashMap.contains(x)){
-            queue.remove(x);
-        }
-        else{
+        if(!hashMap.contains(x)){
             if(queue.size()==capacity){
                 int k = queue.removeLast();
                 hashMap.remove(k);
             }
         }
+        else{
+            queue.remove(x);
 
-        queue.push(x);
+        }
+
+        queue.addFirst(x);
         hashMap.add(x);
 
     }
@@ -45,6 +49,7 @@ public class LruCache {
         cache.updateQ(1);
         cache.updateQ(3);
         cache.updateQ(4);
+        cache.display();
         cache.updateQ(3);
         cache.display();
         cache.updateQ(6);

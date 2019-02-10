@@ -539,8 +539,6 @@ public class StringProblems {
             }
         }
 
-        String result = "";
-        int k = Integer.parseInt(result.split(" ")[1]);
         return true;
     }
 
@@ -630,7 +628,52 @@ public class StringProblems {
         dict.add("and");
         dict.add("cat");
         dict.add("aand");
-        System.out.println(wordBreakProblems("cata", dict));
+       permutation("god");
+       System.out.println(getPerms("god"));
+    }
+
+    private static void permutation(String abc) {
+        permutation("", abc);
+    }
+
+    private static void permutation(String s, String abc) {
+        if(abc.length()==0) System.out.println(s);
+        for(int i =0;i<abc.length();i++){
+            permutation(s+abc.charAt(i), abc.substring(0,i)+abc.substring(i+1, abc.length()));
+        }
+
+    }
+
+
+    /**
+     * Reverse each word of String separated by space
+     * for ex if string is "How are you" result should be "woh era uoy"
+     * @param str input String
+     * @return reverse String
+     */
+    static String reverseAllWords(String str){
+        if(str==null || str.trim().length()==0) return str;
+        String[] split = str.split(" ");
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i< split.length;i++){
+            if(split[i].trim().length()==0) continue;
+            builder.append(reverseString(split[i])).append(" ");
+        }
+        return builder.toString().trim();
+    }
+
+    private static String reverseString(String s) {
+        char[] arr = s.toCharArray();
+        int i = 0;
+        int j = arr.length-1;
+        while(i<j){
+            char temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            i++;
+            j--;
+        }
+        return new String(arr);
     }
 
     /**
@@ -902,7 +945,7 @@ public class StringProblems {
     }
 
 
-    private static String removeWhiteSpcae(String str) {
+    private static String removeWhiteSpace(String str) {
         if (str == null || str.length() <= 0) return str;
         //Anuj Ku
         char[] arr = str.toCharArray();
