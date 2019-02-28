@@ -3,7 +3,7 @@ package com.programs.problems;
 
 import com.programs.linkedlist.LinkedList;
 
-public  class LinkedListProblems {
+public  class LinkedListProblems<T> {
 
 
     /**
@@ -85,25 +85,65 @@ public  class LinkedListProblems {
         return length;
     }
 
+    /*
+      //temporary class
+      static class Node {
+          public int val;
+          public Node prev;
+          public Node next;
+          public Node child;
+
+          public Node(int v){
+              val = v;
+          }
+          public Node(int _val,Node _prev,Node _next,Node _child) {
+              val = _val;
+              prev = _prev;
+              next = _next;
+              child = _child;
+          }
+      }
+
+      //https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/
+
+      static public Node flatten(Node head) {
+          if (head == null) return null;
+          Node temp = head;
+          while (temp != null) {
+              if (temp.child != null) {
+                  Node next = temp.next;
+
+                  temp.next = temp.child;
+                  temp.child=null;
+                  flatten(temp.next);//7
+                  Node n = temp.next;
+                  n.prev = temp;
+                  while (n.next != null) {
+                      n = n.next;
+                  }
+                  n.next = next;
+                  if(next!=null)
+                  next.prev = n;
+              }
+              temp = temp.next;
+          }
+
+          return head;
+
+      }
+
+       */
     public static void main(String[] args) {
-        System.out.println("length of loop is ");
-        LinkedList<Integer> linkedList1 = new LinkedList<>(1);
-        LinkedList<Integer> linkedList2 = new LinkedList<>(0);
-        linkedList1.setNext(linkedList2);
-        LinkedList<Integer> linkedList3 = new LinkedList<>(0);
-        linkedList2.setNext(linkedList3);
 
-        LinkedList<Integer> node1 = new LinkedList<>(9);
-        LinkedList<Integer> node2 = new LinkedList<>(0);
-        node1.setNext(node2);
-        LinkedList<Integer> node3 = new LinkedList<>(5);
-        node2.setNext(node3);
-        LinkedList<Integer> head = sumList(linkedList1, node1);
-
-        System.out.println("Sum is " + getSum(head));
     }
 
 
+    /**
+     * sum of two linked list
+     * @param l1
+     * @param l2
+     * @return
+     */
     private static LinkedList<Integer> sumList(LinkedList<Integer> l1, LinkedList<Integer> l2) {
         LinkedList<Integer> head = null;
 
@@ -114,15 +154,21 @@ public  class LinkedListProblems {
 
         while (num > 0) {
             int rem = num % 10;
-            if (head == null) {
                 head = addNode(head, rem);
-            } else {
-                head = addNode(head, rem);
-            }
             num = num/10;
         }
 
         return head;
+    }
+
+    // 1--2
+    public LinkedList<T> reverse(LinkedList<T> node){
+        if(node==null || node.getNext()==null) return  node;
+        return  reverse(null, node, node.getNext());
+    }
+    public LinkedList<T> reverse(LinkedList<T> prev, LinkedList<T> curr, LinkedList<T> nxt ) {
+      curr.setNext(prev);
+      return nxt!=null?reverse(curr, nxt, nxt.getNext()):curr;
     }
 
     private static LinkedList<Integer> addNode(LinkedList<Integer> head, int num) {
