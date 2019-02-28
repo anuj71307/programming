@@ -1,5 +1,7 @@
 package com.programs.problems;
 
+import com.programs.map.THashMap;
+
 import java.util.*;
 
 public class ArrayProblems {
@@ -154,52 +156,100 @@ public class ArrayProblems {
 
         return maxValue;
     }
+    public static void main(String [] args){
 
-    static int k = 0;
+    }
+    /**
+     * https://leetcode.com/problems/contains-duplicate-ii/
+     * @param nums
+     * @param k
+     * @return
+     */
+    public static boolean containsNearbyDuplicate(int[] nums, int k) {
+        //trying own hash map , hashset can be used to do the same.
+        // not working for number outside int range with own hash map , map gives -ve hash
+        THashMap<Integer, Integer> map = new THashMap<>(k+1);
+        for(int i = 0 ; i < nums.length;i++){
+            if(map.size()>k){
+                map.remove(nums[i-k-1]);
+            }
+            if(map.containsKey(nums[i])){
+                return true;
+            }
+            else{
+                map.put(nums[i], i);
+            }
 
-    public static void main(String[] args) {
-        //solve(table);
-        Integer[] arr = new Integer[]{4,-3,2,-1,-2, 3, 4};
-        //System.out.println(minSwaps(arr));
-        System.out.println(getPow(5,1));
 
-        HashMap<Integer, Integer> map = findOpposite(arr);
-        for(Integer key : map.keySet()){
-            System.out.println(key + " "+map.get(key));
+
+        }
+        return false;
+    }
+    /**
+     * given an array of top marks and another array of marks
+     * find position for after each score
+     *    Rank //100 90 80 75 60
+     *    Marks: //50 ,65, 77, 90, 102
+     *    O/p [6,5,4,2,1]
+     *    Source: https://www.hackerrank.com/challenges/climbing-the-leaderboard/problem
+     * @return
+     */
+    static int[] climbingLeaderboard(int[] scores, int[] alice) {
+        int[] res = new int[alice.length];
+        List< Integer> list = new ArrayList<>();
+        list.add(scores[0]);
+        for (int i = 1; i < scores.length; i++) {
+            if (scores[i] != scores[i - 1]) {
+                list.add(scores[i]);
+            }
         }
 
-        Geek g1 = new Geek("aa", 1);
-        Geek g2 = new Geek("aa", 1);
-
-        // comparing above created Objects.
-
-
-            if(g1.equals(g2))
-                System.out.println("Both Objects are equal. ");
-            else
-                System.out.println("Both Objects are not equal. ");
-
-
-
-}
-
-   static class Geek
-    {
-
-        public String name;
-        public int id;
-
-        Geek(String name, int id)
-        {
-
-            this.name = name;
-            this.id = id;
+        for(int i = 0; i< alice.length;i++){
+            int k = getRank(alice[i], list);
+            res[i] = k;
         }
 
-
+        return res;
 
     }
 
+    private static int getRank(int score, List<Integer> list) {
+
+        if(list.get(0)<=score) return 1;
+        if(list.get(list.size()-1)>score)return list.size()+1;
+        if(list.get(list.size()-1)==score)return list.size();
+
+        int i =0;
+        int j = list.size()-1;
+        int mid;
+        while(i<= j ){
+            mid = (i+j)/2;
+            if(list.get(mid)==score){
+                return mid+1;
+            }
+            else if(list.get(mid)>score){
+                i = mid+1;
+            }
+
+            else{
+                j = mid-1;
+            }
+        }
+
+        if(j<i){
+            return i+1;
+        }
+        else{
+            return j;
+        }
+    }
+
+    /**
+     * given an array find all number whose opposite is present
+     * for [0,2,1,-2,-1] o/p should be [1,-1, 2,-2]
+     * @param arr
+     * @return
+     */
     private static HashMap<Integer,Integer> findOpposite(Integer[] arr) {
         Comparator<Integer> comparator = new Comparator<Integer>() {
             @Override
@@ -301,6 +351,7 @@ public class ArrayProblems {
         return result;
     }
 
+    static int k = 0;
     /*
       * N-Queen Problem
      https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/
