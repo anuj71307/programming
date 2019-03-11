@@ -79,6 +79,34 @@ public class Trie {
         crawl.isWord = false;
     }
 
+    /**
+     * Give a dictionary implement an API to find word in it l. Ex Boy, B.z, ..., Dot should be matched with any charger in between
+     */
+    boolean searchDfs(String word){
+       if(word==null || word.trim().length()==0) return false;
+       return search(root, word, 0);
+    }
+
+    private boolean search(TrieNode node, String word, int index) {
+        if(node==null) return  false;
+        if(index>=word.length()){
+            return node.isWord;
+        }
+        if(word.charAt(index)=='.'){
+            for(int i = 0; i< node.children.length;i++){
+                if(search(node.children[i], word, index+1)){
+                    return  true;
+                }
+            }
+        }
+        else{
+            int child = word.charAt(index)-'a';
+            return search(node.children[child], word, index+1);
+        }
+
+        return  false;
+    }
+
 
 }
 
