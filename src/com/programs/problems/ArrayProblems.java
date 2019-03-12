@@ -156,11 +156,94 @@ public class ArrayProblems {
 
         return maxValue;
     }
-    public static void main(String [] args){
+
+    public static void main(String[] args) {
+        System.out.println(clumsy(5));
+    }
+
+    /**
+     * https://leetcode.com/problems/clumsy-factorial/
+     *
+     * @param N
+     * @return
+     */
+    private static int clumsy(int N) {
+        if (N < 2) return 1;
+        int j = 1;
+        Stack<Integer> integerStack = new Stack<>();
+        integerStack.push(N);
+        integerStack.push(N - 1);
+        Stack<Character> characterStack = new Stack<>();
+        characterStack.push('*');
+        for (int i = N - 2; i > 0; i--) {
+            if (j % 4 == 0) {
+                updateStack(characterStack, integerStack, '*');
+
+            } else if (j % 4 == 1) {
+                updateStack(characterStack, integerStack, '/');
+            } else if (j % 4 == 2) {
+                updateStack(characterStack, integerStack, '+');
+            } else if (j % 4 == 3) {
+                updateStack(characterStack, integerStack, '-');
+            }
+            integerStack.push(i);
+            j++;
+        }
+
+        while (!characterStack.isEmpty()) {
+            int second = integerStack.pop();
+            int first = integerStack.pop();
+            int r = evaluate(first, characterStack.pop(), second);
+            integerStack.push(r);
+        }
+
+        return integerStack.peek();
 
     }
+
+    private static void updateStack(Stack<Character> characterStack, Stack<Integer> integerStack, char c) {
+        while (!characterStack.isEmpty() && isHighPriority(c, characterStack.peek())) {
+            char operator = characterStack.pop();
+            int second = integerStack.pop();
+            int first = integerStack.pop();
+            int re = evaluate(first, operator, second);
+            integerStack.push(re);
+
+        }
+        characterStack.push(c);
+    }
+
+
+    private static int evaluate(int first, char operator, int second) {
+        if (operator == '+') {
+            return first + second;
+        } else if (operator == '-') {
+            return first - second;
+        } else if (operator == '/') {
+            return first / second;
+        } else if (operator == '*') {
+            return first * second;
+        }
+        return 0;
+    }
+
+    private static boolean isHighPriority(char c, Character peek) {
+        if (c == '*' || c == '/') {
+            if (peek == '*' || peek == '/') {
+                return true;
+            }
+            return false;
+        }
+        if (c == '+' || c == '-') {
+            return true;
+        }
+        return false;
+    }
+
+
     /**
      * https://leetcode.com/problems/contains-duplicate-ii/
+     *
      * @param nums
      * @param k
      * @return
@@ -168,35 +251,35 @@ public class ArrayProblems {
     public static boolean containsNearbyDuplicate(int[] nums, int k) {
         //trying own hash map , hashset can be used to do the same.
         // not working for number outside int range with own hash map , map gives -ve hash
-        THashMap<Integer, Integer> map = new THashMap<>(k+1);
-        for(int i = 0 ; i < nums.length;i++){
-            if(map.size()>k){
-                map.remove(nums[i-k-1]);
+        THashMap<Integer, Integer> map = new THashMap<>(k + 1);
+        for (int i = 0; i < nums.length; i++) {
+            if (map.size() > k) {
+                map.remove(nums[i - k - 1]);
             }
-            if(map.containsKey(nums[i])){
+            if (map.containsKey(nums[i])) {
                 return true;
-            }
-            else{
+            } else {
                 map.put(nums[i], i);
             }
-
 
 
         }
         return false;
     }
+
     /**
      * given an array of top marks and another array of marks
      * find position for after each score
-     *    Rank //100 90 80 75 60
-     *    Marks: //50 ,65, 77, 90, 102
-     *    O/p [6,5,4,2,1]
-     *    Source: https://www.hackerrank.com/challenges/climbing-the-leaderboard/problem
+     * Rank //100 90 80 75 60
+     * Marks: //50 ,65, 77, 90, 102
+     * O/p [6,5,4,2,1]
+     * Source: https://www.hackerrank.com/challenges/climbing-the-leaderboard/problem
+     *
      * @return
      */
     static int[] climbingLeaderboard(int[] scores, int[] alice) {
         int[] res = new int[alice.length];
-        List< Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(scores[0]);
         for (int i = 1; i < scores.length; i++) {
             if (scores[i] != scores[i - 1]) {
@@ -204,7 +287,7 @@ public class ArrayProblems {
             }
         }
 
-        for(int i = 0; i< alice.length;i++){
+        for (int i = 0; i < alice.length; i++) {
             int k = getRank(alice[i], list);
             res[i] = k;
         }
@@ -215,31 +298,27 @@ public class ArrayProblems {
 
     private static int getRank(int score, List<Integer> list) {
 
-        if(list.get(0)<=score) return 1;
-        if(list.get(list.size()-1)>score)return list.size()+1;
-        if(list.get(list.size()-1)==score)return list.size();
+        if (list.get(0) <= score) return 1;
+        if (list.get(list.size() - 1) > score) return list.size() + 1;
+        if (list.get(list.size() - 1) == score) return list.size();
 
-        int i =0;
-        int j = list.size()-1;
+        int i = 0;
+        int j = list.size() - 1;
         int mid;
-        while(i<= j ){
-            mid = (i+j)/2;
-            if(list.get(mid)==score){
-                return mid+1;
-            }
-            else if(list.get(mid)>score){
-                i = mid+1;
-            }
-
-            else{
-                j = mid-1;
+        while (i <= j) {
+            mid = (i + j) / 2;
+            if (list.get(mid) == score) {
+                return mid + 1;
+            } else if (list.get(mid) > score) {
+                i = mid + 1;
+            } else {
+                j = mid - 1;
             }
         }
 
-        if(j<i){
-            return i+1;
-        }
-        else{
+        if (j < i) {
+            return i + 1;
+        } else {
             return j;
         }
     }
@@ -247,30 +326,30 @@ public class ArrayProblems {
     /**
      * given an array find all number whose opposite is present
      * for [0,2,1,-2,-1] o/p should be [1,-1, 2,-2]
+     *
      * @param arr
      * @return
      */
-    private static HashMap<Integer,Integer> findOpposite(Integer[] arr) {
+    private static HashMap<Integer, Integer> findOpposite(Integer[] arr) {
         Comparator<Integer> comparator = new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
-                if(o1!=o2 || o1 !=-02){
-                    return Math.abs(o1)-Math.abs(o2);
-                }
-                else{
-                    if(o1<o2) return 1;
-                    if(o1==o2) return  -1;
-                    else return  -1;
+                if (o1 != o2 || o1 != -02) {
+                    return Math.abs(o1) - Math.abs(o2);
+                } else {
+                    if (o1 < o2) return 1;
+                    if (o1 == o2) return -1;
+                    else return -1;
                 }
             }
         };
 
 
-        Arrays.sort(arr,comparator);
+        Arrays.sort(arr, comparator);
         HashMap<Integer, Integer> map = new HashMap<>();
-        for(int i =1; i< arr.length;i++){
-            if(arr[i]==-arr[i-1]){
-                map.put(arr[i], arr[i-1]);
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] == -arr[i - 1]) {
+                map.put(arr[i], arr[i - 1]);
             }
         }
 
@@ -279,42 +358,42 @@ public class ArrayProblems {
 
     /**
      * get pow of a number
+     *
      * @param x
      * @param pow
      * @return
      */
-    static long getPow(int x , int pow){
-        if(pow==0) return 1;
-        if(pow%2==0){
-            return getPow(x*x, pow/2);
-        }
-        else{
-            return x*getPow(x*x,(pow-1)/2);
+    static long getPow(int x, int pow) {
+        if (pow == 0) return 1;
+        if (pow % 2 == 0) {
+            return getPow(x * x, pow / 2);
+        } else {
+            return x * getPow(x * x, (pow - 1) / 2);
         }
     }
 
 
     /**
      * https://www.geeksforgeeks.org/minimum-number-swaps-required-sort-array/
+     *
      * @param A
      * @return
      */
-    public static int minSwaps(int[] A)
-    {//add code here.
+    public static int minSwaps(int[] A) {//add code here.
 
-        if(A==null||A.length<=1) return 0;
-        boolean [] visited = new boolean[A.length];
+        if (A == null || A.length <= 1) return 0;
+        boolean[] visited = new boolean[A.length];
         int swap = 0;
-        for(int i = 0 ; i < A.length;i++){
+        for (int i = 0; i < A.length; i++) {
             int j = i;
-            int cycle=0;
-            while(!visited[j]){
+            int cycle = 0;
+            while (!visited[j]) {
                 visited[j] = true;
-                j = A[j]-1;
+                j = A[j] - 1;
                 cycle++;
             }
-            if(cycle!=0){
-                swap+=cycle-1;
+            if (cycle != 0) {
+                swap += cycle - 1;
             }
         }
 
@@ -352,6 +431,7 @@ public class ArrayProblems {
     }
 
     static int k = 0;
+
     /*
       * N-Queen Problem
      https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/
@@ -366,8 +446,8 @@ public class ArrayProblems {
         for (int i = 0; i < N; i++) {
             if (isSafe(board, row, i)) {
                 board[row][i] = 1;
-                arr[j] = i+1;
-                res = solveNQ(board, row + 1, N, arr,j+1) || res;
+                arr[j] = i + 1;
+                res = solveNQ(board, row + 1, N, arr, j + 1) || res;
                 board[row][i] = 0;
             }
         }
@@ -394,8 +474,8 @@ public class ArrayProblems {
     static void printBoard(int[] board) {
         System.out.print("[");
         for (int i = 0; i < board.length; i++) {
-                    System.out.print(board[i]+" ");
-            }
+            System.out.print(board[i] + " ");
+        }
 
         System.out.print("]" + " ");
     }
@@ -501,6 +581,7 @@ public class ArrayProblems {
 
     /**
      * print an array in spiral form
+     *
      * @param arr
      */
     private static void printSpiralForm(int[][] arr) {
@@ -584,8 +665,9 @@ public class ArrayProblems {
 
     /**
      * search in rotated array
+     *
      * @param arr array to be rotated
-     * @param k item to search
+     * @param k   item to search
      */
     public static void printResult(int[] arr, int k) {
 
@@ -615,6 +697,7 @@ public class ArrayProblems {
 
     /**
      * longest increasing subsequence
+     *
      * @param arr
      */
     public static void printResult(int[] arr) {
