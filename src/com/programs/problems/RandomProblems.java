@@ -15,13 +15,13 @@ public class RandomProblems {
         HashSet<Integer> hash = new HashSet<>();
 
         // 1 3 5 2 
-        for(Integer k : a){
-            Integer diff = Math.abs(k-b);
-            if(hash.contains(diff)) return 1;
+        for (Integer k : a) {
+            Integer diff = Math.abs(k - b);
+            if (hash.contains(diff)) return 1;
             hash.add(k);
         }
 
-        return  0;
+        return 0;
     }
 
     static int migratoryBirds(int n, int[] ar) {
@@ -41,91 +41,169 @@ public class RandomProblems {
 
     public static void main(String[] args) {
 
-        int num = 152;
-       // System.out.println(num==cubeSum(num));
-      // int[] arr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+        char[] arr = new char[]{'p', 'e', 'r', 'f', 'e', 'c', 't', ' ',
+                'm', 'a', 'k', 'e', 's', ' ',
+                'p', 'r', 'a', 'c', 't', 'i', 'c', 'e'};
 
-
-        System.out.println(floorSqrt(2147483647));
-        //System.out.println(sqrt(2147483647));
-
+        arr = reverseWords(arr);
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+        }
 
 
     }
 
-    public int sqrt(int n) {
-        if(n==0) return 0;
-        if(n<4) return 1;
 
-        long start=1; long end = n;
-        long ans=0;
-        while(start<=end){
-            long mid  = (start+end)/2;
-            if(mid*mid==n) return (int)mid;
-            if(mid*mid>n)  end = mid-1;
+    /**
+     * reverse word in char array separated by space
+     *
+     * @param arr
+     * @return
+     */
+    static char[] reverseWords(char[] arr) {
+        if (arr == null || arr.length == 0) return arr;
+
+        char temp[] = new char[arr.length];
+        int j = 0;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            temp[j] = arr[i];
+            j++;
+        }
+
+
+        int start = 0;
+        for (int i = 1; i < temp.length; i++) {
+            if (temp[i] == ' ') {
+                reverse(temp, start, i - 1);
+                start = i + 1;
+            }
+        }
+        reverse(temp, start, temp.length - 1);
+
+        return temp;
+
+    }
+
+    public static void reverse(char[] temp, int start, int end) {
+
+        while (start < end) {
+            char t = temp[start];
+            temp[start] = temp[end];
+            temp[end] = t;
+            start++;
+            end--;
+        }
+
+    }
+
+    /*
+    generate pascal triangle
+     */
+    public static List<List<Integer>> generate(int numRows) {
+        if (numRows <= 0) return null;
+        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        List<Integer> sublist = new ArrayList<>();
+        sublist.add(1);
+        list.add(sublist);
+        for (int i = 1; i < numRows; i++) {
+
+            sublist = getSubList(list.get(i - 1), i + 1);
+            list.add(sublist);
+        }
+        return list;
+    }
+
+    public static List<Integer> getSubList(List<Integer> list, int num) {
+        List<Integer> sublist = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            if (i - 1 >= 0) {
+                if (i >= list.size()) {
+                    sublist.add(list.get(i - 1));
+                } else {
+                    sublist.add(list.get(i) + list.get(i - 1));
+                }
+            } else {
+                sublist.add(list.get(i));
+            }
+        }
+
+        return sublist;
+    }
+
+    /**
+     * find sqrt of a number
+     *
+     * @param n
+     * @return
+     */
+    public int sqrt(int n) {
+        if (n == 0) return 0;
+        if (n < 4) return 1;
+
+        long start = 1;
+        long end = n;
+        long ans = 0;
+        while (start <= end) {
+            long mid = (start + end) / 2;
+            if (mid * mid == n) return (int) mid;
+            if (mid * mid > n) end = mid - 1;
             else {
-                start = mid+1;
+                start = mid + 1;
                 ans = mid;
             }
         }
 
 
-        return (int)ans;
+        return (int) ans;
     }
 
-    public static int floorSqrt(int x)
-    {
+    public static int floorSqrt(int x) {
         // Base Cases
         if (x == 0 || x == 1)
             return x;
 
         // Do Binary Search for floor(sqrt(x))
-        int start = 1, end = x, ans=0;
-        while (start <= end)
-        {
+        int start = 1, end = x, ans = 0;
+        while (start <= end) {
             int mid = (start + end) / 2;
 
             // If x is a perfect square
-            if (mid*mid == x)
+            if (mid * mid == x)
                 return mid;
 
             // Since we need floor, we update answer when mid*mid is
             // smaller than x, and move closer to sqrt(x)
-            if (mid*mid < x)
-            {
+            if (mid * mid < x) {
                 start = mid + 1;
                 ans = mid;
-            }
-            else   // If mid*mid is greater than x
-                end = mid-1;
+            } else   // If mid*mid is greater than x
+                end = mid - 1;
         }
         return ans;
     }
 
     public static int removeDuplicates(ArrayList<Integer> a) {
-        if(a==null|| a.size()==0) return 0;
+        if (a == null || a.size() == 0) return 0;
         int length = a.size();//3
-        int i =0;
-        int j =0;
-        for( i =0;i<a.size();){
-            if(i+1<a.size()&& a.get(i).intValue()==a.get(i+1).intValue()){
+        int i = 0;
+        int j = 0;
+        for (i = 0; i < a.size(); ) {
+            if (i + 1 < a.size() && a.get(i).intValue() == a.get(i + 1).intValue()) {
                 Integer k = a.get(i);
 
-                a.set(j,k);
+                a.set(j, k);
                 j++;
-                a.set(j,k);
+                a.set(j, k);
                 j++;
 
-                while(i+1<a.size()&& a.get(i).intValue()==a.get(i+1).intValue()){
+                while (i + 1 < a.size() && a.get(i).intValue() == a.get(i + 1).intValue()) {
                     i++;
                 }
                 i++;
-            }
-
-            else{
+            } else {
                 Integer k = a.get(i);
 
-                a.set(j,k);
+                a.set(j, k);
                 j++;
                 i++;
 
@@ -136,22 +214,21 @@ public class RandomProblems {
     }
 
     public static int removeDuplicates(int[] a) {
-        if(a==null|| a.length==0) return 0;
+        if (a == null || a.length == 0) return 0;
         int length = a.length;//3
-        int i =0;
-        int j =0;//2
-        for( i =0;i<a.length;){
-          if(i+1<a.length&& a[i]==a[i+1]){
-                a[j] =a[i];
+        int i = 0;
+        int j = 0;//2
+        for (i = 0; i < a.length; ) {
+            if (i + 1 < a.length && a[i] == a[i + 1]) {
+                a[j] = a[i];
                 j++;
-                a[j]=a[i];
+                a[j] = a[i];
                 j++;
-                while(i+1<a.length && a[i+1]==a[i]){
+                while (i + 1 < a.length && a[i + 1] == a[i]) {
                     i++;
                 }
                 i++;
-            }
-            else{
+            } else {
                 a[j] = a[i];
                 j++;
                 i++;
@@ -163,43 +240,43 @@ public class RandomProblems {
 
     /**
      * find sum of cube of all digits in a num
+     *
      * @param num input num
      * @return sum of cubeof all num
      */
-    public static int cubeSum(int num){
+    public static int cubeSum(int num) {
 
-        if(num==0) return 0;
+        if (num == 0) return 0;
         int sum = 0;
-        while(num>0){
-            int rem = num%10;
-            sum+= rem*rem*rem;
-            num=num/10;
+        while (num > 0) {
+            int rem = num % 10;
+            sum += rem * rem * rem;
+            num = num / 10;
         }
-        return  sum;
+        return sum;
     }
 
     public static int compareVersion(String a, String b) {
         String str1[] = a.split("\\.");
         String str2[] = b.split("\\.");
         int i = 0;
-        while(i<str1.length && i < str2.length){
+        while (i < str1.length && i < str2.length) {
             double one = Double.parseDouble(str1[i]);
             double two = Double.parseDouble(str2[i]);
-            if(one>two){
+            if (one > two) {
                 return 1;
-            }
-            else if(one<two){
+            } else if (one < two) {
                 return -1;
             }
             i++;
 
         }
 
-        if(i==str1.length && i == str2.length){
+        if (i == str1.length && i == str2.length) {
             return 0;
         }
 
-        if(i<str1.length){
+        if (i < str1.length) {
             return 1;
         }
         return -1;
