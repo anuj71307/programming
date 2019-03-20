@@ -40,19 +40,43 @@ public class RandomProblems {
     }
 
     public static void main(String[] args) {
-
-        char[] arr = new char[]{'p', 'e', 'r', 'f', 'e', 'c', 't', ' ',
-                'm', 'a', 'k', 'e', 's', ' ',
-                'p', 'r', 'a', 'c', 't', 'i', 'c', 'e'};
-
-        arr = reverseWords(arr);
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i]);
-        }
-
-
+     List<Integer> list = new ArrayList<>();
+     list.add(5);
+        list.add(23);
+        list.add(23);
+        list.add(66);
+        list.add(5);
+        list.add(23);
+        list.add(7);
+        list.add(0);
+        System.out.println(getFirstTwoItemsWithoutPair(list));
     }
 
+    /**
+     * Given a list return first two item which is present only once
+     * if given list is {1,3,3,56,7,56,1,56,2} then return {7,2}
+     * @param list
+     * @return
+     */
+    public static List<Integer> getFirstTwoItemsWithoutPair(List<Integer> list) {
+         if(list==null || list.isEmpty()) return list;
+         HashSet<Integer> set = new HashSet<>();
+         List<Integer> res = new ArrayList<>();
+         for(Integer num: list){
+             if(set.add(num)){
+                 res.add(num);
+             }
+             else{
+                 res.remove(num);
+             }
+         }
+
+         List<Integer> result  = new ArrayList<>();
+         for(int i = 0; i< res.size() && i < 2;i++){
+             result.add(res.get(i));
+         }
+         return  result;
+    }
 
     /**
      * reverse word in char array separated by space
