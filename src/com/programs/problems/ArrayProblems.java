@@ -157,9 +157,49 @@ public class ArrayProblems {
         return maxValue;
     }
 
+
     public static void main(String[] args) {
-        System.out.println(clumsy(5));
+        // System.out.println(clumsy(5));
+        combination();
     }
+
+    /**
+     * https://leetcode.com/problems/combinations/
+     *
+     */
+    private static void combination() {
+        LinkedList<Integer> list = new LinkedList<>();
+        List<List<Integer>> res = new LinkedList<>();
+        int n = 2;
+        int k = 2;
+        getCombination(k, n, list, res, 1);
+    }
+
+
+    /**
+     * https://leetcode.com/problems/combinations/
+     *
+     * @param k        number of nos
+     * @param n        total no from 1..n
+     * @param currList
+     * @param res
+     * @param curr
+     */
+    public static void getCombination(int k, int n, LinkedList<Integer> currList, List<List<Integer>> res, int curr) {
+
+        if (currList.size() == k) {
+            res.add(new LinkedList<>(currList));
+            //return res;
+        }
+
+        for (int i = curr; i < n + 1; i++) {
+            currList.add(i);
+            getCombination(k, n, currList, res, i + 1);
+            currList.removeLast();
+        }
+
+    }
+
 
     /**
      * https://leetcode.com/problems/clumsy-factorial/
