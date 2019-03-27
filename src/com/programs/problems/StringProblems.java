@@ -1,6 +1,11 @@
 package com.programs.problems;
 
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class StringProblems {
@@ -250,6 +255,40 @@ public class StringProblems {
             j = current;
         }
         return current;
+
+    }
+
+    /*
+    https://leetcode.com/problems/decode-ways/
+     */
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0) return 0;
+        if (s.length() == 1) {
+            if (s.charAt(0) > '0') return 1;
+            else return 0;
+        }
+        int first = 0;
+        int second = 0;
+        if (s.charAt(0) > '0') {
+            first = 1;
+        }
+        if (s.charAt(1) > '0' && first != 0) {
+            second = 1;
+        }
+        int current = 1;
+        for (int i = 2; i <= s.length(); i++) {
+            current = 0;
+            if (s.charAt(i - 1) > '0') {
+                current = second;
+            }
+            if (s.charAt(i - 2) == '1' || (s.charAt(i - 2) == '2' && s.charAt(i - 1) < '7')) {
+                current += first;
+            }
+            first = second;
+            second = current;
+        }
+
+        return second;
 
     }
 
@@ -624,39 +663,184 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        HashSet<String> dict = new HashSet<>();
-        dict.add("and");
-        dict.add("cat");
-        dict.add("aand");
-       permutation("god");
-       System.out.println(getPerms("god"));
+        String input = "abc";
+        printAllPerm(input, "");
     }
 
-    private static void permutation(String abc) {
-        permutation("", abc);
-    }
 
-    private static void permutation(String s, String abc) {
-        if(abc.length()==0) System.out.println(s);
-        for(int i =0;i<abc.length();i++){
-            permutation(s+abc.charAt(i), abc.substring(0,i)+abc.substring(i+1, abc.length()));
+    /**
+     * print all permutation of a string
+     *
+     * @param input
+     * @param res
+     */
+    private static void printAllPerm(String input, String res) {
+        if (input.length() == 0) {
+            System.out.println(res);
+            return;
         }
 
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            String prefix = input.substring(0, i);
+            String suffix = input.substring(i + 1, input.length());
+            printAllPerm(prefix + suffix, res + c);
+        }
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/find-all-strings-that-match-specific-pattern-in-a-dictionary/
+     *
+     * @param dict
+     * @param pattern
+     * @return
+     */
+    public static ArrayList<String> findMatchedWords(ArrayList<String> dict, String pattern) {
+        ArrayList<String> list = new ArrayList<String>();
+        String patternCode = encodedWord(pattern);
+        for (String str : dict) {
+            if (patternCode.equals(encodedWord(str))) {
+                list.add(str);
+            }
+        }
+        return list;
+    }
+
+    private static String encodedWord(String pattern) {
+        if (pattern == null) return "";
+        int i = 0;
+        StringBuilder builder = new StringBuilder();
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int k = 0; k < pattern.length(); k++) {
+            if (!map.containsKey(pattern.charAt(k))) {
+                map.put(pattern.charAt(k), i);
+                i++;
+            }
+            builder = builder.append(map.get(pattern.charAt(k)));
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * https://leetcode.com/articles/longest-substring-with-at-most-two-distinct-charac/
+     *
+     * @param str
+     * @return
+     */
+    public static String longestSubStringWith2Char(String str) {
+
+        HashMap<Character, Integer> map = new HashMap<>();
+        int left = 0;
+        int right = 0;
+        String res = "";
+        while (right < str.length()) {
+            if (map.size() < 3) {
+                map.put(str.charAt(right), right);
+            }
+            if (map.size() == 3) {
+                int min = Collections.min(map.values());
+                map.remove(str.charAt(min));
+                left = min + 1;
+            }
+            int max = Collections.max(map.values());
+            if (res.length() < max + 1 - left) {
+                res = str.substring(left, max + 1);
+            }
+            right++;
+        }
+
+        return res;
+    }
+
+    // Function to count special
+// Palindromic susbstring
+    public static int CountSpecialPalindrome(String str) {
+        int n = str.length();
+
+        // store count of special
+        // Palindromic substring
+        int result = 0;
+
+        // it will store the count
+        // of continues same char
+        int[] sameChar = new int[n];
+        for (int v = 0; v < n; v++)
+            sameChar[v] = 0;
+
+        int i = 0;
+
+        // traverse string character
+        // from left to right
+        while (i < n) {
+
+            // store same character count
+            int sameCharCount = 1;
+
+            int j = i + 1;
+
+            // count smiler character
+            while (j < n &&
+                    str.charAt(i) == str.charAt(j)) {
+                sameCharCount++;
+                j++;
+            }
+
+            // Case : 1
+            // so total number of
+            // substring that we can
+            // generate are : K *( K + 1 ) / 2
+            // here K is sameCharCount
+            result += (sameCharCount *
+                    (sameCharCount + 1) / 2);
+
+            // store current same char
+            // count in sameChar[] array
+            sameChar[i] = sameCharCount;
+
+            // increment i
+            i = j;
+        }
+
+        // Case 2: Count all odd length
+        //           Special Palindromic
+        //           substring
+        for (int j = 1; j < n; j++) {
+            // if current character is
+            // equal to previous one
+            // then we assign Previous
+            // same character count to
+            // current one
+            if (str.charAt(j) == str.charAt(j - 1))
+                sameChar[j] = sameChar[j - 1];
+
+            // case 2: odd length
+            if (j > 0 && j < (n - 1) &&
+                    (str.charAt(j - 1) == str.charAt(j + 1) &&
+                            str.charAt(j) != str.charAt(j - 1)))
+                result += Math.min(sameChar[j - 1],
+                        sameChar[j + 1]);
+        }
+
+        // subtract all single
+        // length substring
+        return result - n;
     }
 
 
     /**
      * Reverse each word of String separated by space
      * for ex if string is "How are you" result should be "woh era uoy"
+     *
      * @param str input String
      * @return reverse String
      */
-    static String reverseAllWords(String str){
-        if(str==null || str.trim().length()==0) return str;
+    static String reverseAllWords(String str) {
+        if (str == null || str.trim().length() == 0) return str;
         String[] split = str.split(" ");
         StringBuilder builder = new StringBuilder();
-        for(int i = 0; i< split.length;i++){
-            if(split[i].trim().length()==0) continue;
+        for (int i = 0; i < split.length; i++) {
+            if (split[i].trim().length() == 0) continue;
             builder.append(reverseString(split[i])).append(" ");
         }
         return builder.toString().trim();
@@ -665,8 +849,8 @@ public class StringProblems {
     private static String reverseString(String s) {
         char[] arr = s.toCharArray();
         int i = 0;
-        int j = arr.length-1;
-        while(i<j){
+        int j = arr.length - 1;
+        while (i < j) {
             char temp = arr[i];
             arr[i] = arr[j];
             arr[j] = temp;
@@ -743,6 +927,12 @@ public class StringProblems {
     }
 
 
+    /**
+     * reverse a list of words ex if given word is "I am Geek" expected o/p is "Geek am I"
+     *
+     * @param a
+     * @return
+     */
     public static String reverseWords(String a) {
         if (a == null) return null;
         if (a.trim().length() == 0) return "";
@@ -757,6 +947,9 @@ public class StringProblems {
     }
 
 
+    /**
+     * Text Edit - > https://www.hackerrank.com/challenges/simple-text-editor/problem
+     */
     public static int evalRPN(String[] A) {
         Stack<Integer> stack = new Stack();
         for (String str : A) {
