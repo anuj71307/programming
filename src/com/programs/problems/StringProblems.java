@@ -1,11 +1,6 @@
 package com.programs.problems;
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class StringProblems {
@@ -88,36 +83,6 @@ public class StringProblems {
 
         // required smallest number
         return (new String(num));
-    }
-
-
-    public static ArrayList<String> getPerms(String str) {
-
-        if (str == null) return null;
-        ArrayList<String> perm = new ArrayList<>();
-        if (str.length() == 0) {
-            perm.add("");
-            return perm;
-        }
-        char first = str.charAt(0);
-        String remainder = str.substring(1);
-        ArrayList<String> words = getPerms(remainder);
-        for (String word : words) {
-            for (int j = 0; j <= word.length(); j++) {
-                String temp = insertChar(word, first, j);
-                perm.add(temp);
-            }
-        }
-
-
-        return perm;
-    }
-
-    private static String insertChar(String word, char first, int i) {
-        String start = word.substring(0, i);
-        String end = word.substring(i);
-        return start + first + end;
-
     }
 
     /*
@@ -663,28 +628,33 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        String input = "abc";
-        printAllPerm(input, "");
+        String input = "ABCA";
+        HashSet<Character> set = new HashSet<>();
+        printAllPerm(input, "", set);
+
     }
 
 
     /**
-     * print all permutation of a string
+     * generate all unique permutation of a string
      *
      * @param input
      * @param res
      */
-    private static void printAllPerm(String input, String res) {
+    private static void printAllPerm(String input, String res, HashSet<Character> set ) {
         if (input.length() == 0) {
             System.out.println(res);
             return;
         }
 
+        set = new HashSet<>();
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
+            if(set.contains(c)) continue;
+            set.add(c);
             String prefix = input.substring(0, i);
             String suffix = input.substring(i + 1, input.length());
-            printAllPerm(prefix + suffix, res + c);
+            printAllPerm(prefix + suffix, res + c, set);
         }
     }
 
