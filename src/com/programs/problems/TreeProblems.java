@@ -5,31 +5,77 @@ import java.util.*;
 public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
-        TreeNode node1 = new TreeNode(1);
-        TreeNode node2 = new TreeNode(2);
-        TreeNode node3 = new TreeNode(3);
+        Node node1 = new Node(10);
+        Node node2 = new Node(20);
+        Node node3 = new Node(30);
         node1.left = node2;
         node1.right = node3;
-        node3.left = new TreeNode(6);
-
-
-        System.out.println(isCompleteTree(node1));
+        node2.left = new Node(40);
+        node2.right = new Node(60);
+        //node3.left = new Node(6);
+        bottomView(node1);
 
     }
 
+    /**
+     * class used to print bottom view of a tree
+     */
+    static class Pair {
+        int data;
+        int height;
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/bottom-view-binary-tree/
+     *
+     * @param root
+     */
+    public static void bottomView(Node root) {
+        // Your code here
+        TreeMap<Integer, Pair> map = new TreeMap<>();
+        printBottom(root, map, 0, 0);
+        Iterator<Integer> iterator = map.keySet().iterator();
+        while (iterator.hasNext()) {
+            Pair key = map.get(iterator.next());
+            System.out.print(key.data + " ");
+        }
+
+
+    }
+
+    private static void printBottom(Node root, TreeMap<Integer, Pair> map, int height, int hDis) {
+        if (root == null) return;
+        if (!map.containsKey(hDis)) {
+            Pair pair = new Pair();
+            pair.data = root.data;
+            pair.height = height;
+            map.put(hDis, pair);
+        } else {
+            Pair pair = map.get(hDis);
+            if (pair.height <= height) {
+                pair.height = height;
+                pair.data = root.data;
+            }
+
+        }
+
+        printBottom(root.left, map, height + 1, hDis - 1);
+        printBottom(root.right, map, height + 1, hDis + 1);
+    }
 
     /**
      * https://leetcode.com/problems/check-completeness-of-a-binary-tree/
+     *
      * @param root
      * @return
      */
-    public static boolean isCompleteTree(TreeNode root) {
+    public static boolean isCompleteTree(Node root) {
         if (root == null) return true;
-        Queue<TreeNode> queue = new LinkedList<>();
+        Queue<Node> queue = new LinkedList<>();
         queue.add(root);
         boolean flag = false;
         while (!queue.isEmpty()) {
-            TreeNode node = queue.poll();
+            Node node = queue.poll();
             if (node.left != null) {
 
                 if (flag) {
@@ -59,7 +105,7 @@ public class TreeProblems {
     /*
     https://www.geeksforgeeks.org/find-count-of-singly-subtrees/
      */
-    static int countUniValue(TreeNode node) {
+    static int countUniValue(Node node) {
         Count count = new Count();
         countUniValue(node, count);
         return count.res;
@@ -72,7 +118,7 @@ public class TreeProblems {
     /*
     https://www.geeksforgeeks.org/find-count-of-singly-subtrees/
      */
-    private static boolean countUniValue(TreeNode node, Count count) {
+    private static boolean countUniValue(Node node, Count count) {
         if (node == null) return true;
         boolean left = countUniValue(node.left, count);
         boolean right = countUniValue(node.right, count);
@@ -84,7 +130,7 @@ public class TreeProblems {
         return false;
     }
 
-    static public List<List<Integer>> verticalTraversal(TreeNode root) {
+    static public List<List<Integer>> verticalTraversal(Node root) {
         TreeMap<Integer, List<Integer>> map = new TreeMap<>();
         preOrder(root, 0, map);
         List<List<Integer>> list = new ArrayList<List<Integer>>();
@@ -97,7 +143,7 @@ public class TreeProblems {
     }
 
 
-    static void preOrder(TreeNode root, int dis, TreeMap<Integer, List<Integer>> map) {
+    static void preOrder(Node root, int dis, TreeMap<Integer, List<Integer>> map) {
         if (root == null) return;
         List<Integer> list = map.get(dis);
         if (list == null) {
@@ -118,12 +164,12 @@ public class TreeProblems {
      * @param y
      * @return
      */
-    public static boolean ifCousin(TreeNode root, TreeNode x, TreeNode y) {
+    public static boolean ifCousin(Node root, Node x, Node y) {
         //Your Code here.
         if (root == null) return false;
-        List<TreeNode> pathx = new ArrayList<>();
+        List<Node> pathx = new ArrayList<>();
         getPath(root, x, pathx);
-        List<TreeNode> pathy = new ArrayList<>();
+        List<Node> pathy = new ArrayList<>();
         getPath(root, y, pathy);
         if (pathx.size() != pathy.size()) return false;
         if (pathx.isEmpty() || pathy.isEmpty()) return false;
@@ -138,7 +184,7 @@ public class TreeProblems {
      * @param path
      * @return
      */
-    static boolean getPath(TreeNode root, TreeNode x, List<TreeNode> path) {
+    static boolean getPath(Node root, Node x, List<Node> path) {
         if (root == null) {
             return false;
         }
@@ -158,14 +204,14 @@ public class TreeProblems {
     /*
       check if tree has root to path with given sum
      */
-    static void hasPathSum(TreeNode node, int sum) {
+    static void hasPathSum(Node node, int sum) {
         // Your code here
         ArrayList<Integer> list = new ArrayList<>();
         hasPathSum(node, sum, list);
 
     }
 
-    static void hasPathSum(TreeNode node, int sum, ArrayList<Integer> list) {
+    static void hasPathSum(Node node, int sum, ArrayList<Integer> list) {
         if (node == null) return;
         list.add(node.data);
         if (node.left == null && node.right == null && node.data == sum) {
@@ -179,7 +225,7 @@ public class TreeProblems {
     }
 
 
-    public static int[][] levelOrder(TreeNode A) {
+    public static int[][] levelOrder(Node A) {
 
         int i = 0;
         ArrayList<ArrayList<Integer>> lists = new ArrayList<ArrayList<Integer>>();
@@ -199,7 +245,7 @@ public class TreeProblems {
         return arr;
     }
 
-    private static void doTraversal(TreeNode a, ArrayList<ArrayList<Integer>> lists, int depth) {
+    private static void doTraversal(Node a, ArrayList<ArrayList<Integer>> lists, int depth) {
         if (a == null) return;
         if (depth == lists.size()) {
             ArrayList<Integer> temp = new ArrayList<>();
@@ -211,15 +257,14 @@ public class TreeProblems {
         doTraversal(a.right, lists, depth + 1);
     }
 
-
 }
 
-class TreeNode {
+class Node {
     int data;
-    TreeNode left;
-    TreeNode right;
+    Node left;
+    Node right;
 
-    TreeNode(int x) {
+    Node(int x) {
         data = x;
         left = null;
         right = null;
