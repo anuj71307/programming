@@ -3,7 +3,7 @@ package com.programs.problems;
 
 import com.programs.linkedlist.LinkedList;
 
-public  class LinkedListProblems<T> {
+public class LinkedListProblems<T> {
 
 
     /**
@@ -135,11 +135,37 @@ public  class LinkedListProblems<T> {
        */
     public static void main(String[] args) {
 
+        LinkedList<Integer> head = new LinkedList<>(1);
+        LinkedList<Integer> next = new LinkedList<>(2);
+        head.setNext(next);
+        LinkedList temp = head;
+        while (temp != null) {
+            System.out.print(temp.getData() + " ");
+            temp = temp.getNext();
+        }
+        deleteNode(head);
+        System.out.println();
+        temp = head;
+        while (temp != null) {
+            System.out.print(temp.getData() + " ");
+            temp = temp.getNext();
+        }
     }
 
 
     /**
+     * https://practice.geeksforgeeks.org/problems/delete-without-head-pointer/1
+     * delete a given node form linkedlist which may not be head
+     * Assumption: Last will ever be given as input
+     */
+    static void deleteNode(LinkedList<Integer> node) {
+        node.setData(node.getNext().getData());
+        node.setNext(node.getNext().getNext());
+    }
+
+    /**
      * sum of two linked list
+     *
      * @param l1
      * @param l2
      * @return
@@ -154,21 +180,22 @@ public  class LinkedListProblems<T> {
 
         while (num > 0) {
             int rem = num % 10;
-                head = addNode(head, rem);
-            num = num/10;
+            head = addNode(head, rem);
+            num = num / 10;
         }
 
         return head;
     }
 
     // 1--2
-    public LinkedList<T> reverse(LinkedList<T> node){
-        if(node==null || node.getNext()==null) return  node;
-        return  reverse(null, node, node.getNext());
+    public LinkedList<T> reverse(LinkedList<T> node) {
+        if (node == null || node.getNext() == null) return node;
+        return reverse(null, node, node.getNext());
     }
-    public LinkedList<T> reverse(LinkedList<T> prev, LinkedList<T> curr, LinkedList<T> nxt ) {
-      curr.setNext(prev);
-      return nxt!=null?reverse(curr, nxt, nxt.getNext()):curr;
+
+    public LinkedList<T> reverse(LinkedList<T> prev, LinkedList<T> curr, LinkedList<T> nxt) {
+        curr.setNext(prev);
+        return nxt != null ? reverse(curr, nxt, nxt.getNext()) : curr;
     }
 
     private static LinkedList<Integer> addNode(LinkedList<Integer> head, int num) {
