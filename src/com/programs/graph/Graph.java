@@ -1,4 +1,4 @@
-package com.programs;
+package com.programs.graph;
 
 
 import java.util.Iterator;
@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+/**
+ * Graph class
+ */
 public class Graph {
     //No of vertices
     int vertices;

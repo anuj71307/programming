@@ -1,12 +1,9 @@
 package com.programs.problems;
 
-import com.programs.Graph;
+import com.programs.graph.Graph;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class GraphProblems {
 

@@ -88,6 +88,35 @@ public class THashMap<K,V> {
         node.setVal(val);
     }
 
+
+    public boolean remove(K key){
+        int pos = getPos(key);
+        Node<K,V> node = table[pos];
+
+        if(node==null) {
+            return false;
+        }
+
+
+        Node<K,V> prev = node;
+        while(node!=null&& (hashing(key)!=hashing(node.key) && !key.equals(node.key))){
+            prev = node;
+            node = node.next;
+        }
+        if(node==null){
+            return  false;
+        }
+        else{
+            if(prev==node){
+                table[pos] = node.next;
+            }
+            else {
+                prev.next = node.next;
+            }
+           size--;
+        }
+        return  true;
+    }
     public boolean isEmpty(){
         return size==0;
     }

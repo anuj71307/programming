@@ -130,6 +130,11 @@ public class TreeProblems {
         return false;
     }
 
+    /**
+     * vertical level traversal of binary tree.
+     * @param root
+     * @return
+     */
     static public List<List<Integer>> verticalTraversal(Node root) {
         TreeMap<Integer, List<Integer>> map = new TreeMap<>();
         preOrder(root, 0, map);
