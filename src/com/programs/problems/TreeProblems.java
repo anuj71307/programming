@@ -1,19 +1,120 @@
 package com.programs.problems;
 
+
 import java.util.*;
 
 public class TreeProblems {
+
+
     public static void main(String args[]) throws Exception {
 
-        Node node1 = new Node(10);
-        Node node2 = new Node(20);
-        Node node3 = new Node(30);
-        node1.left = node2;
-        node1.right = node3;
-        node2.left = new Node(40);
-        node2.right = new Node(60);
-        //node3.left = new Node(6);
-        bottomView(node1);
+
+    }
+
+    /**
+     * do a zigzag traversal of a tree and return every level as list
+     *
+     * @param node
+     * @return
+     */
+    public static ArrayList<ArrayList<Integer>> zigzagLevelOrder(Node node) {
+        if (node == null) return null;
+        ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+
+        Stack<Node> stack1 = new Stack<>();
+        Stack<Node> stack2 = new Stack<>();
+        stack1.push(node);
+        while (!stack1.isEmpty() || !stack2.isEmpty()) {
+            ArrayList<Integer> li = new ArrayList<>();
+            while (!stack1.isEmpty()) {
+                Node temp = stack1.pop();
+                li.add(temp.data);
+                if (temp.left != null) {
+                    stack2.push(temp.left);
+                }
+                if (temp.right != null) {
+                    stack2.push(temp.right);
+                }
+
+            }
+
+            if (!li.isEmpty()) {
+                list.add(li);
+            }
+            li = new ArrayList<>();
+
+            while (!stack2.isEmpty()) {
+                Node temp = stack2.pop();
+                li.add(temp.data);
+                if (temp.right != null) {
+                    stack1.push(temp.right);
+                }
+                if (temp.left != null) {
+                    stack1.push(temp.left);
+                }
+            }
+            if (!li.isEmpty()) {
+                list.add(li);
+            }
+
+
+        }
+
+        return list;
+
+    }
+
+    static ArrayList<ArrayList> printSpiral(Node node) {
+        if (node == null)
+            return null; // NULL check
+
+        ArrayList<ArrayList> list = new ArrayList<>();
+        // Create two stacks to store alternate levels
+        // For levels to be printed from right to left
+        Stack<Node> s1 = new Stack<Node>();
+        // For levels to be printed from left to right
+        Stack<Node> s2 = new Stack<Node>();
+
+        // Push first level to first stack 's1'
+        s1.push(node);
+
+        // Keep printing while any of the stacks has some nodes
+        while (!s1.empty() || !s2.empty()) {
+            // Print nodes of current level from s1 and push nodes of
+            // next level to s2
+            ArrayList<Integer> li = new ArrayList<>();
+            while (!s1.empty()) {
+                Node temp = s1.pop();
+                li.add(temp.data);
+
+                // Note that is right is pushed before left
+                if (temp.left != null)
+                    s2.push(temp.left);
+
+                if (temp.right != null)
+                    s2.push(temp.right);
+            }
+
+            list.add(li);
+            li = new ArrayList<>();
+            // Print nodes of current level from s2 and push nodes of
+            // next level to s1
+            while (!s2.empty()) {
+                Node temp = s2.pop();
+                li.add(temp.data);
+
+                // Note that is left is pushed before right
+                if (temp.right != null)
+                    s1.push(temp.right);
+                if (temp.left != null)
+                    s1.push(temp.left);
+            }
+            list.add(li);
+            char[] arr = new char[2];
+            new String(arr);
+        }
+        return list;
+
 
     }
 
@@ -132,6 +233,7 @@ public class TreeProblems {
 
     /**
      * vertical level traversal of binary tree.
+     *
      * @param root
      * @return
      */
