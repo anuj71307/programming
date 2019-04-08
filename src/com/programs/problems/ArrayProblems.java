@@ -160,7 +160,35 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         // System.out.println(clumsy(5));
-        combination();
+        int[] arr= new int[]{3,1,2,4};
+        System.out.println(sumSubarrayMins(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/sum-of-subarray-minimums/
+     * @param arr
+     * @return
+     */
+    public static int sumSubarrayMins(int[] arr) {
+        int len  = arr.length;
+        int sum = 0;
+        for(int i = 1; i<=len;i++ ){
+            for(int j = 0; j < arr.length;j++){
+                int start = j;
+                int end = j+i;
+                if(end>arr.length) break;
+                int min = arr[start];
+
+                while(start<end){
+                    if(min>arr[start]){
+                        min = arr[start];
+                    }
+                    start++;
+                }
+                sum+=min;
+            }
+        }
+        return sum;
     }
 
     /**
