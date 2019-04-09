@@ -160,40 +160,84 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         // System.out.println(clumsy(5));
-        int[] arr= new int[]{3,1,2,4};
+        int[] arr = new int[]{3, 1, 2, 4};
         System.out.println(sumSubarrayMins(arr));
     }
 
     /**
      * https://leetcode.com/problems/sum-of-subarray-minimums/
+     *
      * @param arr
      * @return
      */
     public static int sumSubarrayMins(int[] arr) {
-        int len  = arr.length;
+        int len = arr.length;
         int sum = 0;
-        for(int i = 1; i<=len;i++ ){
-            for(int j = 0; j < arr.length;j++){
+        for (int i = 1; i <= len; i++) {
+            for (int j = 0; j < arr.length; j++) {
                 int start = j;
-                int end = j+i;
-                if(end>arr.length) break;
+                int end = j + i;
+                if (end > arr.length) break;
                 int min = arr[start];
 
-                while(start<end){
-                    if(min>arr[start]){
+                while (start < end) {
+                    if (min > arr[start]) {
                         min = arr[start];
                     }
                     start++;
                 }
-                sum+=min;
+                sum += min;
+                sum = (int) (sum % (Math.pow(10, 9) + 7));
             }
         }
         return sum;
     }
 
     /**
-     * https://leetcode.com/problems/combinations/
+     * https://www.geeksforgeeks.org/sum-of-minimum-elements-of-all-subarrays/
+     * https://leetcode.com/problems/sum-of-subarray-minimums/
      *
+     * @param arr
+     * @return
+     */
+    public static int sumSubarrayMinsUsingStack(int[] arr) {
+        int mod = (int) Math.pow(10, 9) + 7;
+
+        Stack<Rep> stack = new Stack<>();
+        int ans = 0;
+        int dot = 0;
+        for (int i = 0; i < arr.length; i++) {
+            int count = 1;
+            while (!stack.isEmpty() && stack.peek().val >= arr[i]) {
+                Rep rep = stack.pop();
+                count += rep.count;
+                dot -= rep.val * rep.count;
+            }
+            Rep re = new Rep(arr[i], count);
+            stack.push(re);
+            dot+=re.val*re.count;
+            ans+=dot;
+            ans%=mod;
+        }
+
+
+        return ans;
+
+
+    }
+
+    static class Rep {
+        int val;
+        int count;
+
+        Rep(int v, int c) {
+            val = v;
+            count = c;
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/combinations/
      */
     private static void combination() {
         LinkedList<Integer> list = new LinkedList<>();
