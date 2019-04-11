@@ -165,6 +165,43 @@ public class ArrayProblems {
     }
 
     /**
+     * https://www.geeksforgeeks.org/find-a-tour-that-visits-all-stations/
+     *
+     * @param arr
+     * @return
+     */
+    private static int firstCity(City arr[]) {
+        if (arr == null || arr.length == 0) return -1;
+        int start = 0;
+        int end = 1;
+        int currPetrol = arr[start].petrol - arr[start].dis;
+        while (start != end) {
+
+            while (currPetrol < 0 && start != end) {
+                currPetrol -= arr[start].petrol - arr[start].dis;
+                start = (start + 1) % arr.length;
+                if (start == 0) return -1;
+            }
+
+            currPetrol += arr[end].petrol - arr[end].dis;
+            end = (end + 1) % arr.length;
+
+        }
+
+        return start;
+    }
+
+    static class City {
+        int petrol;
+        int dis;
+
+        public City(int petrol, int dis) {
+            this.petrol = petrol;
+            this.dis = dis;
+        }
+    }
+
+    /**
      * https://leetcode.com/problems/sum-of-subarray-minimums/
      *
      * @param arr
@@ -197,6 +234,7 @@ public class ArrayProblems {
      * https://www.geeksforgeeks.org/sum-of-minimum-elements-of-all-subarrays/
      * https://leetcode.com/problems/sum-of-subarray-minimums/
      * Time Complexity - 0(n), Space Complexity 0(n)
+     *
      * @param arr
      * @return
      */
@@ -215,9 +253,9 @@ public class ArrayProblems {
             }
             Rep re = new Rep(arr[i], count);
             stack.push(re);
-            dot+=re.val*re.count;
-            ans+=dot;
-            ans%=mod;
+            dot += re.val * re.count;
+            ans += dot;
+            ans %= mod;
         }
 
 
