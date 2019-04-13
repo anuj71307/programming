@@ -40,16 +40,40 @@ public class RandomProblems {
     }
 
     public static void main(String[] args) {
-     List<Integer> list = new ArrayList<>();
-     list.add(5);
-        list.add(23);
-        list.add(23);
-        list.add(66);
-        list.add(5);
-        list.add(23);
-        list.add(7);
-        list.add(0);
-        System.out.println(getFirstTwoItemsWithoutPair(list));
+       generateBinary(4);
+    }
+
+    /**
+     * generate all biary number of a given length
+     * https://www.geeksforgeeks.org/generate-binary-strings-without-consecutive-1s/
+     * @param len
+     */
+    private static void generateBinary(int len){
+        if(len<=0) return;
+        char[] arr = new char[len];
+        arr[0] = '0';
+        generateBinary(len, arr, 1);
+        arr[0] = '1';
+        generateBinary(len, arr, 1);
+    }
+
+    private static void generateBinary(int len, char[] arr, int i) {
+        if(i==len){
+            System.out.println(new String(arr));
+            return;
+        }
+
+        if(arr[i-1]=='0'){
+            arr[i] = '0';
+            generateBinary(len, arr, i+1);
+            arr[i] = '1';
+            generateBinary(len, arr, i+1);
+        }
+        else if(arr[i-1]=='1'){
+            arr[i] = '0';
+            generateBinary(len, arr, i+1);
+        }
+
     }
 
     /**
