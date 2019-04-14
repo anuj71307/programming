@@ -628,53 +628,77 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        String input = "ABCA";
-        HashSet<Character> set = new HashSet<>();
-        //printAllPerm(input, "", set);
-        System.out.print(editDistDP("ab", "ac", 2,2));
+        printInterLeave("AB", "CD", "");
 
     }
 
 
     /**
+     * https://www.geeksforgeeks.org/print-all-interleavings-of-given-two-strings/
+     *
+     * @param str1
+     * @param str2
+     * @param interleave
+     */
+    private static void printInterLeave(String str1, String str2, String interleave) {
+        if (str1 == null) {
+            System.out.println(str2);
+            return;
+        }
+        if (str2 == null) {
+            System.out.println(str1);
+            return;
+        }
+
+        if (str1.length() == 0 && str2.length() == 0) {
+            System.out.println(interleave);
+            return;
+        }
+
+        if (str1.length() != 0)
+            printInterLeave(str1.substring(1), str2, interleave + str1.charAt(0));
+        if (str2.length() != 0)
+            printInterLeave(str1, str2.substring(1), interleave + str2.charAt(0));
+    }
+
+
+    /**
      * https://www.geeksforgeeks.org/edit-distance-dp-5/
+     *
      * @param str1
      * @param str2
      * @param m
      * @param n
      * @return
      */
-    static int editDistDP(String str1, String str2, int m, int n)
-    {
+    static int editDistDP(String str1, String str2, int m, int n) {
         // Create a table to store results of subproblems
-        int dp[][] = new int[m+1][n+1];
+        int dp[][] = new int[m + 1][n + 1];
 
         // Fill d[][] in bottom up manner
-        for (int i=0; i<=m; i++)
-        {
-            for (int j=0; j<=n; j++)
-            {
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
                 // If first string is empty, only option is to
                 // insert all characters of second string
-                if (i==0)
+                if (i == 0)
                     dp[i][j] = j;  // Min. operations = j
 
                     // If second string is empty, only option is to
                     // remove all characters of second string
-                else if (j==0)
+                else if (j == 0)
                     dp[i][j] = i; // Min. operations = i
 
                     // If last characters are same, ignore last char
                     // and recur for remaining string
-                else if (str1.charAt(i-1) == str2.charAt(j-1))
-                    dp[i][j] = dp[i-1][j-1];
+                else if (str1.charAt(i - 1) == str2.charAt(j - 1))
+                    dp[i][j] = dp[i - 1][j - 1];
 
                     // If the last character is different, consider all
                     // possibilities and find the minimum
                 else
-                    dp[i][j] = 1 + min(dp[i][j-1],  // Insert
-                            dp[i-1][j],  // Remove
-                            dp[i-1][j-1]); // Replace
+                    dp[i][j] = 1 + min(dp[i][j - 1],  // Insert
+                            dp[i - 1][j],  // Remove
+                            dp[i - 1][j - 1]); // Replace
             }
         }
 
@@ -682,7 +706,7 @@ public class StringProblems {
     }
 
     private static int min(int x, int y, int z) {
-        return Math.min(Math.min(x,y), z);
+        return Math.min(Math.min(x, y), z);
     }
 
     /**
@@ -691,7 +715,7 @@ public class StringProblems {
      * @param input
      * @param res
      */
-    private static void printAllPerm(String input, String res, HashSet<Character> set ) {
+    private static void printAllPerm(String input, String res, HashSet<Character> set) {
         if (input.length() == 0) {
             System.out.println(res);
             return;
@@ -700,7 +724,7 @@ public class StringProblems {
         set = new HashSet<>();
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            if(set.contains(c)) continue;
+            if (set.contains(c)) continue;
             set.add(c);
             String prefix = input.substring(0, i);
             String suffix = input.substring(i + 1, input.length());
