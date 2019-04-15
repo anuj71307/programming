@@ -12,10 +12,6 @@ public class TreeProblems {
     }
 
 
-    class Result {
-        int val = Integer.MAX_VALUE;
-    }
-
     /**
      * https://www.geeksforgeeks.org/find-minimum-depth-of-a-binary-tree/
      *
@@ -40,6 +36,10 @@ public class TreeProblems {
         minDepth(root.left, res, level + 1);
 
         minDepth(root.right, res, level + 1);
+    }
+
+    class Result {
+        int val = Integer.MAX_VALUE;
     }
 
     /**
