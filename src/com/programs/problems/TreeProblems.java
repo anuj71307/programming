@@ -11,6 +11,37 @@ public class TreeProblems {
 
     }
 
+
+    class Result {
+        int val = Integer.MAX_VALUE;
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/find-minimum-depth-of-a-binary-tree/
+     *
+     * @param root
+     * @return
+     */
+    int minDepth(Node root) {
+        // Your code here
+
+        Result res = new Result();
+        minDepth(root, res, 1);
+        return res.val;
+    }
+
+    void minDepth(Node root, Result res, int level) {
+        if (root == null) return;
+        if (root.left == null && root.right == null) {
+            res.val = Math.min(res.val, level);
+            return;
+        }
+
+        minDepth(root.left, res, level + 1);
+
+        minDepth(root.right, res, level + 1);
+    }
+
     /**
      * do a zigzag traversal of a tree and return every level as list
      *
