@@ -2,9 +2,9 @@ package com.programs.linkedlist;
 
 public class LinkedList<T> {
 
-    private T data;
-    private LinkedList<T> next;
-    private LinkedList<T> prev;
+    public T data;
+    public LinkedList<T> next;
+    public LinkedList<T> prev;
 
     public LinkedList(T data) {
         this.data = data;
@@ -35,5 +35,17 @@ public class LinkedList<T> {
     }
 
 
+    /**
+     * add node to last of linked list
+     * //TODO Change to remove time complexity of 0(n)
+     * @param data
+     */
+    public void add(T data ){
 
+        LinkedList<T> temp = this;
+        while(temp.next!=null){
+            temp = temp.next;
+        }
+        temp.next = new LinkedList<>(data);
+    }
 }
