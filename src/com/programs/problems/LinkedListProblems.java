@@ -135,21 +135,54 @@ public class LinkedListProblems<T> {
        */
     public static void main(String[] args) {
 
-        LinkedList<Integer> head = new LinkedList<>(1);
-        LinkedList<Integer> next = new LinkedList<>(2);
-        head.setNext(next);
+        LinkedList<Integer> node = new LinkedList<>(1);
+        LinkedList t = node;
+        node.add(2);
+        node.add(3);
+        node.add(4);
+        node.add(5);
+        node.add(6);
+        node.add(7);
+        node.add(8);
+
+        while (node != null) {
+            System.out.print(node.data + " ");
+            node = node.next;
+        }
+        System.out.println("After");
+        LinkedList<Integer> temp = reverseInGroup(t, 5);
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/reverse-a-list-in-groups-of-given-size/
+     * reverse linkedlist in groups
+     *
+     * @param head
+     * @param size
+     * @return
+     */
+    public static LinkedList<Integer> reverseInGroup(LinkedList<Integer> head, int size) {
+
+        if (head == null) return null;
         LinkedList temp = head;
-        while (temp != null) {
-            System.out.print(temp.getData() + " ");
-            temp = temp.getNext();
+        LinkedList tail = head;
+        int j = 0;
+        LinkedList prev = null;
+
+        while (temp != null && j < size) {
+            LinkedList next = temp.next;//2
+            temp.next = prev;
+            prev = temp;
+            temp = next; //2
+            j++;
+
         }
-        deleteNode(head);
-        System.out.println();
-        temp = head;
-        while (temp != null) {
-            System.out.print(temp.getData() + " ");
-            temp = temp.getNext();
-        }
+        tail.next = reverseInGroup(temp, size);
+        return prev;
     }
 
 
