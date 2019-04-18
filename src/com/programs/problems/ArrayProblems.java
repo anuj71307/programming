@@ -165,6 +165,40 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/online-election/
+     */
+    class TopVotedCandidate {
+
+        //time to person map
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+
+        public TopVotedCandidate(int[] persons, int[] times) {
+
+            //person to vote count map
+            HashMap<Integer, Integer> hashMap = new HashMap<>();
+            int currMax = 0;
+            int currWinner = 0;
+            for (int i = 0; i < persons.length; i++) {
+                int person = persons[i];
+                Integer val = hashMap.getOrDefault(person, 0);
+                val += 1;
+                hashMap.put(person, val);
+                if (val >= currMax) {
+                    currMax = val;
+                    currWinner = person;
+                }
+
+                map.put(times[i], currWinner);
+            }
+
+        }
+
+        public int q(int t) {
+            return map.get(map.floorKey(t));
+        }
+    }
+
+    /**
      * https://www.geeksforgeeks.org/find-a-tour-that-visits-all-stations/
      *
      * @param arr
