@@ -160,8 +160,42 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         // System.out.println(clumsy(5));
-        int[] arr = new int[]{3, 1, 2, 4};
-        System.out.println(sumSubarrayMins(arr));
+        int[] arr = new int[]{1, 2, 3, 4, 5};
+        int[] res = multiply(new int[1]);
+        for (int i : res){
+            System.out.print(i+" ");
+        }
+
+    }
+
+    /**
+     * Given an array of integers, return a new array such that each element at index i of the new array
+     * is the product of all the numbers in the original array except the one at i.
+     * @param arr
+     * @return
+     */
+    public static int[] multiply(int[] arr){
+
+        if(arr==null|| arr.length==0){
+            return  arr;
+        }
+        int[] result = new int[arr.length];
+        int multiply = arr[0];
+        for(int i=1; i< arr.length;i++){
+            multiply*= arr[i];
+        }
+
+        for(int i =0; i< arr.length;i++){
+            //handle when element is zero
+            if(arr[i]==0){
+                result[i] = 0;
+                continue;
+            }
+            result[i] = multiply/arr[i];
+        }
+
+        return  result;
+
     }
 
     /**
