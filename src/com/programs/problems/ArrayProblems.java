@@ -160,12 +160,39 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         // System.out.println(clumsy(5));
-        int[] arr = new int[]{1, 2, 3, 4, 5};
-        int[] res = multiply(new int[1]);
+        int[] arr = new int[]{1,2,3,4,5};
+        int[] res = multiplyElem(arr);
         for (int i : res){
             System.out.print(i+" ");
         }
 
+    }
+    /**
+     * Given an array of integers, return a new array such that each element at index i of the new array
+     * is the product of all the numbers in the original array except the one at i.
+     * This solution doesn't require any division
+     * @param arr
+     * @return
+     */
+    public static int[] multiplyElem(int[] arr){
+        int left[] = new int[arr.length];
+        //create an array in which for every index it contain multiplication of element to its left;
+        left[0]=1;
+        for(int i=1;i<arr.length;i++){
+            left[i] = arr[i-1]*left[i-1];
+        }
+        //left = [1,1,2,6,24]
+        int result[] = new int[arr.length];
+        int k =1;
+        //now we have left multiplication so we can find right one similarly and multiply with left one
+        for(int i = arr.length-1;i>=0;i--){
+
+            result[i]= left[i]*k;
+            k = arr[i]*k;
+        }
+
+
+        return result;
     }
 
     /**
