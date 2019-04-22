@@ -107,7 +107,6 @@ public class StringProblems {
         return str.substring(start, end + 1);
     }
 
-
     /**
      * check both left and right from given index
      *
@@ -628,7 +627,7 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        printInterLeave("AB", "CD", "");
+        //System.out.println(longestPalindromics("abcd"));
 
     }
 

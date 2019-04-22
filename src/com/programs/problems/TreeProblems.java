@@ -7,10 +7,70 @@ public class TreeProblems {
 
 
     public static void main(String args[]) throws Exception {
+        TreeProblems problems = new TreeProblems();
+        Node root = new Node(1);
+        root.right = new Node(2);
+        String str = problems.serialize(root);
+        Node node = problems.deserialize(str);
+        if (node.equals(root)) {
+            System.out.println(true);
+        }
 
 
     }
 
+    /**
+     * serialize a binary tree into string
+     *
+     * @param root
+     * @return
+     */
+    public String serialize(Node root) {
+        StringBuilder str = new StringBuilder();
+        serialize(root, str);
+        return str.toString();
+
+    }
+
+    public void serialize(Node root, StringBuilder str) {
+        if (root == null) {
+            str.append("n,");
+            return;
+        }
+        str.append(root.data);
+        str.append(",");
+        serialize(root.left, str);
+        serialize(root.right, str);
+    }
+
+    /**
+     * deserialize a binary tree from given string
+     *
+     * @param data
+     * @return
+     */
+    public Node deserialize(String data) {
+        String[] arr = data.split(",");
+        int[] index = new int[1];
+        return deserialize(arr, index);
+    }
+
+    public Node deserialize(String[] arr, int[] index) {
+        if (index[0] > arr.length) {
+            return null;
+        }
+
+        String str = arr[index[0]];
+        index[0]++;
+        if (str.equals("n")) {
+            return null;
+        }
+
+        Node node = new Node(Integer.valueOf(str));
+        node.left = deserialize(arr, index);
+        node.right = deserialize(arr, index);
+        return node;
+    }
 
     /**
      * https://www.geeksforgeeks.org/find-minimum-depth-of-a-binary-tree/
