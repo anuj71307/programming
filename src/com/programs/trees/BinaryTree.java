@@ -95,12 +95,16 @@ public class BinaryTree<T extends Comparable> implements ITree<T> {
     }
 
     @Override
-    public int depth() {
+    public int depth()
+    {
+        //TODO Anuj Implement
         return 0;
     }
 
     @Override
-    public boolean isMemeber(T data) {
+    public boolean isMember(T data)
+    {
+        //TODO Anuj implement
         return false;
     }
 

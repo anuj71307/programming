@@ -82,35 +82,38 @@ public class BinarySearchTree<T extends Comparable> implements ITree<T> {
 	    @Override
 	    public boolean delete(Comparable data)
 	    {
+			//TODO Implement
 	        return false;
 	    }
 
 	    @Override
 	    public int height()
 	    {
+	    	//TODO Implement
 	        return 0;
 	    }
 
 	    @Override
 	    public int depth()
 	    {
+			//TODO Implement
 	        return 0;
 	    }
 
 	    @Override
-	    public boolean isMemeber(T data)
+	    public boolean isMember(T data)
 	    {
 	        if (this.data.compareTo(data) == 0) {
 	            return true;
 	        }
 	        else if (this.data.compareTo(data) < 0) {
 	            if (this.rightTree != null) {
-	                return this.rightTree.isMemeber(data);
+	                return this.rightTree.isMember(data);
 	            }
 	        }
 	        else {
 	            if (this.leftTree != null) {
-	                return this.leftTree.isMemeber(data);
+	                return this.leftTree.isMember(data);
 	            }
 
 	        }
