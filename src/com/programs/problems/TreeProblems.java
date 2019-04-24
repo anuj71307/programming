@@ -1,22 +1,46 @@
 package com.programs.problems;
 
 
+import com.programs.trees.BinarySearchTree;
+import com.programs.trees.ITree;
+
 import java.util.*;
 
 public class TreeProblems {
 
 
     public static void main(String args[]) throws Exception {
-        TreeProblems problems = new TreeProblems();
-        Node root = new Node(1);
-        root.right = new Node(2);
-        String str = problems.serialize(root);
-        Node node = problems.deserialize(str);
-        if (node.equals(root)) {
-            System.out.println(true);
+
+      BinarySearchTree<Integer> node = new BinarySearchTree<>(8);
+      node.add(10);
+      node.add(5);
+      node.add(1);
+      node.add(50);
+      node.add(40);
+      node.add(100);
+      System.out.println(countNodesBetween(node, 1 , 5));
+
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/count-bst-nodes-that-are-in-a-given-range/
+     * Given a binary search tree and a range count number
+     * of nodes between them as per inorder traversal
+     *
+     * @param node
+     * @param min
+     * @param max
+     * @return
+     */
+    static int countNodesBetween(ITree<Integer> node, int min, int max) {
+        if (node == null) {
+            return 0;
         }
-
-
+        if (node.getData() >= min && node.getData() <= max) {
+            return 1 + countNodesBetween(node.getLeftTree(), min, max);
+        } else if (node.getData() < min) {
+            return countNodesBetween(node.getRightTree(), min, max);
+        } else return countNodesBetween(node.getLeftTree(), min, max);
     }
 
     /**

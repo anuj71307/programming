@@ -160,12 +160,37 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         // System.out.println(clumsy(5));
-        int[] arr = new int[]{1,2,3,4,5};
-        int[] res = multiplyElem(arr);
-        for (int i : res){
-            System.out.print(i+" ");
+        int a[] = {3,4,-1,1};
+        int miss = getMissingNo(a);
+        System.out.println(miss);
+
+    }
+
+    // Function to ind missing number
+    static int getMissingNo (int v[])
+    {
+        for (int i=0; i<v.length; i++){
+            int val = v[i];
+            if ((val<0)|| (val>=v.length)){continue;}
+            int curval = v[i], nextval = v[v[i]];
+            while (curval!=nextval){
+                v[curval] = curval;
+                curval = nextval;
+                if ((curval<0)||(curval>=v.length)){continue;}
+                nextval = v[nextval];
+            }
+
         }
 
+        int ans = v.length;
+        for (int i=1; i<v.length; i++){
+            if (v[i]!=i){
+                ans = i;
+                break;
+            }
+        }
+
+        return ans;
     }
     /**
      * Given an array of integers, return a new array such that each element at index i of the new array
