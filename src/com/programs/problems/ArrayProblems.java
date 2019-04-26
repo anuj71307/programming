@@ -160,31 +160,68 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         // System.out.println(clumsy(5));
-        int a[] = {3,4,-1,1};
-        int miss = getMissingNo(a);
-        System.out.println(miss);
+        int arr[] = {15, 17, 2, 3, 4, 6, 8, 9, 10};
+        System.out.println(searchInRotatedArr(arr, 8));
 
     }
 
+    /**
+     * https://leetcode.com/problems/search-in-rotated-sorted-array/
+     *
+     * @param arr
+     * @param target
+     * @return
+     */
+    private static int searchInRotatedArr(int[] arr, int target) {
+
+        int start = 0;
+        int end = arr.length - 1;
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            if (arr[mid] == target) {
+                return mid;
+            } else if (arr[mid] >= arr[start]) {
+                if (target >= arr[start] && target <= arr[mid]) {
+                    end = mid - 1;
+                } else {
+                    start = mid + 1;
+                }
+            } else {
+
+                if (target >= arr[mid] && target <= arr[end]) {
+                    start = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+
     // Function to ind missing number
-    static int getMissingNo (int v[])
-    {
-        for (int i=0; i<v.length; i++){
+    static int getMissingNo(int v[]) {
+        for (int i = 0; i < v.length; i++) {
             int val = v[i];
-            if ((val<0)|| (val>=v.length)){continue;}
+            if ((val < 0) || (val >= v.length)) {
+                continue;
+            }
             int curval = v[i], nextval = v[v[i]];
-            while (curval!=nextval){
+            while (curval != nextval) {
                 v[curval] = curval;
                 curval = nextval;
-                if ((curval<0)||(curval>=v.length)){continue;}
+                if ((curval < 0) || (curval >= v.length)) {
+                    continue;
+                }
                 nextval = v[nextval];
             }
 
         }
 
         int ans = v.length;
-        for (int i=1; i<v.length; i++){
-            if (v[i]!=i){
+        for (int i = 1; i < v.length; i++) {
+            if (v[i] != i) {
                 ans = i;
                 break;
             }
@@ -192,28 +229,30 @@ public class ArrayProblems {
 
         return ans;
     }
+
     /**
      * Given an array of integers, return a new array such that each element at index i of the new array
      * is the product of all the numbers in the original array except the one at i.
      * This solution doesn't require any division
+     *
      * @param arr
      * @return
      */
-    public static int[] multiplyElem(int[] arr){
+    public static int[] multiplyElem(int[] arr) {
         int left[] = new int[arr.length];
         //create an array in which for every index it contain multiplication of element to its left;
-        left[0]=1;
-        for(int i=1;i<arr.length;i++){
-            left[i] = arr[i-1]*left[i-1];
+        left[0] = 1;
+        for (int i = 1; i < arr.length; i++) {
+            left[i] = arr[i - 1] * left[i - 1];
         }
         //left = [1,1,2,6,24]
         int result[] = new int[arr.length];
-        int k =1;
+        int k = 1;
         //now we have left multiplication so we can find right one similarly and multiply with left one
-        for(int i = arr.length-1;i>=0;i--){
+        for (int i = arr.length - 1; i >= 0; i--) {
 
-            result[i]= left[i]*k;
-            k = arr[i]*k;
+            result[i] = left[i] * k;
+            k = arr[i] * k;
         }
 
 
@@ -223,30 +262,31 @@ public class ArrayProblems {
     /**
      * Given an array of integers, return a new array such that each element at index i of the new array
      * is the product of all the numbers in the original array except the one at i.
+     *
      * @param arr
      * @return
      */
-    public static int[] multiply(int[] arr){
+    public static int[] multiply(int[] arr) {
 
-        if(arr==null|| arr.length==0){
-            return  arr;
+        if (arr == null || arr.length == 0) {
+            return arr;
         }
         int[] result = new int[arr.length];
         int multiply = arr[0];
-        for(int i=1; i< arr.length;i++){
-            multiply*= arr[i];
+        for (int i = 1; i < arr.length; i++) {
+            multiply *= arr[i];
         }
 
-        for(int i =0; i< arr.length;i++){
+        for (int i = 0; i < arr.length; i++) {
             //handle when element is zero
-            if(arr[i]==0){
+            if (arr[i] == 0) {
                 result[i] = 0;
                 continue;
             }
-            result[i] = multiply/arr[i];
+            result[i] = multiply / arr[i];
         }
 
-        return  result;
+        return result;
 
     }
 
