@@ -1,19 +1,19 @@
 package com.programs.array;
 
-public class CircularQueue {
+public class CircularQueue<T> {
 
-    int[] arr;
+    Object[] arr;
     int front;
     int rear;
     /** Initialize your data structure here. Set the size of the queue to be k. */
     public CircularQueue(int k) {
-        arr = new int[k];
+        arr = new Object[k];
         front=-1;
         rear = -1;
     }
 
     /** Insert an element into the circular queue. Return true if the operation is successful. */
-    public boolean enQueue(int value) {
+    public boolean enQueue(T value) {
         if(isFull()) return false;
         if(front==-1){
             arr[++front] = value;
@@ -46,15 +46,15 @@ public class CircularQueue {
     }
 
     /** Get the front item from the queue. */
-    public int Front() {
-        if(isEmpty()) return -1;
-        return arr[front];
+    public T Front() {
+        if(isEmpty()) return null;
+        return (T)arr[front];
     }
 
     /** Get the last item from the queue. */
-    public int Rear() {
-        if(isEmpty()) return -1;
-        return arr[rear];
+    public T Rear() {
+        if(isEmpty()) return null;
+        return (T)arr[rear];
     }
 
     /** Checks whether the circular queue is empty or not. */
