@@ -165,6 +165,32 @@ public class ArrayProblems {
 
     }
 
+
+
+    /**
+     * https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+     *
+     * @param arr
+     * @return
+     */
+    public int findMin(int[] arr) {
+        if (arr == null || arr.length == 0) return Integer.MAX_VALUE;
+
+        int start = 0;
+        int end = arr.length - 1;
+        int mid;
+        while (start < end) {
+            mid = (start + end) / 2;
+            if (arr[mid] > arr[end]) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+
+        return arr[start];
+    }
+
     /**
      * https://leetcode.com/problems/search-in-rotated-sorted-array/
      *
