@@ -159,12 +159,36 @@ public class ArrayProblems {
 
 
     public static void main(String[] args) {
-        // System.out.println(clumsy(5));
-        int arr[] = {15, 17, 2, 3, 4, 6, 8, 9, 10};
-        System.out.println(searchInRotatedArr(arr, 8));
+        int arr[] = {1, 2, 3, 4, 5};
+        generateAllNum(arr, 3);
 
     }
 
+    /**
+     * https://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
+     * @param arr
+     * @param size
+     */
+    static void generateAllNum(int[] arr, int size) {
+        if (arr == null || arr.length == 0 || size > arr.length) return;
+        List<Integer> list = new ArrayList<>();
+        generateAllNum(arr, size, 0, list);
+
+    }
+
+    private static void generateAllNum(int[] arr, int size, int start, List<Integer> list) {
+        if (list.size() == size) {
+            System.out.println(list);
+            return;
+        }
+
+        for (int i = start; i < arr.length; i++) {
+            Integer integer = arr[i];
+            list.add(integer);
+            generateAllNum(arr, size, i + 1, list);
+            list.remove(integer);
+        }
+    }
 
 
     /**
