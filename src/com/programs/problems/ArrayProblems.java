@@ -159,8 +159,7 @@ public class ArrayProblems {
 
 
     public static void main(String[] args) {
-        int arr[] = {-1, 8, 1, 12, 18};
-
+   
     }
 
     /**
@@ -219,7 +218,6 @@ public class ArrayProblems {
 
     /**
      * https://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
-     *
      * @param arr
      * @param size
      */
