@@ -2,6 +2,7 @@ package com.programs.trie;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TrieProblems {
@@ -26,26 +27,21 @@ public class TrieProblems {
 
         Trie trie = new Trie();
         trie.insert("hack");
-        trie.insert("hackerrank");
-        System.out.println("Item size "+ prefixSearch(trie.root, "hac"));
+        trie.insert("cat");
+        trie.insert("bat");
+        trie.insert("batman");
+        trie.insert("dog");
+        trie.insert("don");
+        List<String> list = trie.prefixSearch("batman");
+        for(String str:list){
+            System.out.println(str);
+        }
       // populateNumberMap();
       // System.out.print(findWords(trie, "8733"));
 
     }
 
 
-    public static int prefixSearch(TrieNode root,String prefix){
-        if(prefix==null||prefix.trim().length()==0) return 0;
-        TrieNode current = root;
-        for(int i = 0; i < prefix.length();i++){
-            int index = prefix.charAt(i)-'a';
-            TrieNode temp = current.children[index];
-            if(temp==null) return 0;
-            current = temp;
-        }
-        if(!current.isWord) return current.count;
-        return current.count+1;
-    }
 
     private static Set<String> findWords(Trie trie, String num){
         if(trie==null || num==null || num.isEmpty()) return  null;
