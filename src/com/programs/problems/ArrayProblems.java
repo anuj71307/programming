@@ -159,9 +159,61 @@ public class ArrayProblems {
 
 
     public static void main(String[] args) {
-        int arr[] = {1, 2, 3, 4, 5};
-        generateAllNum(arr, 3);
+   
+    }
 
+    /**
+     * Given a list of integers, write a function that returns the largest sum of non-adjacent numbers.
+     * Numbers can be 0 or negative.
+     * https://www.geeksforgeeks.org/maximum-sum-such-that-no-two-elements-are-adjacent/
+     *
+     * @param arr
+     * @return
+     */
+    static int nonAdjacentSum(int[] arr) {
+
+        if (arr.length == 0) return 0;
+        if (arr.length == 1) return arr[0];
+        int x = arr[0];
+        int y = arr[1];
+        int res = Math.max(x, y);
+        y = res;
+        for (int i = 2; i < arr.length; i++) {
+            res = Math.max(Math.max(arr[i] + x, y), arr[i]);
+            x = y;
+            y = res;
+        }
+
+        return res;
+    }
+
+    /**
+     * given an array and a target find all combination of number whose sum equals target
+     *
+     * @param arr
+     * @param target
+     */
+    static void findCombination(int[] arr, int target) {
+        if (arr == null || arr.length == 0) return;
+
+        Arrays.sort(arr);
+        int sum = 0;
+        findCombination(arr, target, sum, 0, new ArrayList<>());
+    }
+
+    private static void findCombination(int[] arr, int target, int sum, int start, List<Integer> list) {
+        if (sum == target) {
+            System.out.println(list);
+            return;
+        }
+        for (int i = start; i < arr.length; i++) {
+            if (i > start && arr[i] == arr[i - 1]) continue;
+            Integer integer = arr[i];
+            if (sum + integer > target) break;
+            list.add(integer);
+            findCombination(arr, target, sum + integer, i + 1, list);
+            list.remove(integer);
+        }
     }
 
     /**

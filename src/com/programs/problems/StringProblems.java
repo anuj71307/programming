@@ -627,8 +627,35 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        //System.out.println(longestPalindromics("abcd"));
 
+    }
+
+
+    /**
+     * generate all anagrams of a given string
+     *
+     * @param good
+     */
+    private static void generateAllPerm(String good) {
+        char[] arr = good.toCharArray();
+        Arrays.sort(arr);
+        generateAllPerm(arr, new char[arr.length], 0, new boolean[arr.length]);
+    }
+
+    private static void generateAllPerm(char[] arr, char[] result, int index, boolean[] used) {
+
+        if (index >= arr.length) {
+            System.out.println(new String(result));
+            return;
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            if (used[i] || (i > 0 && arr[i] == arr[i - 1] && used[i - 1])) continue;
+            result[index] = arr[i];
+            used[i] = true;
+            generateAllPerm(arr, result, index + 1, used);
+            used[i] = false;
+        }
     }
 
 
@@ -1159,17 +1186,22 @@ public class StringProblems {
     }
 
 
-    static HashMap<String, String> map = new HashMap<>();
-
-    //https://www.geeksforgeeks.org/word-break-problem-dp-32/
-    private static String wordBreakProblems(String str, Set<String> dict) {
+    /**
+     * https://www.geeksforgeeks.org/word-break-problem-dp-32/
+     *
+     * @param str
+     * @param dict
+     * @param map
+     * @return
+     */
+    private static String wordBreakProblems(String str, Set<String> dict, HashMap<String, String> map) {
         if (dict.contains(str)) return str;
         if (map.containsKey(str)) return map.get(str);
         //catsanddog
         for (int i = 1; i < str.length(); i++) {
             String prefix = str.substring(0, i);
             if (dict.contains(prefix)) {
-                String suffix = wordBreakProblems(str.substring(i, str.length()), dict);
+                String suffix = wordBreakProblems(str.substring(i, str.length()), dict, map);
                 if (suffix != null) {
                     String s = prefix + " " + suffix;
                     map.put(str, s);
