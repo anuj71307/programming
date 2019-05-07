@@ -159,7 +159,41 @@ public class ArrayProblems {
 
 
     public static void main(String[] args) {
-   
+
+        selectRandomFromStream();
+    }
+
+    /**
+     * Given a stream of elements too large to store in memory,
+     * pick a random element from the stream with uniform probability.
+     * <p>
+     * https://www.geeksforgeeks.org/select-a-random-number-from-stream-with-o1-space/
+     */
+    private static void selectRandomFromStream() {
+        int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7};//sample arr/stream
+        int[] temp = new int[1];
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(selectRandomFromStream(i, temp) + " ");
+        }
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/select-a-random-number-from-stream-with-o1-space/
+     *
+     * @param i
+     * @param temp
+     * @return
+     */
+    private static int selectRandomFromStream(int i, int[] temp) {
+        if (i == 0) {
+            temp[0] = 0;
+        } else {
+            Random random = new Random();
+            int rand = random.nextInt(i + 1);
+            if (rand == i) temp[0] = i;
+        }
+
+        return temp[0];
     }
 
     /**
@@ -218,6 +252,7 @@ public class ArrayProblems {
 
     /**
      * https://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
+     *
      * @param arr
      * @param size
      */
