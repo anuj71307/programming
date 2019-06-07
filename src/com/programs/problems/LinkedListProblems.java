@@ -138,23 +138,43 @@ public class LinkedListProblems<T> {
         LinkedList<Integer> node = new LinkedList<>(1);
         LinkedList t = node;
         node.add(2);
-        node.add(3);
-        node.add(4);
-        node.add(5);
-        node.add(6);
-        node.add(7);
-        node.add(8);
+        node.add(2);
+        node.add(2);
+        node.add(1);
 
-        while (node != null) {
-            System.out.print(node.data + " ");
-            node = node.next;
-        }
-        System.out.println("After");
-        LinkedList<Integer> temp = reverseInGroup(t, 5);
-        while (temp != null) {
-            System.out.print(temp.data + " ");
-            temp = temp.next;
-        }
+
+
+        System.out.println(isPalindrome(node));
+
+    }
+    //variable used to point to start node and move one by one
+    static LinkedList<Integer> left;
+    /**
+     * https://www.geeksforgeeks.org/function-to-check-if-a-singly-linked-list-is-palindrome/
+     * check if a linkedlist is palindrome or not
+     * @param node
+     * @return
+     */
+    static boolean  isPalindrome(LinkedList<Integer> node){
+
+        left = node;
+        return isPalindromeUtil(node);
+    }
+
+
+    /**
+     * check if a linkedlist is palindrome or not
+     * @param right
+     * @return
+     */
+    static boolean  isPalindromeUtil( LinkedList<Integer> right){
+        if(right ==null) return  true;
+        boolean result = isPalindromeUtil( right.next);
+        if(!result) return false;
+        boolean res = (left.data==right.data);
+        if(!res) return  false;
+        left = left.next;
+        return true;
     }
 
     /**
