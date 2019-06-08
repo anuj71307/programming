@@ -160,7 +160,68 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
 
-        selectRandomFromStream();
+        int arr[] = new int[]{1,3,1,2,0,5};
+        int res [] = subArrayMaxUsingDeque(arr, 3);
+        for(int i : res){
+            System.out.println(i);
+        }
+    }
+
+
+    /**
+     * https://leetcode.com/problems/sliding-window-maximum/
+     * @param arr
+     * @param k
+     * @return
+     */
+    private static int[] subArrayMaxUsingDeque(int[] arr, int k) {
+        if (arr == null || arr.length == 0) return new int[0];
+
+        int[] res = new int[arr.length - k + 1];
+        Deque<Integer> deque = new LinkedList<>();
+        for (int i = 0; i < k; i++) {
+            while (!deque.isEmpty() && arr[i] >= arr[deque.peekLast()]) {
+                deque.removeLast();
+            }
+            deque.addLast(i);
+        }
+        for (int i = k; i < arr.length; i++) {
+            res[i - k] = arr[deque.peek()];
+            while (!deque.isEmpty() && deque.peek()<=i-k){
+                deque.removeFirst();
+            }
+            while (!deque.isEmpty() && arr[i]>=arr[deque.peekLast()]){
+                deque.removeLast();
+            }
+            deque.addLast(i);
+
+        }
+        res[res.length-1] = arr[deque.peek()];
+
+        return res;
+
+    }
+
+    /**
+     * find max in subarray of given size
+     * https://leetcode.com/problems/sliding-window-maximum/
+     * @param arr
+     * @param k
+     */
+    private static void subArrayMax(int[] arr, int k) {
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Collections.reverseOrder());
+        for (int i = 0; i < k; i++) {
+            priorityQueue.add(arr[i]);
+        }
+        System.out.println(priorityQueue.peek());
+        priorityQueue.remove(arr[0]);
+        int j = 1;
+        for (int i = k; i < arr.length; i++) {
+            priorityQueue.add(arr[i]);
+            System.out.println(priorityQueue.peek());
+            priorityQueue.remove(arr[j]);
+            j++;
+        }
     }
 
     /**
@@ -186,11 +247,11 @@ public class ArrayProblems {
      */
     private static int selectRandomFromStream(int i, int[] temp) {
         if (i == 0) {
-            temp[0] = 0;
+            temp[0] = 1;
         } else {
             Random random = new Random();
             int rand = random.nextInt(i + 1);
-            if (rand == i) temp[0] = i;
+            if (rand == i) temp[0] = i + 1;
         }
 
         return temp[0];
