@@ -41,7 +41,7 @@ public class Stack<T> implements IStack<T> {
      * @return
      */
     public T pop() {
-        if (isStackEmpty()) {
+        if (isEmpty()) {
             System.out.println("Stack Underflow, Push failed, Stack Full");
             throw new EmptyStackException();
         } else {
@@ -51,7 +51,7 @@ public class Stack<T> implements IStack<T> {
         }
     }
 
-    public boolean isStackEmpty() {
+    public boolean isEmpty() {
         return (top == -1);
     }
 

@@ -24,7 +24,7 @@ public class LLStack<T> implements IStack<T> {
 
     @Override
     public T pop() {
-        if (isStackEmpty()) {
+        if (isEmpty()) {
             throw new EmptyStackException();
         } else {
             T data = head.getData();
@@ -35,7 +35,7 @@ public class LLStack<T> implements IStack<T> {
 
     @Override
     public T top() {
-        if (isStackEmpty()) {
+        if (isEmpty()) {
             throw new EmptyStackException();
         } else {
             return head.getData();
@@ -49,7 +49,7 @@ public class LLStack<T> implements IStack<T> {
     }
 
     @Override
-    public boolean isStackEmpty() {
+    public boolean isEmpty() {
         return head == null;
     }
 }
