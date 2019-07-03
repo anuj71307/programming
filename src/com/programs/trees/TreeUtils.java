@@ -64,7 +64,7 @@ public class TreeUtils {
         }
 
         //Iterate all element of stack and print the data
-        while (!stack.isStackEmpty()) {
+        while (!stack.isEmpty()) {
             System.out.print(stack.pop().getData() + " ");
         }
 
@@ -84,7 +84,7 @@ public class TreeUtils {
                 stack.push(tree);
                 tree = tree.getLeftTree();
             }
-            if (stack.isStackEmpty()) {
+            if (stack.isEmpty()) {
                 break;
             }
             tree = (BinaryTree) stack.pop();

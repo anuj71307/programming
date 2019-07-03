@@ -1,7 +1,7 @@
 package com.programs.problems;
 
 
-import com.programs.trees.BinarySearchTree;
+import com.programs.trees.BinaryTree;
 import com.programs.trees.ITree;
 
 import java.util.*;
@@ -11,15 +11,41 @@ public class TreeProblems {
 
     public static void main(String args[]) throws Exception {
 
-      BinarySearchTree<Integer> node = new BinarySearchTree<>(8);
+      BinaryTree<Integer> node = new BinaryTree<>(8);
       node.add(10);
       node.add(5);
       node.add(1);
-      node.add(50);
-      node.add(40);
-      node.add(100);
-      System.out.println(countNodesBetween(node, 1 , 5));
 
+      node.getRightTree().setLeftTree(new BinaryTree<>(2));
+      iterativePostOrder(node);
+
+    }
+
+    /**
+     * Iteratuve post order of Binary tree using two stack
+     * @param tree
+     * @param <T>
+     */
+    public static <T extends Comparable> void  iterativePostOrder(BinaryTree<T> tree){
+
+        com.programs.stack.Stack<BinaryTree> stack = new com.programs.stack.Stack<>(10);
+        stack.push(tree);
+        com.programs.stack.Stack<BinaryTree> stack2 = new com.programs.stack.Stack<>(10);
+        BinaryTree<T> temp;
+        while(!stack.isEmpty()){
+             temp = stack.pop();
+             if(temp.getLeftTree()!=null){
+                 stack.push(temp.getLeftTree());
+             }
+             if(temp.getRightTree()!=null){
+                 stack.push(temp.getRightTree());
+             }
+             stack2.push(temp);
+        }
+
+        while(!stack2.isEmpty()){
+            System.out.print(stack2.pop().getData()+" ");
+        }
     }
 
     /**

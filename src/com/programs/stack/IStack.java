@@ -14,5 +14,5 @@ public interface IStack<T> {
 
     boolean isStackFull();
 
-    boolean isStackEmpty();
+    boolean isEmpty();
 }
