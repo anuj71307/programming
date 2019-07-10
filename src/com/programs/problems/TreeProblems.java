@@ -17,8 +17,38 @@ public class TreeProblems {
       node.add(1);
 
       node.getRightTree().setLeftTree(new BinaryTree<>(2));
-      iterativePostOrder(node);
+      iterativeInorder(node);
 
+    }
+
+    /**
+     * do iterative inorder tyraversal of binary tree
+     * @param root
+     * @param <T>
+     */
+    public static <T extends Comparable> void iterativeInorder(BinaryTree<T> root){
+
+        if(root == null) return;
+        Stack<BinaryTree> st = new Stack<>();
+        leftTraversal(root, st);
+        BinaryTree<T> node = null;
+        while(!st.isEmpty()){
+            node = st.pop();
+            System.out.print(node.getData()+" ");
+            if(node.getRightTree()!=null){
+                leftTraversal(node.getRightTree(), st);
+            }
+        }
+    }
+
+    /*
+     Traverse left of a binary tree and put it in Stack
+     */
+    private static <T extends Comparable> void leftTraversal(BinaryTree<T> root, Stack<BinaryTree> st) {
+        while (root != null) {
+            st.push(root);
+            root = root.getLeftTree();
+        }
     }
 
     /**
