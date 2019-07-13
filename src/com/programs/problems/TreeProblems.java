@@ -1,41 +1,42 @@
 package com.programs.problems;
 
 
+import com.programs.stack.Stack;
 import com.programs.trees.BinaryTree;
 import com.programs.trees.ITree;
 
 import java.util.*;
+
 
 public class TreeProblems {
 
 
     public static void main(String args[]) throws Exception {
 
-      BinaryTree<Integer> node = new BinaryTree<>(8);
-      node.add(10);
-      node.add(5);
-      node.add(1);
+        BinaryTree<Integer> node = new BinaryTree<>(8);
+        node.add(10);
+        node.add(5);
 
-      node.getRightTree().setLeftTree(new BinaryTree<>(2));
-      iterativeInorder(node);
+        iterativePostOrderOneStack(node);
 
     }
 
     /**
      * do iterative inorder tyraversal of binary tree
+     *
      * @param root
      * @param <T>
      */
-    public static <T extends Comparable> void iterativeInorder(BinaryTree<T> root){
+    public static <T extends Comparable> void iterativeInorder(ITree<T> root) {
 
-        if(root == null) return;
-        Stack<BinaryTree> st = new Stack<>();
+        if (root == null) return;
+        Stack<ITree> st = new Stack<>();
         leftTraversal(root, st);
-        BinaryTree<T> node = null;
-        while(!st.isEmpty()){
+        ITree<T> node = null;
+        while (!st.isEmpty()) {
             node = st.pop();
-            System.out.print(node.getData()+" ");
-            if(node.getRightTree()!=null){
+            System.out.print(node.getData() + " ");
+            if (node.getRightTree() != null) {
                 leftTraversal(node.getRightTree(), st);
             }
         }
@@ -44,38 +45,69 @@ public class TreeProblems {
     /*
      Traverse left of a binary tree and put it in Stack
      */
-    private static <T extends Comparable> void leftTraversal(BinaryTree<T> root, Stack<BinaryTree> st) {
-        while (root != null) {
-            st.push(root);
-            root = root.getLeftTree();
+    private static <T extends Comparable> void leftTraversal(ITree<T> node, Stack<ITree> st) {
+        while (node != null) {
+            st.push(node);
+            node = node.getLeftTree();
         }
     }
 
     /**
      * Iteratuve post order of Binary tree using two stack
+     *
      * @param tree
      * @param <T>
      */
-    public static <T extends Comparable> void  iterativePostOrder(BinaryTree<T> tree){
+    public static <T extends Comparable> void iterativePostOrder(ITree<T> tree) {
 
-        com.programs.stack.Stack<BinaryTree> stack = new com.programs.stack.Stack<>(10);
+        Stack<ITree> stack = new Stack<>(10);
         stack.push(tree);
-        com.programs.stack.Stack<BinaryTree> stack2 = new com.programs.stack.Stack<>(10);
-        BinaryTree<T> temp;
-        while(!stack.isEmpty()){
-             temp = stack.pop();
-             if(temp.getLeftTree()!=null){
-                 stack.push(temp.getLeftTree());
-             }
-             if(temp.getRightTree()!=null){
-                 stack.push(temp.getRightTree());
-             }
-             stack2.push(temp);
+        Stack<ITree> stack2 = new Stack<>(10);
+        ITree<T> temp;
+        while (!stack.isEmpty()) {
+            temp = stack.pop();
+            if (temp.getLeftTree() != null) {
+                stack.push(temp.getLeftTree());
+            }
+            if (temp.getRightTree() != null) {
+                stack.push(temp.getRightTree());
+            }
+            stack2.push(temp);
         }
 
-        while(!stack2.isEmpty()){
-            System.out.print(stack2.pop().getData()+" ");
+        while (!stack2.isEmpty()) {
+            System.out.print(stack2.pop().getData() + " ");
         }
+    }
+
+    /**
+     * iterative post order using one stack
+     * @param node
+     * @param <T>
+     */
+    public static <T extends Comparable> void iterativePostOrderOneStack(ITree<T> node) {
+
+        if (node == null) return;
+        Stack<ITree> stack = new Stack<>(10);
+        while (node != null || !stack.isEmpty()) {
+            while(node!=null){
+                stack.push(node);
+                node= node.getLeftTree();
+            }
+            ITree<T> temp = stack.top().getRightTree();
+            if (temp == null) {
+                temp = stack.pop();
+                System.out.print(temp.getData() + " ");
+                while (!stack.isEmpty() && temp == stack.top().getRightTree()) {
+                    temp = stack.pop();
+                    System.out.print(temp.getData() + " ");
+                }
+            } else {
+                node = temp;
+            }
+
+        }
+
     }
 
     /**
@@ -250,11 +282,11 @@ public class TreeProblems {
         s1.push(node);
 
         // Keep printing while any of the stacks has some nodes
-        while (!s1.empty() || !s2.empty()) {
+        while (!s1.isEmpty() || !s2.isEmpty()) {
             // Print nodes of current level from s1 and push nodes of
             // next level to s2
             ArrayList<Integer> li = new ArrayList<>();
-            while (!s1.empty()) {
+            while (!s1.isEmpty()) {
                 Node temp = s1.pop();
                 li.add(temp.data);
 
@@ -270,7 +302,7 @@ public class TreeProblems {
             li = new ArrayList<>();
             // Print nodes of current level from s2 and push nodes of
             // next level to s1
-            while (!s2.empty()) {
+            while (!s2.isEmpty()) {
                 Node temp = s2.pop();
                 li.add(temp.data);
 
