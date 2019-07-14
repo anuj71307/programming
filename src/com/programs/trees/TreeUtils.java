@@ -28,8 +28,8 @@ public class TreeUtils {
         while (!queue.isEmpty()) {
             size++;
             ITree temp = queue.remove();
-            if (temp.getLeftTree() != null) queue.add(temp.getLeftTree());
-            if (temp.getRightTree() != null) queue.add(temp.getRightTree());
+            if (temp.getLeftNode() != null) queue.add(temp.getLeftNode());
+            if (temp.getRightNode() != null) queue.add(temp.getRightNode());
         }
         return size;
     }
@@ -54,11 +54,11 @@ public class TreeUtils {
         Stack<ITree> stack = new Stack<>(tree.size());
         while (!queue.isEmpty()) {
             ITree temp = queue.poll();
-            if (temp.getRightTree() != null) {
-                queue.add(temp.getRightTree());
+            if (temp.getRightNode() != null) {
+                queue.add(temp.getRightNode());
             }
-            if (temp.getLeftTree() != null) {
-                queue.add(temp.getLeftTree());
+            if (temp.getLeftNode() != null) {
+                queue.add(temp.getLeftNode());
             }
             stack.push(temp);
         }
@@ -75,20 +75,20 @@ public class TreeUtils {
      *
      * @param tree
      */
-    private static void preOrderWithoutRecursion(BinaryTree tree) {
+    private static void preOrderWithoutRecursion(ITree tree) {
         Stack stack = new Stack(tree.size());
         while (true) {
 
             while (tree != null) {
                 System.out.print(tree.getData() + " ");
                 stack.push(tree);
-                tree = tree.getLeftTree();
+                tree = tree.getLeftNode();
             }
             if (stack.isEmpty()) {
                 break;
             }
             tree = (BinaryTree) stack.pop();
-            tree = tree.getRightTree();
+            tree = tree.getRightNode();
         }
     }
 
@@ -99,14 +99,14 @@ public class TreeUtils {
      * @param node
      * @return
      */
-    private static boolean printAncestorOfNode(BinaryTree root, BinaryTree node) {
+    private static boolean printAncestorOfNode(ITree root, BinaryTree node) {
         if (root == null) {
             return false;
         }
         if (root == node) {
             return true;
         }
-        if (printAncestorOfNode(root.getLeftTree(), node) || printAncestorOfNode(root.getRightTree(), node)) {
+        if (printAncestorOfNode(root.getLeftNode(), node) || printAncestorOfNode(root.getRightNode(), node)) {
             System.out.print(root.getData() + " ");
             return true;
         }
@@ -120,16 +120,7 @@ public class TreeUtils {
 
     public static void main(String[] args) {
         //create a binary tree
-        BinaryTree<Integer> binaryTree = new BinaryTree<>(1);
-        binaryTree.setLeftTree(new BinaryTree<>(2));
-        binaryTree.setRightTree(new BinaryTree<>(3));
 
-        binaryTree.getLeftTree().setLeftTree(new BinaryTree<>(4));
-        binaryTree.getLeftTree().setRightTree(new BinaryTree<>(5));
-        binaryTree.getRightTree().setLeftTree(new BinaryTree<>(6));
-        binaryTree.getRightTree().setRightTree(new BinaryTree<>(7));
-
-        printAncestorOfNode(binaryTree, binaryTree.getLeftTree().getLeftTree());
 
     }
 

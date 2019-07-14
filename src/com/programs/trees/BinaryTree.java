@@ -11,8 +11,8 @@ import java.util.Queue;
  */
 public class BinaryTree<T extends Comparable> implements ITree<T> {
     private T data;
-    private BinaryTree<T> leftTree;
-    private BinaryTree<T> rightTree;
+    private ITree<T> leftTree;
+    private ITree<T> rightTree;
 
     public BinaryTree(T data) {
         this.data = data;
@@ -21,22 +21,22 @@ public class BinaryTree<T extends Comparable> implements ITree<T> {
     @Override
     public void add(T data) {
 
-        Queue<BinaryTree> queue = new LinkedList<>();
-        BinaryTree<T> newNode = new BinaryTree(data);
+        Queue<ITree> queue = new LinkedList<>();
+        ITree<T> newNode = new BinaryTree<>(data);
         queue.add(this);
         while (!queue.isEmpty()) {
-            BinaryTree<T> node = queue.poll();
-            if (node.leftTree == null) {
-                node.leftTree = newNode;
+            ITree<T> node = queue.poll();
+            if (node.getLeftNode() == null) {
+                node.setLeftNode(newNode);
                 return;
             } else {
-                queue.add(node.leftTree);
+                queue.add(node.getLeftNode());
             }
-            if (node.rightTree == null) {
-                node.rightTree = newNode;
+            if (node.getRightNode() == null) {
+                node.setRightNode(newNode);
                 return;
             } else {
-                queue.add(node.rightTree);
+                queue.add(node.getRightNode());
             }
 
 
@@ -52,8 +52,8 @@ public class BinaryTree<T extends Comparable> implements ITree<T> {
     @Override
     public int size() {
         int size = 1;
-        BinaryTree leftTree = this.getLeftTree();
-        BinaryTree rightTree = this.getRightTree();
+        ITree leftTree = this.getLeftNode();
+        ITree rightTree = this.getRightNode();
         if (leftTree != null) size = size + leftTree.size();
         if (rightTree != null) size = size + rightTree.size();
         return size;
@@ -95,15 +95,13 @@ public class BinaryTree<T extends Comparable> implements ITree<T> {
     }
 
     @Override
-    public int depth()
-    {
+    public int depth() {
         //TODO Anuj Implement
         return 0;
     }
 
     @Override
-    public boolean isMember(T data)
-    {
+    public boolean isMember(T data) {
         //TODO Anuj implement
         return false;
     }
@@ -114,22 +112,23 @@ public class BinaryTree<T extends Comparable> implements ITree<T> {
     }
 
     @Override
-    public BinaryTree<T> getLeftTree() {
+    public ITree<T> getLeftNode() {
         return leftTree;
     }
 
-    public void setLeftTree(BinaryTree<T> leftTree) {
-        this.leftTree = leftTree;
-    }
-
     @Override
-    public BinaryTree<T> getRightTree() {
+    public ITree<T> getRightNode() {
         return rightTree;
     }
 
-    public void setRightTree(BinaryTree<T> rightTree) {
-        this.rightTree = rightTree;
+    @Override
+    public void setLeftNode(ITree<T> node) {
+        leftTree = node;
     }
 
+    @Override
+    public void setRightNode(ITree<T> node) {
+        rightTree = node;
+    }
 
 }
