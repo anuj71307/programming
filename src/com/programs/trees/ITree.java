@@ -26,13 +26,25 @@ public interface ITree<T extends Comparable> {
      * return left child
      * @return
      */
-    ITree<T> getLeftTree();
+    ITree<T> getLeftNode();
 
     /**
      * return right node
      * @return
      */
-    ITree<T> getRightTree() ;
+    ITree<T> getRightNode() ;
+
+    /**
+     * set left child
+     * @return
+     */
+    void setLeftNode(ITree<T> node);
+
+    /**
+     * set right node
+     * @return
+     */
+    void setRightNode(ITree<T> node) ;
 
     /**
      * return the data

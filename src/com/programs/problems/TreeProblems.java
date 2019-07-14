@@ -16,9 +16,40 @@ public class TreeProblems {
         BinaryTree<Integer> node = new BinaryTree<>(8);
         node.add(10);
         node.add(5);
+        node.add(11);
+        node.add(12);
 
-        iterativePostOrderOneStack(node);
+        inOrderMorrisTraversal(node);
 
+    }
+
+    /**
+     * morris inorder traversal
+     *
+     * @param root root node
+     * @param <T>
+     */
+    public static <T extends Comparable> void inOrderMorrisTraversal(ITree<T> root) {
+        while (root != null) {
+            if (root.getLeftNode() == null) {
+                System.out.print(root.getData() + " ");
+                root = root.getRightNode();
+            } else {
+                ITree<T> temp = root.getLeftNode();
+                while (temp.getRightNode() != null && temp.getRightNode() != root) {
+                    temp = temp.getRightNode();
+                }
+                if (temp.getRightNode() == null) {
+                    temp.setRightNode(root);
+                    root = root.getLeftNode();
+                } else {
+                    temp.setRightNode(null);
+                    System.out.print(root.getData() + " ");
+                    root = root.getRightNode();
+                }
+
+            }
+        }
     }
 
     /**
@@ -36,8 +67,8 @@ public class TreeProblems {
         while (!st.isEmpty()) {
             node = st.pop();
             System.out.print(node.getData() + " ");
-            if (node.getRightTree() != null) {
-                leftTraversal(node.getRightTree(), st);
+            if (node.getRightNode() != null) {
+                leftTraversal(node.getRightNode(), st);
             }
         }
     }
@@ -48,7 +79,7 @@ public class TreeProblems {
     private static <T extends Comparable> void leftTraversal(ITree<T> node, Stack<ITree> st) {
         while (node != null) {
             st.push(node);
-            node = node.getLeftTree();
+            node = node.getLeftNode();
         }
     }
 
@@ -66,11 +97,11 @@ public class TreeProblems {
         ITree<T> temp;
         while (!stack.isEmpty()) {
             temp = stack.pop();
-            if (temp.getLeftTree() != null) {
-                stack.push(temp.getLeftTree());
+            if (temp.getLeftNode() != null) {
+                stack.push(temp.getLeftNode());
             }
-            if (temp.getRightTree() != null) {
-                stack.push(temp.getRightTree());
+            if (temp.getRightNode() != null) {
+                stack.push(temp.getRightNode());
             }
             stack2.push(temp);
         }
@@ -82,6 +113,7 @@ public class TreeProblems {
 
     /**
      * iterative post order using one stack
+     *
      * @param node
      * @param <T>
      */
@@ -90,15 +122,15 @@ public class TreeProblems {
         if (node == null) return;
         Stack<ITree> stack = new Stack<>(10);
         while (node != null || !stack.isEmpty()) {
-            while(node!=null){
+            while (node != null) {
                 stack.push(node);
-                node= node.getLeftTree();
+                node = node.getLeftNode();
             }
-            ITree<T> temp = stack.top().getRightTree();
+            ITree<T> temp = stack.top().getRightNode();
             if (temp == null) {
                 temp = stack.pop();
                 System.out.print(temp.getData() + " ");
-                while (!stack.isEmpty() && temp == stack.top().getRightTree()) {
+                while (!stack.isEmpty() && temp == stack.top().getRightNode()) {
                     temp = stack.pop();
                     System.out.print(temp.getData() + " ");
                 }
@@ -125,10 +157,10 @@ public class TreeProblems {
             return 0;
         }
         if (node.getData() >= min && node.getData() <= max) {
-            return 1 + countNodesBetween(node.getLeftTree(), min, max);
+            return 1 + countNodesBetween(node.getLeftNode(), min, max);
         } else if (node.getData() < min) {
-            return countNodesBetween(node.getRightTree(), min, max);
-        } else return countNodesBetween(node.getLeftTree(), min, max);
+            return countNodesBetween(node.getRightNode(), min, max);
+        } else return countNodesBetween(node.getLeftNode(), min, max);
     }
 
     /**
