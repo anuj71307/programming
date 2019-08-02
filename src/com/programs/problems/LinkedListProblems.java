@@ -147,6 +147,79 @@ public class LinkedListProblems<T> {
         System.out.println(isPalindrome(node));
 
     }
+
+    /**
+     * https://leetcode.com/problems/add-two-numbers/
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public static  LinkedList<Integer> addTwoNumbers(LinkedList<Integer> l1, LinkedList<Integer> l2) {
+
+        if(l1==null)return  l2;
+        if(l2==null) return  l1;
+        int carry =0;
+        LinkedList<Integer> head =null;
+        LinkedList<Integer> prev = null;
+        LinkedList<Integer> temp;
+        while(l1!=null && l2 !=null){
+            int val = l1.getData()+l2.getData()+carry;
+            int rem = val%10;
+            carry = val/10;
+            temp = new LinkedList(rem);
+            if(head==null) {
+                head =temp;
+                prev = head;
+            }
+            else{
+                prev.next = temp;
+                prev = temp;
+            }
+            l1=l1.next;
+            l2=l2.next;
+        }
+
+        while (l1!=null){
+            int val = l1.getData()+carry;
+            int rem = val%10;
+            carry = val/10;
+            temp = new LinkedList(rem);
+            if(head==null) {
+                head =temp;
+                prev = head;
+            }
+            else{
+                prev.next = temp;
+                prev = temp;
+            }
+            l1=l1.next;
+        }
+        while (l2!=null){
+            int val = l2.data+carry;
+            int rem = val%10;
+            carry = val/10;
+            temp = new LinkedList<>(rem);
+            if(head==null) {
+                head =temp;
+                prev = head;
+            }
+            else{
+                prev.next = temp;
+                prev = temp;
+            }
+            l2=l2.next;
+        }
+
+        if(carry!=0){
+
+            temp = new LinkedList<>(carry);
+            prev.next=temp;
+        }
+
+        return head;
+    }
+
+
     //variable used to point to start node and move one by one
     static LinkedList<Integer> left;
     /**
