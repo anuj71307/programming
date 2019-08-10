@@ -627,6 +627,46 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
+        List<String> words = findPossibleWords("23");
+        System.out.print(words);
+
+    }
+
+    /**
+     * Problem https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+     * Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
+     * A mapping of digit to letters (just like on the telephone buttons).
+     * @param nums
+     * @return
+     */
+    private static List<String> findPossibleWords(String nums) {
+        Map<Character, String> map = new HashMap<>();
+        map.put('2', "abc");
+        map.put('3', "def");
+        map.put('4', "ghi");
+        map.put('5', "jkl");
+        map.put('6', "mno");
+        map.put('7', "pqrs");
+        map.put('8', "tuv");
+        map.put('9', "wxyz");
+
+        List<String> list = new ArrayList<>();
+
+        findPossibleWords(nums, 0, "", map,list );
+        return list;
+    }
+
+    private static void findPossibleWords(String nums, int index, String word, Map<Character, String> map, List<String> list) {
+        if (index >= nums.length()) {
+            list.add(word);
+            return;
+        }
+
+        String str = map.get(nums.charAt(index));
+        for (int i = 0; i < str.length(); i++) {
+            char p = str.charAt(i);
+            findPossibleWords(nums, index + 1, word + p, map, list);
+        }
 
     }
 
