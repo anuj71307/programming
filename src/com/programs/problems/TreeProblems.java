@@ -15,12 +15,30 @@ public class TreeProblems {
 
         BinaryTree<Integer> node = new BinaryTree<>(8);
         node.add(10);
-        node.add(5);
-        node.add(11);
-        node.add(12);
+        node.add(10);
+        System.out.print(isSymmetric(node));
+    }
 
-        inOrderMorrisTraversal(node);
 
+    /**
+     * https://leetcode.com/problems/symmetric-tree/
+     *
+     * @param root
+     * @return
+     */
+    public static boolean isSymmetric(BinaryTree root) {
+        return isSymmetric(root, root);
+    }
+
+    public static boolean isSymmetric(BinaryTree node1, BinaryTree node2) {
+        if (node1 == null && node2 == null) return true;
+        if (node1 == null) return false;
+        if (node2 == null) return false;
+        if (node1.getData() != node2.getData()) return false;
+
+        boolean val = isSymmetric((BinaryTree) node1.getLeftNode(), (BinaryTree) node2.getRightNode());
+        if (!val) return false;
+        else return isSymmetric((BinaryTree) node2.getLeftNode(), (BinaryTree) node1.getRightNode());
     }
 
     /**
