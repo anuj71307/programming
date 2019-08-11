@@ -161,10 +161,26 @@ public class ArrayProblems {
     public static void main(String[] args) {
 
         int arr[] = new int[]{1,3,1,2,0,5};
-        int res [] = subArrayMaxUsingDeque(arr, 3);
-        for(int i : res){
-            System.out.println(i);
+        System.out.print(maxWaterTrap(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/container-with-most-water/
+     * @param arr
+     * @return
+     */
+    private static int maxWaterTrap(int [] arr){
+        if(arr==null|| arr.length<2) return 0;
+        int max = 0;
+        int start = 0;
+        int end = arr.length-1;
+        while(start<end){
+            max = Math.max(max, Math.min(arr[start], arr[end])*(end-start));
+            if(arr[start]<arr[end]) start++;
+            else end--;
         }
+
+        return max;
     }
 
 

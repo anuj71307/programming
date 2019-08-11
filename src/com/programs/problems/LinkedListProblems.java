@@ -313,7 +313,11 @@ public class LinkedListProblems<T> {
         return head;
     }
 
-    // 1--2
+    /**
+     * Reverse linked list recursively
+     * @param node
+     * @return
+     */
     public LinkedList<T> reverse(LinkedList<T> node) {
         if (node == null || node.getNext() == null) return node;
         return reverse(null, node, node.getNext());
