@@ -24,6 +24,24 @@ public class TreeProblems {
     }
 
     /**
+     * https://leetcode.com/problems/validate-binary-search-tree/
+     * @param root
+     * @return
+     */
+    public boolean isValidBST(ITree<Integer> root) {
+        return isValidBST(root, null, null);
+    }
+
+
+    public boolean isValidBST(ITree<Integer> root, ITree<Integer> min, ITree<Integer> max) {
+        if (root == null) return true;
+        if (min != null && min.getData() >= root.getData()) return false;
+        if (max != null && max.getData() <= root.getData()) return false;
+
+        return isValidBST(root, min, root) && isValidBST(root, root, max);
+    }
+
+    /**
      * morris inorder traversal
      *
      * @param root root node
