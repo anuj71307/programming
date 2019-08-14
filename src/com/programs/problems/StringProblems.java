@@ -627,10 +627,37 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        List<String> words = findPossibleWords("23");
+        List<String> words = generateParenthesis(3);
         System.out.print(words);
 
     }
+
+    /**
+     * https://leetcode.com/problems/generate-parentheses/
+     * @param n
+     * @return
+     */
+    public static List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        generateParenthesis("", 0, 0, n, res);
+        return res;
+    }
+
+
+    private static void generateParenthesis(String str, int start, int end, int max, List<String> res) {
+        if (str.length() >= max * 2) {
+            res.add(str);
+            return;
+        }
+
+        if (start < max) {
+            generateParenthesis(str + "(", start + 1, end, max, res);
+        }
+        if (end < start) {
+            generateParenthesis(str + ")", start, end + 1, max, res);
+        }
+    }
+
 
     /**
      * Problem https://leetcode.com/problems/letter-combinations-of-a-phone-number/
