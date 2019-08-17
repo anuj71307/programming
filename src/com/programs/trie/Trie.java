@@ -60,6 +60,39 @@ public class Trie {
         return (temp != null && temp.isWord);
     }
 
+    public void remove(String word){
+        remove(word, root, 0);
+    }
+
+    /**
+     * remove a word from dictionary
+     * https://www.geeksforgeeks.org/trie-delete/
+     * @param word word to remove
+     * @param root node to check
+     * @param index index position of letter in word
+     * @return
+     */
+    private boolean remove(String word, TrieNode root, int index) {
+        if(root==null)  return false;
+        if(index>=word.length()){
+            root.isWord = false;
+            return hasChild(root);
+        }
+        int pos = word.charAt(index)-'a';
+        boolean res = remove(word, root.children[pos], index+1);
+        if(res){
+            root.children[pos] = null;
+        }
+        return  hasChild(root);
+    }
+
+    public boolean hasChild(TrieNode root) {
+        for(int i = 0; i<root.children.length;i++){
+            if(root.children[i]!=null) return true;
+        }
+        return false;
+    }
+
 
     public void delete(String word) {
         if (word == null || word.length() == 0 || !search(word)) return;

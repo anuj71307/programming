@@ -25,17 +25,14 @@ public class TrieProblems {
 
     public  static  void main(String[] args){
 
+        String word = "ab";
         Trie trie = new Trie();
-        trie.insert("hack");
-        trie.insert("cat");
-        trie.insert("bat");
-        trie.insert("batman");
-        trie.insert("dog");
-        trie.insert("don");
-        List<String> list = trie.prefixSearch("batman");
-        for(String str:list){
-            System.out.println(str);
-        }
+        trie.insert(word);
+        System.out.println(trie.hasChild(trie.root));
+       // System.out.println(trie.search(word));
+        trie.remove(word);
+        System.out.println(trie.hasChild(trie.root));
+        System.out.println(trie.search(word));
       // populateNumberMap();
       // System.out.print(findWords(trie, "8733"));
 
