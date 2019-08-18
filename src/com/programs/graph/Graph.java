@@ -95,7 +95,7 @@ public class Graph {
         }
     }
 
-    public void recursiveDfs(int s, boolean[] visited){
+    private void recursiveDfs(int s, boolean[] visited){
         visited[s] = true;
         System.out.print(s+" ");
 
