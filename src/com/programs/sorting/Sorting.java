@@ -131,26 +131,27 @@ public class Sorting {
         return arr;
     }
 
-    //7 8 4 1 5 3 a
-    public static int[] insertionSort(int[] arr) {
-        if (arr == null || arr.length == 0) return arr;
 
-        for (int i = 1; i < arr.length; i++) { //i =2
-            int elem = arr[i]; //elem = 4
-            int j = i - 1;
-            for (; j >= 0; j--) { //j = 0
-                if (arr[j] > elem) { //true
-                    arr[i] = arr[j]; // 7 7 8 1 5 3
-                    i--; // i =1
-                } else {
+    /**
+     * insertion sort
+     * @param arr arr to sort
+     */
+    public static  void insertionSort(int[] arr){
+        if(arr==null || arr.length==0) return;
+
+        for(int i =1; i<arr.length;i++){
+            int elem = arr[i];
+            int j = i-1;
+            for( ; j>=0;j--){
+                if(arr[j]>elem){
+                    arr[j+1] = arr[j];
+                }
+                else{
                     break;
                 }
             }
-            arr[j + 1] = elem;
+            arr[j+1] = elem;
         }
-
-
-        return arr;
     }
 
     /**
