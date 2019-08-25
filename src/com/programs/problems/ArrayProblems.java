@@ -160,8 +160,68 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
 
-        int arr[] = new int[]{1,1};
-        System.out.print(permuteUnique(arr));
+        // System.out.print(uniquePaths(3,2));
+        int[][] intervals = {{1,3}, {8,10}, {2,6}};
+
+        int res[][] = mergeIntervals(intervals);
+        for(int[] temp : res){
+            if(temp==null) break;
+            System.out.println(temp[0]+" "+temp[1]);
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/merge-intervals/
+     * merge intervals
+     * @param intervals
+     * @return
+     */
+    private static int[][] mergeIntervals(int[][] intervals) {
+        if(intervals==null || intervals.length==0) return null;
+
+        Arrays.sort(intervals, (o1, o2) -> {
+            return  o1[0] - o2[0];
+        });
+
+        List<int[]> result = new ArrayList<>();
+        int j = 0;
+        int[] prev = intervals[0];
+        int[] temp;
+        for(int i =1; i < intervals.length;){
+            temp = intervals[i];
+            if(temp[0]>=prev[0] && temp[0]<=prev[1]){
+                prev[0] = Math.min(temp[0], prev[0]);
+                prev[1] = Math.max(temp[1], prev[1]);
+            }
+            else{
+                result.add(prev);
+                prev = temp;
+            }
+            i++;
+        }
+
+        result.add(prev);
+        return result.toArray(new int[result.size()][]);
+
+    }
+
+    public static int uniquePaths(int m, int n) {
+        int i =1;
+        int j =1;
+        int res[] = new int[1];
+        uniquePaths(m,n,i,j, res);
+        return res[0];
+    }
+
+    public static void uniquePaths(int m, int n, int i , int j, int res[]) {
+        if(i>=m && j>=n){
+            res[0]+=1;
+            return;
+        }
+        if(i>m || j>n) return;
+
+        uniquePaths(m,n,i+1,j, res);
+        uniquePaths(m,n,i,j+1, res);
     }
 
     /**
