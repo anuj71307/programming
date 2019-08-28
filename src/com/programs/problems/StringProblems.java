@@ -225,7 +225,7 @@ public class StringProblems {
     /*
     https://leetcode.com/problems/decode-ways/
      */
-    public int numDecodings(String s) {
+    public static int numDecodings(String s) {
         if (s == null || s.length() == 0) return 0;
         if (s.length() == 1) {
             if (s.charAt(0) > '0') return 1;
@@ -627,9 +627,79 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        List<String> words = generateParenthesis(3);
-        System.out.print(words);
+        String str = "19:49";
+        System.out.println(nextClosestTime(str));
 
+    }
+
+    /**
+     * Find next closest time using same digits
+     * https://www.programcreek.com/2012/04/leetcode-next-closest-time-java/
+     * @param str
+     * @return
+     */
+    public static String nextClosestTime(String str){
+
+        String arr[] = str.split(":");
+        int hour = Integer.parseInt(arr[0])*60;
+        int min = Integer.parseInt(arr[1]);
+        int time = hour+min;
+        HashSet<Integer> set = new HashSet<>();
+        for(char c: str.toCharArray() ){
+            set.add(c-'0');
+        }
+
+        System.out.println(time);
+        int h1;
+        int h2;
+        int m1;
+        int m2;
+        while(true){
+            time = (time+1)%(24*60);
+            h1 = (time/60)/10;
+            h2 = (time/60)%10;
+            m1 = (time%60)/10;
+            m2 = (time%60)%10;
+            if(set.contains(h1)&& set.contains(h2)&& set.contains(m1) && set.contains(m2)){
+                break;
+            }
+        }
+
+        String nextTime = ""+h1+h2+":"+m1+m2;
+
+        return nextTime;
+    }
+
+    public static int numDecodingss(String s) {
+
+        //10
+        if(s==null || s.length()==0) return 0;
+        if (s.length() == 1) {
+            if (s.charAt(0) > '0') return 1;
+            else return 0;
+        }
+        int x = s.charAt(0)=='0'?0:1;
+
+        int y = s.charAt(1)=='0'?0:1;;
+        if(s.charAt(1)>'0' && x!=0){
+            y = 1;
+        }
+        int curr=1;
+        for(int i =2;i<=s.length();i++){
+            curr =0;
+            if(s.charAt(i-1)>'0'){
+                curr =y;
+            }
+            if(s.charAt(i-2)=='1' || (s.charAt(i-2)=='2' &&
+                    s.charAt(i-1)<'7')){
+                curr+=x;
+
+            }
+            x = y;
+            y=curr;
+
+        }
+        return y;
     }
 
     /**
