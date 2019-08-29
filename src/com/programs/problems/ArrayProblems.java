@@ -205,25 +205,6 @@ public class ArrayProblems {
 
     }
 
-    public static int uniquePaths(int m, int n) {
-        int i =1;
-        int j =1;
-        int res[] = new int[1];
-        uniquePaths(m,n,i,j, res);
-        return res[0];
-    }
-
-    public static void uniquePaths(int m, int n, int i , int j, int res[]) {
-        if(i>=m && j>=n){
-            res[0]+=1;
-            return;
-        }
-        if(i>m || j>n) return;
-
-        uniquePaths(m,n,i+1,j, res);
-        uniquePaths(m,n,i,j+1, res);
-    }
-
     /**
      * https://leetcode.com/problems/jump-game/
      * @param nums
