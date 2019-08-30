@@ -549,6 +549,9 @@ public class StringProblems {
     static int path = 1;
     static String result = "";
 
+    public  StringProblems(){
+
+    }
     // initialize the solution matrix in constructor.
     public StringProblems(char[][] N) {
         solution = new int[N.length][N[0].length];
@@ -627,9 +630,31 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-        String str = "19:49";
-        System.out.println(nextClosestTime(str));
+       String[] arr = {"gees", "ge", "geek", ""};
+       StringProblems sp = new StringProblems();
+       System.out.println("Prefix is "+sp.longestCommonPrefix(arr));
 
+    }
+
+    /**
+     * https://leetcode.com/problems/longest-common-prefix/
+     * @param str
+     * @return
+     */
+    public String longestCommonPrefix(String[] str) {
+        if(str==null || str.length==0) return "";
+        if(str.length==1) return str[0];
+
+        Arrays.sort(str);
+
+        int min = Math.min(str[0].length(), str[str.length-1].length());
+
+        int i = 0;
+        if(str[0].isEmpty() || str[str.length-1].isEmpty()) return "";
+        while(i < min && str[0].charAt(i) == str[str.length-1].charAt(i)){
+            i++;
+        }
+        return str[0].substring(0,i);
     }
 
     /**
