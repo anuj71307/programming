@@ -159,14 +159,58 @@ public class ArrayProblems {
 
 
     public static void main(String[] args) {
-
         // System.out.print(uniquePaths(3,2));
-        int[][] intervals = {{1,3}, {8,10}, {2,6}};
+        ArrayProblems ap = new ArrayProblems();
+        int[] weight = {4,5,1};
+        int[] value = {1,2,3};
+        Item item = ap.knapsackProblem(value, weight, 4);
+        System.out.println("Value " + item.value+" weight " + item.weight);
+    }
 
-        int res[][] = mergeIntervals(intervals);
-        for(int[] temp : res){
-            if(temp==null) break;
-            System.out.println(temp[0]+" "+temp[1]);
+    /**
+     *
+     * @param value
+     * @param weight
+     * @param total
+     * @return
+     */
+    public Item knapsackProblem(int[] value, int [] weight, int total){
+
+        if(value==null || weight ==null || value.length==0 ||
+                weight.length==0|| value.length!=weight.length)
+            return new Item(0,0);
+        Item [] item = new Item[value.length];
+        for(int i = 0; i< value.length;i++){
+            item[i] = new Item(weight[i], value[i]);
+        }
+
+        Arrays.sort(item, new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                return (o1.value/o1.weight)-(o2.value/o2.weight);
+            }
+        });
+
+        int w = 0;
+        int v = 0;
+        for(int i =item.length-1; i>=0;i--){
+           if(item[i].weight<total){
+                w += item[i].weight;
+                v += item[i].value;
+                total=total-item[i].weight;
+           }
+        }
+
+        return new Item(w,v);
+    }
+
+    // USED IN KNAPSACK PROBLEM
+    class Item {
+        int weight;
+        int value;
+        Item(int weight, int value){
+            this.weight = weight;
+            this.value = value;
         }
     }
 
