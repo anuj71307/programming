@@ -549,9 +549,10 @@ public class StringProblems {
     static int path = 1;
     static String result = "";
 
-    public  StringProblems(){
+    public StringProblems() {
 
     }
+
     // initialize the solution matrix in constructor.
     public StringProblems(char[][] N) {
         solution = new int[N.length][N[0].length];
@@ -630,48 +631,115 @@ public class StringProblems {
 
     public static void main(String[] args) throws Exception {
 
-       String[] arr = {"gees", "ge", "geek", ""};
-       StringProblems sp = new StringProblems();
-       System.out.println("Prefix is "+sp.longestCommonPrefix(arr));
+        StringProblems sp = new StringProblems();
+        char[][] board = {{'A'}};
+        String word = "A";
+        System.out.print(sp.exist(board, word));
 
     }
 
     /**
+     * https://leetcode.com/problems/word-search/
+     *
+     * @param board
+     * @param word
+     * @return
+     */
+    public boolean exist(char[][] board, String word) {
+        boolean visited[][] = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            //if(board[i]==null || board[i].length==0) continue;
+            for (int j = 0; j < board[0].length; j++) {
+                if (exist(board, word, visited, i, j, 0)) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * https://leetcode.com/problems/word-search-ii/
+     *
+     * @param board
+     * @param words
+     * @return
+     */
+    public List<String> findWords(char[][] board, String[] words) {
+        List<String> res = new ArrayList();
+        boolean visited[][] = new boolean[board.length][board[0].length];
+        for (String word : words) {
+            boolean found = false;
+            for (int i = 0; i < board.length; i++) {
+                if (board[i] == null || board[i].length == 0) continue;
+                for (int j = 0; j < board[0].length; j++) {
+                    if (exist(board, word, visited, i, j, 0)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+            if (found) res.add(word);
+        }
+        Collections.sort(res);
+        return res;
+
+
+    }
+
+    private boolean exist(char[][] board, String word, boolean[][] visited, int i, int j, int index) {
+        if (index >= word.length()) return true;
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length) return false;
+        if (visited[i][j]) return false;
+        if (board[i][j] != word.charAt(index)) {
+            return false;
+        }
+        visited[i][j] = true;
+        if (exist(board, word, visited, i + 1, j, index + 1)) return true;
+        if (exist(board, word, visited, i - 1, j, index + 1)) return true;
+        if (exist(board, word, visited, i, j + 1, index + 1)) return true;
+        if (exist(board, word, visited, i, j - 1, index + 1)) return true;
+        visited[i][j] = false;
+        return false;
+    }
+
+    /**
      * https://leetcode.com/problems/longest-common-prefix/
+     *
      * @param str
      * @return
      */
     public String longestCommonPrefix(String[] str) {
-        if(str==null || str.length==0) return "";
-        if(str.length==1) return str[0];
+        if (str == null || str.length == 0) return "";
+        if (str.length == 1) return str[0];
 
         Arrays.sort(str);
 
-        int min = Math.min(str[0].length(), str[str.length-1].length());
+        int min = Math.min(str[0].length(), str[str.length - 1].length());
 
         int i = 0;
-        if(str[0].isEmpty() || str[str.length-1].isEmpty()) return "";
-        while(i < min && str[0].charAt(i) == str[str.length-1].charAt(i)){
+        if (str[0].isEmpty() || str[str.length - 1].isEmpty()) return "";
+        while (i < min && str[0].charAt(i) == str[str.length - 1].charAt(i)) {
             i++;
         }
-        return str[0].substring(0,i);
+        return str[0].substring(0, i);
     }
 
     /**
      * Find next closest time using same digits
      * https://www.programcreek.com/2012/04/leetcode-next-closest-time-java/
+     *
      * @param str
      * @return
      */
-    public static String nextClosestTime(String str){
+    public static String nextClosestTime(String str) {
 
         String arr[] = str.split(":");
-        int hour = Integer.parseInt(arr[0])*60;
+        int hour = Integer.parseInt(arr[0]) * 60;
         int min = Integer.parseInt(arr[1]);
-        int time = hour+min;
+        int time = hour + min;
         HashSet<Integer> set = new HashSet<>();
-        for(char c: str.toCharArray() ){
-            set.add(c-'0');
+        for (char c : str.toCharArray()) {
+            set.add(c - '0');
         }
 
         System.out.println(time);
@@ -679,18 +747,18 @@ public class StringProblems {
         int h2;
         int m1;
         int m2;
-        while(true){
-            time = (time+1)%(24*60);
-            h1 = (time/60)/10;
-            h2 = (time/60)%10;
-            m1 = (time%60)/10;
-            m2 = (time%60)%10;
-            if(set.contains(h1)&& set.contains(h2)&& set.contains(m1) && set.contains(m2)){
+        while (true) {
+            time = (time + 1) % (24 * 60);
+            h1 = (time / 60) / 10;
+            h2 = (time / 60) % 10;
+            m1 = (time % 60) / 10;
+            m2 = (time % 60) % 10;
+            if (set.contains(h1) && set.contains(h2) && set.contains(m1) && set.contains(m2)) {
                 break;
             }
         }
 
-        String nextTime = ""+h1+h2+":"+m1+m2;
+        String nextTime = "" + h1 + h2 + ":" + m1 + m2;
 
         return nextTime;
     }
@@ -698,30 +766,31 @@ public class StringProblems {
     public static int numDecodingss(String s) {
 
         //10
-        if(s==null || s.length()==0) return 0;
+        if (s == null || s.length() == 0) return 0;
         if (s.length() == 1) {
             if (s.charAt(0) > '0') return 1;
             else return 0;
         }
-        int x = s.charAt(0)=='0'?0:1;
+        int x = s.charAt(0) == '0' ? 0 : 1;
 
-        int y = s.charAt(1)=='0'?0:1;;
-        if(s.charAt(1)>'0' && x!=0){
+        int y = s.charAt(1) == '0' ? 0 : 1;
+        ;
+        if (s.charAt(1) > '0' && x != 0) {
             y = 1;
         }
-        int curr=1;
-        for(int i =2;i<=s.length();i++){
-            curr =0;
-            if(s.charAt(i-1)>'0'){
-                curr =y;
+        int curr = 1;
+        for (int i = 2; i <= s.length(); i++) {
+            curr = 0;
+            if (s.charAt(i - 1) > '0') {
+                curr = y;
             }
-            if(s.charAt(i-2)=='1' || (s.charAt(i-2)=='2' &&
-                    s.charAt(i-1)<'7')){
-                curr+=x;
+            if (s.charAt(i - 2) == '1' || (s.charAt(i - 2) == '2' &&
+                    s.charAt(i - 1) < '7')) {
+                curr += x;
 
             }
             x = y;
-            y=curr;
+            y = curr;
 
         }
         return y;
@@ -729,24 +798,24 @@ public class StringProblems {
 
     /**
      * https://leetcode.com/problems/longest-valid-parentheses/
+     *
      * @param s
      * @return
      */
     public int longestValidParentheses(String s) {
-        if(s==null || s.length()==0) return 0;
+        if (s == null || s.length() == 0) return 0;
         int res = 0;
-        Stack<Integer> st =  new Stack();
+        Stack<Integer> st = new Stack();
         st.push(-1);
-        for(int i =0; i< s.length();i++){
+        for (int i = 0; i < s.length(); i++) {
 
             char c = s.charAt(i);
-            if(c=='('){
+            if (c == '(') {
                 st.push(i);
-            }
-            else{
+            } else {
                 st.pop();
-                if(!st.isEmpty())
-                    res = Math.max(res, i-st.peek());
+                if (!st.isEmpty())
+                    res = Math.max(res, i - st.peek());
                 else st.push(i);
             }
         }
@@ -755,6 +824,7 @@ public class StringProblems {
 
     /**
      * https://leetcode.com/problems/generate-parentheses/
+     *
      * @param n
      * @return
      */
@@ -784,6 +854,7 @@ public class StringProblems {
      * Problem https://leetcode.com/problems/letter-combinations-of-a-phone-number/
      * Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
      * A mapping of digit to letters (just like on the telephone buttons).
+     *
      * @param nums
      * @return
      */
@@ -800,7 +871,7 @@ public class StringProblems {
 
         List<String> list = new ArrayList<>();
 
-        findPossibleWords(nums, 0, "", map,list );
+        findPossibleWords(nums, 0, "", map, list);
         return list;
     }
 
