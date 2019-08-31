@@ -161,10 +161,46 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int[] weight = {4,5,1};
-        int[] value = {1,2,3};
-        Item item = ap.knapsackProblem(value, weight, 4);
-        System.out.println("Value " + item.value+" weight " + item.weight);
+        int INF = 2147483647;
+        int[][] board = {{INF,  -1,  0,  INF},
+                         {INF, INF, INF,  -1},
+                         {INF,  -1, INF,  -1},
+                         {  0  ,-1 ,INF ,INF}};
+        ap.wallsAndGates(board);
+        for (int[] arr: board){
+            for(int i: arr ){
+                System.out.print(i +" ");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * https://www.youtube.com/watch?v=Pj9378ZsCh4
+     * @param board
+     */
+    public void wallsAndGates(int [][] board){
+        if(board==null || board.length==0) return;
+
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[i].length; j ++){
+                if(board[i][j] == 0){
+                    fillDistance(board, i, j, 0);
+                }
+            }
+        }
+    }
+
+    private void fillDistance(int[][] board, int i, int j, int value) {
+
+        if(i<0 || j<0 || i>=board.length || j>=board[i].length ) return;
+        if(board[i][j] < value || board[i][j]==-1) return;
+
+        board[i][j]= value;
+        fillDistance(board, i+1, j, value+1);
+        fillDistance(board, i-1, j, value+1);
+        fillDistance(board, i, j+1, value+1);
+        fillDistance(board, i, j-1, value+1);
     }
 
     /**
