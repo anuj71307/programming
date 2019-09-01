@@ -169,6 +169,36 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/combination-sum/
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> list = new ArrayList<>();
+        if(candidates==null || candidates.length==0) return list;
+        Arrays.sort(candidates);
+        combinationSum_backtrack(list, new ArrayList<>(), candidates, target, 0);
+        return list;
+    }
+
+    private void combinationSum_backtrack(List<List<Integer>> list, List<Integer> tempList, int [] arr, int target, int start){
+        if(target<0) return;
+        if(target == 0) {
+            list.add(new ArrayList<>(tempList));
+            return;
+        }
+
+        for(int i =start; i< arr.length;i++){
+
+            tempList.add(arr[i]);
+            combinationSum_backtrack(list, tempList, arr, target-arr[i], i);
+            tempList.remove(tempList.size()-1);
+        }
+
+    }
+
+    /**
      * https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
      * @param arr
      * @param target
