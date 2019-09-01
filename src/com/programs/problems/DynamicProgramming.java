@@ -10,8 +10,63 @@ public class DynamicProgramming {
         int i = 4;
         int j = 7;
         DynamicProgramming dp = new DynamicProgramming();
-        System.out.println(dp.uniquePaths(i,j));
-        System.out.println(dp.uniquePathRecur(i,j));
+        int[][] arr =  {{1,3,1},
+                        {1,5,1},
+                        {4,2,1},
+                     {1,1,1}};
+        System.out.print(dp.minPathSum(arr));
+    }
+
+
+    /**
+     * https://leetcode.com/problems/minimum-path-sum/
+     * @param grid
+     * @return
+     */
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        for(int i = 1;i<n;i++){
+            grid[0][i]+=grid[0][i-1];
+        }
+        for(int i = 1; i< m;i++){
+            grid[i][0]+=grid[i-1][0];
+        }
+
+        for(int i =1;i< m;i++){
+            for(int j =1;j<n;j++){
+                grid[i][j]+=Math.min(grid[i-1][j], grid[i][j-1]);
+            }
+        }
+
+        return grid[m-1][n-1];
+
+    }
+
+    /**
+     * https://leetcode.com/problems/minimum-path-sum/
+     * @param grid
+     * @return
+     */
+    public int minPathSum_recur(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int res[] = new int[1];
+        res[0] = Integer.MAX_VALUE;
+        minPathSum_Recur(grid, res, 0, 0,0);
+        return res[0];
+    }
+
+    public void minPathSum_Recur(int[][] grid, int[] res, int i, int j, int sum){
+        if(i<0||j<0||i>=grid.length||j>=grid[i].length) return;
+
+        if(i==grid.length-1 && j == grid[i].length-1){
+            sum+=grid[i][j];
+            if(sum<res[0]) res[0] = sum;
+            return;
+        }
+        minPathSum_Recur(grid, res, i+1, j, sum+grid[i][j]);
+        minPathSum_Recur(grid, res, i, j+1,sum+grid[i][j]);
+
     }
 
     /**
