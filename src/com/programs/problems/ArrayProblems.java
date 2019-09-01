@@ -161,18 +161,62 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int INF = 2147483647;
-        int[][] board = {{INF,  -1,  0,  INF},
-                         {INF, INF, INF,  -1},
-                         {INF,  -1, INF,  -1},
-                         {  0  ,-1 ,INF ,INF}};
-        ap.wallsAndGates(board);
-        for (int[] arr: board){
-            for(int i: arr ){
-                System.out.print(i +" ");
+        int arr[] = new int[]{1};
+        int target = 1;
+        int[] res = ap.searchRange(arr, target);
+        System.out.print(res[0]+" "+res[1] );
+
+    }
+
+    /**
+     * https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+     * @param arr
+     * @param target
+     * @return
+     */
+    private int[] searchRange(int[] arr, int target) {
+        int left = searchLeft(arr, target);
+        if(left==-1) return new int[]{-1,-1};
+        int right = searchRight(arr, target);
+        return  new int[]{left, right};
+    }
+
+    private int searchRight(int[] arr, int target) {
+        int start = 0;
+        int end = arr.length-1;
+        int mid = 0;
+        while(start<=end){
+            mid = (start+end)/2;
+            if(arr[mid]==target){
+                if(mid ==arr.length-1) return  mid;
+                if(arr[mid+1]!=target) return mid;
+                start = mid+1;
             }
-            System.out.println();
+            else {
+                if(arr[mid]>target) end = mid-1;
+                else start = mid+1;
+            }
         }
+        return -1;
+    }
+
+    private int searchLeft(int[] arr, int target) {
+        int start = 0;
+        int end = arr.length-1;
+        int mid = 0;
+        while(start<=end){
+            mid = (start+end)/2;
+            if(arr[mid]==target){
+                if(mid ==0) return  mid;
+                if(arr[mid-1]!=target) return mid;
+                end = mid-1;
+            }
+            else {
+                if(arr[mid]>target) end = mid-1;
+                else start = mid+1;
+            }
+        }
+        return -1;
     }
 
     /**
