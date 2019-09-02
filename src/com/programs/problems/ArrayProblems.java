@@ -161,11 +161,43 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int arr[] = new int[]{1};
+        int arr[] = new int[]{71,70,69};
         int target = 1;
-        int[] res = ap.searchRange(arr, target);
-        System.out.print(res[0]+" "+res[1] );
+        int[] res = ap.dailyTemperatures(arr);
+        for(int i : res){
+            System.out.print(i+" ");
+        }
 
+    }
+
+    /**
+     * https://leetcode.com/problems/daily-temperatures/
+     * @param arr
+     * @return
+     */
+    public int[] dailyTemperatures(int[] arr) {
+        int length = arr.length;
+        int[] res = new int[length];
+        res[length-1] = 0;
+        boolean found;
+        int j;
+        for(int i = length-2;i>=0;i--){
+            found = false;
+            j = i+1;
+            while(j<length){
+                if(arr[j]>arr[i]){
+                    found = true;
+                    break;
+                }
+                else {
+                    if(res[j]==0) break;
+                    j = j+res[j];
+                }
+            }
+            if(found) res[i] = j-i;
+        }
+
+        return res;
     }
 
     /**
