@@ -1,6 +1,8 @@
 package com.programs.problems;
 
 
+import java.util.HashMap;
+
 /**
  * Dynamic Programming problems
  */
@@ -10,13 +12,39 @@ public class DynamicProgramming {
         int i = 4;
         int j = 7;
         DynamicProgramming dp = new DynamicProgramming();
-        int[][] arr =  {{1,3,1},
-                        {1,5,1},
-                        {4,2,1},
-                     {1,1,1}};
-        System.out.print(dp.minPathSum(arr));
+        int arr[] = new int[]{2,2,5,3};
+        System.out.print(dp.canPartition(arr));
     }
 
+    /**
+     * https://leetcode.com/problems/partition-equal-subset-sum/
+     * @param nums
+     * @return
+     */
+    public boolean canPartition(int[] nums) {
+
+        int sum =0;
+        for(int i : nums) sum+=i;
+        if(sum%2!=0) return  false;
+
+        HashMap<String, Boolean> map = new HashMap<>();
+        sum = sum/2;
+        return sumTarget(nums, sum, 0, map);
+    }
+
+    private boolean sumTarget(int[] nums, int sum, int index, HashMap<String, Boolean> map) {
+        String key = sum+"_"+index;
+        if(map.containsKey(key)) return map.get(key);
+        if(sum==0) return  true;
+        if(index>=nums.length) return false;
+
+
+         boolean found =  sumTarget(nums, sum-nums[index], index+1, map)
+                 || sumTarget(nums, sum, index+1, map);
+         map.put(key, found);
+         return found;
+
+    }
 
     /**
      * https://leetcode.com/problems/minimum-path-sum/
