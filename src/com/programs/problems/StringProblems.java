@@ -632,10 +632,33 @@ public class StringProblems {
     public static void main(String[] args) throws Exception {
 
         StringProblems sp = new StringProblems();
-        char[][] board = {{'A'}};
-        String word = "A";
-        System.out.print(sp.exist(board, word));
 
+    }
+
+
+    /**
+     * https://leetcode.com/problems/edit-distance/
+     * @param s
+     * @return
+     */
+    public boolean validPalindrome(String s) {
+
+        boolean done = false;
+        int i = 0;
+        int j = s.length()-1;
+        return valid(s,i,j, done);
+    }
+
+    public boolean valid(String s, int i , int j , boolean done){
+        if(i>=j) return true;
+
+        boolean unEqual = s.charAt(i) != s.charAt(j);
+        if( unEqual && done) return false;
+
+        if(unEqual) {
+            return valid(s,i+1,j, true) || valid(s,i,j-1, true);
+        }
+        return valid(s,i+1,j-1, done);
     }
 
     /**
