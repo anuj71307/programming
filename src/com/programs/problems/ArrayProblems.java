@@ -161,14 +161,49 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int arr[] = new int[]{71,70,69};
-        int target = 1;
-        int[] res = ap.dailyTemperatures(arr);
-        for(int i : res){
-            System.out.print(i+" ");
-        }
+        int arr[][]= new int[][]{{1,1,1,1,0},
+                {1,1,0,1,0}};
+        System.out.print(new ArrayProblems().numIslands(arr));
+
 
     }
+
+    /**
+     * https://leetcode.com/problems/number-of-islands/
+     * @param grid
+     * @return
+     */
+    public int numIslands(int[][] grid) {
+
+        boolean visited[][] = new boolean[grid.length][grid[0].length];
+
+        int res = 0;
+        for(int i =0;i< grid.length;i++){
+            for(int j =0; j< grid[i].length;j++){
+
+                if(grid[i][j]==1 && !visited[i][j]){
+                    traverse(grid,visited, i,j);
+                    res++;
+                }
+            }
+        }
+
+
+        return res;
+    }
+
+    public void traverse(int[][] grid,boolean visited[][], int i , int j ) {
+
+        if(i<0 || j<0 || i>=grid.length || j>= grid[i].length
+                || grid[i][j]==0 || visited[i][j]) return;
+
+        visited[i][j] = true;
+        traverse(grid,visited, i+1,j);
+        traverse(grid,visited, i-1,j);
+        traverse(grid,visited, i,j+1);
+        traverse(grid,visited, i,j-1);
+    }
+
 
     /**
      * https://leetcode.com/problems/daily-temperatures/
