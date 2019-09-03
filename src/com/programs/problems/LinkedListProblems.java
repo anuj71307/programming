@@ -135,85 +135,151 @@ public class LinkedListProblems<T> {
        */
     public static void main(String[] args) {
 
-        LinkedList<Integer> node = new LinkedList<>(1);
-        LinkedList t = node;
-        node.add(2);
-        node.add(2);
-        node.add(2);
-        node.add(1);
+        LinkedListProblems lp = new LinkedListProblems();
+        //lp.sortList();
 
-
-
-        System.out.println(isPalindrome(node));
 
     }
 
     /**
+     * https://leetcode.com/problems/sort-list/
+     *
+     * @param head
+     * @return
+     */
+    public LinkedList<Integer> sortList(LinkedList<Integer> head) {
+        if (head == null || head.next == null) return head;
+
+        LinkedList<Integer> left = getMid(head, halflength(head));
+        LinkedList<Integer> right = left.next != null ? left.next : null;
+        left.next = null;
+        head = sortList(head);
+        right = sortList(right);
+        return merge(head, right);
+    }
+
+    LinkedList<Integer> merge(LinkedList<Integer> first, LinkedList<Integer> second) {
+
+        if (first == null) return second;
+        if (second == null) return first;
+
+        LinkedList<Integer> temp = new LinkedList(1);
+        LinkedList<Integer> prev = temp;
+
+        while (first != null && second != null) {
+
+            if (first.data < second.data) {
+                prev.next = first;
+                first = first.next;
+            } else {
+                prev.next = second;
+                second = second.next;
+            }
+            prev = prev.next;
+
+        }
+
+        if (first != null) {
+            prev.next = first;
+        } else {
+            prev.next = second;
+        }
+
+        return temp.next;
+
+    }
+
+
+    LinkedList<Integer> getMid(LinkedList<Integer> head, int mid) {
+
+        while (head != null && mid > 1) {
+            mid--;
+            head = head.next;
+        }
+
+        return head;
+    }
+
+
+    /**
+     * return half length
+     * @param head
+     * @return
+     */
+    int halflength(LinkedList<Integer> head) {
+        int len = 0;
+        while (head != null) {
+            head = head.next;
+            len++;
+        }
+
+        return len / 2;
+    }
+
+    /**
      * https://leetcode.com/problems/add-two-numbers/
+     *
      * @param l1
      * @param l2
      * @return
      */
-    public static  LinkedList<Integer> addTwoNumbers(LinkedList<Integer> l1, LinkedList<Integer> l2) {
+    public static LinkedList<Integer> addTwoNumbers(LinkedList<Integer> l1, LinkedList<Integer> l2) {
 
-        if(l1==null)return  l2;
-        if(l2==null) return  l1;
-        int carry =0;
-        LinkedList<Integer> head =null;
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+        int carry = 0;
+        LinkedList<Integer> head = null;
         LinkedList<Integer> prev = null;
         LinkedList<Integer> temp;
-        while(l1!=null && l2 !=null){
-            int val = l1.getData()+l2.getData()+carry;
-            int rem = val%10;
-            carry = val/10;
+        while (l1 != null && l2 != null) {
+            int val = l1.getData() + l2.getData() + carry;
+            int rem = val % 10;
+            carry = val / 10;
             temp = new LinkedList(rem);
-            if(head==null) {
-                head =temp;
+            if (head == null) {
+                head = temp;
                 prev = head;
-            }
-            else{
+            } else {
                 prev.next = temp;
                 prev = temp;
             }
-            l1=l1.next;
-            l2=l2.next;
+            l1 = l1.next;
+            l2 = l2.next;
         }
 
-        while (l1!=null){
-            int val = l1.getData()+carry;
-            int rem = val%10;
-            carry = val/10;
+        while (l1 != null) {
+            int val = l1.getData() + carry;
+            int rem = val % 10;
+            carry = val / 10;
             temp = new LinkedList(rem);
-            if(head==null) {
-                head =temp;
+            if (head == null) {
+                head = temp;
                 prev = head;
-            }
-            else{
+            } else {
                 prev.next = temp;
                 prev = temp;
             }
-            l1=l1.next;
+            l1 = l1.next;
         }
-        while (l2!=null){
-            int val = l2.data+carry;
-            int rem = val%10;
-            carry = val/10;
+        while (l2 != null) {
+            int val = l2.data + carry;
+            int rem = val % 10;
+            carry = val / 10;
             temp = new LinkedList<>(rem);
-            if(head==null) {
-                head =temp;
+            if (head == null) {
+                head = temp;
                 prev = head;
-            }
-            else{
+            } else {
                 prev.next = temp;
                 prev = temp;
             }
-            l2=l2.next;
+            l2 = l2.next;
         }
 
-        if(carry!=0){
+        if (carry != 0) {
 
             temp = new LinkedList<>(carry);
-            prev.next=temp;
+            prev.next = temp;
         }
 
         return head;
@@ -222,13 +288,15 @@ public class LinkedListProblems<T> {
 
     //variable used to point to start node and move one by one
     static LinkedList<Integer> left;
+
     /**
      * https://www.geeksforgeeks.org/function-to-check-if-a-singly-linked-list-is-palindrome/
      * check if a linkedlist is palindrome or not
+     *
      * @param node
      * @return
      */
-    static boolean  isPalindrome(LinkedList<Integer> node){
+    static boolean isPalindrome(LinkedList<Integer> node) {
 
         left = node;
         return isPalindromeUtil(node);
@@ -240,12 +308,12 @@ public class LinkedListProblems<T> {
      * @param right
      * @return
      */
-    static boolean  isPalindromeUtil( LinkedList<Integer> right){
-        if(right ==null) return  true;
-        boolean result = isPalindromeUtil( right.next);
-        if(!result) return false;
-        boolean res = (left.data==right.data);
-        if(!res) return  false;
+    static boolean isPalindromeUtil(LinkedList<Integer> right) {
+        if (right == null) return true;
+        boolean result = isPalindromeUtil(right.next);
+        if (!result) return false;
+        boolean res = (left.data == right.data);
+        if (!res) return false;
         left = left.next;
         return true;
     }
