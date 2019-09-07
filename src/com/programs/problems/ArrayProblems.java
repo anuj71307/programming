@@ -169,6 +169,41 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/frog-jump/
+     * @param stones
+     * @return
+     */
+    public boolean canCross(int[] stones) {
+        HashMap<Integer, Integer>  map= new HashMap<>();
+        for(int i =0; i< stones.length;i++){
+            map.put(stones[i], i);
+        }
+        if(stones[1]!=1) return false;
+        HashMap<String, Boolean> check = new HashMap();
+        return canCross(map, 0, 1,stones, check);
+    }
+
+    public boolean canCross(  HashMap<Integer, Integer>  map, int pos, int jump, int [] stones, HashMap<String, Boolean> check){
+        //if(pos>=stones.length) return false;
+        String str = pos+""+jump;
+        if(check.containsKey(str)) return check.get(str);
+        if(jump<0) return false;
+        if(pos==stones.length-1) return true;
+        if(pos>=stones.length) return false;
+
+        int res = stones[pos]+jump;
+        if(!map.containsKey(res)) return false;
+        int cp = map.get(res);
+        if(jump==0) return false;
+        boolean exits =  canCross(map, cp, jump,stones, check) || canCross(map, cp, jump-1,stones, check)
+                ||canCross(map, cp, jump+1,stones, check);
+
+        check.put(str, exits);
+        return exits;
+
+    }
+
+    /**
      * https://leetcode.com/problems/number-of-islands/
      * @param grid
      * @return
