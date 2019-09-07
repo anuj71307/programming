@@ -579,27 +579,54 @@ public class TreeProblems {
         return false;
     }
 
-    /*
-      check if tree has root to path with given sum
+    /**
+     * https://leetcode.com/problems/path-sum/
+     * @param node
+     * @param sum
      */
-    static void hasPathSum(Node node, int sum) {
+    static boolean hasPathSum(Node node, int sum) {
         // Your code here
-        ArrayList<Integer> list = new ArrayList<>();
-        hasPathSum(node, sum, list);
+        if(node==null) return false;
+        if(node.left==null && node.right==null) return node.data==sum;
+        return hasPathSum(node.left, sum-node.data)|| hasPathSum(node.right, sum-node.data);
 
     }
 
-    static void hasPathSum(Node node, int sum, ArrayList<Integer> list) {
-        if (node == null) return;
-        list.add(node.data);
-        if (node.left == null && node.right == null && node.data == sum) {
-            for (Integer i : list) System.out.print(i + " ");
-            System.out.println();
+
+    /**
+     * find all path from toor to left which equals a given sum
+     * https://leetcode.com/problems/path-sum-ii/
+     * @param root
+     * @param sum
+     * @return
+     */
+    public List<List<Integer>> pathSum(Node root, int sum) {
+
+        List<List<Integer>> res = new ArrayList();
+        List<Integer> list = new ArrayList();
+        pathSum(root,sum,res,list);
+        return res;
+    }
+
+    public void pathSum(Node root, int sum, List<List<Integer>> res, List<Integer> list) {
+
+        if(root==null) return ;
+
+        if(root.left==null && root.right==null){
+            if(sum==root.data){
+                list.add(root.data);
+                res.add(new ArrayList(list));
+                list.remove(list.size()-1);
+            }
+            else{
+                return;
+            }
         }
-        hasPathSum(node.right, sum - node.data, list);
-        hasPathSum(node.left, sum - node.data, list);
-        if (!list.isEmpty())
-            list.remove(list.size() - 1);
+
+        list.add(root.data);
+        pathSum(root.left,sum-root.data,res,list);
+        pathSum(root.right,sum-root.data,res,list);
+        list.remove(list.size()-1);
     }
 
 
