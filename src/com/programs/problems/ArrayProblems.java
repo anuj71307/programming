@@ -161,42 +161,76 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int arr[][]= new int[][]{{1,1,1,1,0},
-                {1,1,0,1,0}};
+        int arr[][] = new int[][]{{1, 1, 1, 1, 0},
+                {1, 1, 0, 1, 0}};
         System.out.print(new ArrayProblems().numIslands(arr));
 
 
     }
 
     /**
+     * https://leetcode.com/problems/target-sum/
+     *
+     * You are given a list of non-negative integers, a1, a2, ..., an, and a target, S. Now you have 2 symbols + and -. For each integer, you should choose one from + and - as its new symbol.
+     *
+     * Find out how many ways to assign symbols to make sum of integers equal to target S.
+     * @param nums
+     * @param S
+     * @return
+     */
+    public int findTargetSumWays(int[] nums, int S) {
+        if (nums == null || nums.length == 0) return 0;
+        HashMap<String, Integer> map = new HashMap();
+        return findTargetSumWays(nums, S, 0, 0, map);
+
+    }
+
+    public int findTargetSumWays(int[] nums, int S, int index, int sum, HashMap<String, Integer> map) {
+
+        String str = index + " " + sum;
+        if (map.containsKey(str)) return map.get(str);
+        if (index >= nums.length) {
+            if (sum == S) return 1;
+            return 0;
+        }
+
+        int total = findTargetSumWays(nums, S, index + 1, sum + nums[index], map) + findTargetSumWays(nums, S, index + 1, sum - nums[index], map);
+
+
+        map.put(str, total);
+        return total;
+    }
+
+    /**
      * https://leetcode.com/problems/frog-jump/
+     *
      * @param stones
      * @return
      */
     public boolean canCross(int[] stones) {
-        HashMap<Integer, Integer>  map= new HashMap<>();
-        for(int i =0; i< stones.length;i++){
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < stones.length; i++) {
             map.put(stones[i], i);
         }
-        if(stones[1]!=1) return false;
+        if (stones[1] != 1) return false;
         HashMap<String, Boolean> check = new HashMap();
-        return canCross(map, 0, 1,stones, check);
+        return canCross(map, 0, 1, stones, check);
     }
 
-    public boolean canCross(  HashMap<Integer, Integer>  map, int pos, int jump, int [] stones, HashMap<String, Boolean> check){
+    public boolean canCross(HashMap<Integer, Integer> map, int pos, int jump, int[] stones, HashMap<String, Boolean> check) {
         //if(pos>=stones.length) return false;
-        String str = pos+""+jump;
-        if(check.containsKey(str)) return check.get(str);
-        if(jump<0) return false;
-        if(pos==stones.length-1) return true;
-        if(pos>=stones.length) return false;
+        String str = pos + "" + jump;
+        if (check.containsKey(str)) return check.get(str);
+        if (jump < 0) return false;
+        if (pos == stones.length - 1) return true;
+        if (pos >= stones.length) return false;
 
-        int res = stones[pos]+jump;
-        if(!map.containsKey(res)) return false;
+        int res = stones[pos] + jump;
+        if (!map.containsKey(res)) return false;
         int cp = map.get(res);
-        if(jump==0) return false;
-        boolean exits =  canCross(map, cp, jump,stones, check) || canCross(map, cp, jump-1,stones, check)
-                ||canCross(map, cp, jump+1,stones, check);
+        if (jump == 0) return false;
+        boolean exits = canCross(map, cp, jump, stones, check) || canCross(map, cp, jump - 1, stones, check)
+                || canCross(map, cp, jump + 1, stones, check);
 
         check.put(str, exits);
         return exits;
@@ -205,6 +239,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/number-of-islands/
+     *
      * @param grid
      * @return
      */
@@ -213,11 +248,11 @@ public class ArrayProblems {
         boolean visited[][] = new boolean[grid.length][grid[0].length];
 
         int res = 0;
-        for(int i =0;i< grid.length;i++){
-            for(int j =0; j< grid[i].length;j++){
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
 
-                if(grid[i][j]==1 && !visited[i][j]){
-                    traverse(grid,visited, i,j);
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    traverse(grid, visited, i, j);
                     res++;
                 }
             }
@@ -227,44 +262,44 @@ public class ArrayProblems {
         return res;
     }
 
-    public void traverse(int[][] grid,boolean visited[][], int i , int j ) {
+    public void traverse(int[][] grid, boolean visited[][], int i, int j) {
 
-        if(i<0 || j<0 || i>=grid.length || j>= grid[i].length
-                || grid[i][j]==0 || visited[i][j]) return;
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[i].length
+                || grid[i][j] == 0 || visited[i][j]) return;
 
         visited[i][j] = true;
-        traverse(grid,visited, i+1,j);
-        traverse(grid,visited, i-1,j);
-        traverse(grid,visited, i,j+1);
-        traverse(grid,visited, i,j-1);
+        traverse(grid, visited, i + 1, j);
+        traverse(grid, visited, i - 1, j);
+        traverse(grid, visited, i, j + 1);
+        traverse(grid, visited, i, j - 1);
     }
 
 
     /**
      * https://leetcode.com/problems/daily-temperatures/
+     *
      * @param arr
      * @return
      */
     public int[] dailyTemperatures(int[] arr) {
         int length = arr.length;
         int[] res = new int[length];
-        res[length-1] = 0;
+        res[length - 1] = 0;
         boolean found;
         int j;
-        for(int i = length-2;i>=0;i--){
+        for (int i = length - 2; i >= 0; i--) {
             found = false;
-            j = i+1;
-            while(j<length){
-                if(arr[j]>arr[i]){
+            j = i + 1;
+            while (j < length) {
+                if (arr[j] > arr[i]) {
                     found = true;
                     break;
-                }
-                else {
-                    if(res[j]==0) break;
-                    j = j+res[j];
+                } else {
+                    if (res[j] == 0) break;
+                    j = j + res[j];
                 }
             }
-            if(found) res[i] = j-i;
+            if (found) res[i] = j - i;
         }
 
         return res;
@@ -272,61 +307,62 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/combination-sum/
+     *
      * @param candidates
      * @param target
      * @return
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> list = new ArrayList<>();
-        if(candidates==null || candidates.length==0) return list;
+        if (candidates == null || candidates.length == 0) return list;
         Arrays.sort(candidates);
         combinationSum_backtrack(list, new ArrayList<>(), candidates, target, 0);
         return list;
     }
 
-    private void combinationSum_backtrack(List<List<Integer>> list, List<Integer> tempList, int [] arr, int target, int start){
-        if(target<0) return;
-        if(target == 0) {
+    private void combinationSum_backtrack(List<List<Integer>> list, List<Integer> tempList, int[] arr, int target, int start) {
+        if (target < 0) return;
+        if (target == 0) {
             list.add(new ArrayList<>(tempList));
             return;
         }
 
-        for(int i =start; i< arr.length;i++){
+        for (int i = start; i < arr.length; i++) {
 
             tempList.add(arr[i]);
-            combinationSum_backtrack(list, tempList, arr, target-arr[i], i);
-            tempList.remove(tempList.size()-1);
+            combinationSum_backtrack(list, tempList, arr, target - arr[i], i);
+            tempList.remove(tempList.size() - 1);
         }
 
     }
 
     /**
      * https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+     *
      * @param arr
      * @param target
      * @return
      */
     private int[] searchRange(int[] arr, int target) {
         int left = searchLeft(arr, target);
-        if(left==-1) return new int[]{-1,-1};
+        if (left == -1) return new int[]{-1, -1};
         int right = searchRight(arr, target);
-        return  new int[]{left, right};
+        return new int[]{left, right};
     }
 
     private int searchRight(int[] arr, int target) {
         int start = 0;
-        int end = arr.length-1;
+        int end = arr.length - 1;
         int mid = 0;
-        while(start<=end){
-            mid = (start+end)/2;
-            if(arr[mid]==target){
-                if(mid ==arr.length-1) return  mid;
-                if(arr[mid+1]!=target) return mid;
-                start = mid+1;
-            }
-            else {
-                if(arr[mid]>target) end = mid-1;
-                else start = mid+1;
+        while (start <= end) {
+            mid = (start + end) / 2;
+            if (arr[mid] == target) {
+                if (mid == arr.length - 1) return mid;
+                if (arr[mid + 1] != target) return mid;
+                start = mid + 1;
+            } else {
+                if (arr[mid] > target) end = mid - 1;
+                else start = mid + 1;
             }
         }
         return -1;
@@ -334,18 +370,17 @@ public class ArrayProblems {
 
     private int searchLeft(int[] arr, int target) {
         int start = 0;
-        int end = arr.length-1;
+        int end = arr.length - 1;
         int mid = 0;
-        while(start<=end){
-            mid = (start+end)/2;
-            if(arr[mid]==target){
-                if(mid ==0) return  mid;
-                if(arr[mid-1]!=target) return mid;
-                end = mid-1;
-            }
-            else {
-                if(arr[mid]>target) end = mid-1;
-                else start = mid+1;
+        while (start <= end) {
+            mid = (start + end) / 2;
+            if (arr[mid] == target) {
+                if (mid == 0) return mid;
+                if (arr[mid - 1] != target) return mid;
+                end = mid - 1;
+            } else {
+                if (arr[mid] > target) end = mid - 1;
+                else start = mid + 1;
             }
         }
         return -1;
@@ -353,21 +388,22 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/product-of-array-except-self/
+     *
      * @param nums
      * @return
      */
     public int[] productExceptSelf(int[] nums) {
-        if(nums==null || nums.length<2) return nums;
+        if (nums == null || nums.length < 2) return nums;
         int left[] = new int[nums.length];
         left[0] = 1;
-        for(int i = 1; i < nums.length; i++){
-            left[i] = left[i-1]*nums[i-1];
+        for (int i = 1; i < nums.length; i++) {
+            left[i] = left[i - 1] * nums[i - 1];
         }
 
-        int res = nums[nums.length-1];
-        for(int i = nums.length-2; i >=0; i--){
-            left[i] = left[i]*res;
-            res = res*nums[i];
+        int res = nums[nums.length - 1];
+        for (int i = nums.length - 2; i >= 0; i--) {
+            left[i] = left[i] * res;
+            res = res * nums[i];
         }
 
         return left;
@@ -375,14 +411,15 @@ public class ArrayProblems {
 
     /**
      * https://www.youtube.com/watch?v=Pj9378ZsCh4
+     *
      * @param board
      */
-    public void wallsAndGates(int [][] board){
-        if(board==null || board.length==0) return;
+    public void wallsAndGates(int[][] board) {
+        if (board == null || board.length == 0) return;
 
-        for(int i = 0; i < board.length; i++){
-            for(int j = 0; j < board[i].length; j ++){
-                if(board[i][j] == 0){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 0) {
                     fillDistance(board, i, j, 0);
                 }
             }
@@ -391,58 +428,58 @@ public class ArrayProblems {
 
     private void fillDistance(int[][] board, int i, int j, int value) {
 
-        if(i<0 || j<0 || i>=board.length || j>=board[i].length ) return;
-        if(board[i][j] < value || board[i][j]==-1) return;
+        if (i < 0 || j < 0 || i >= board.length || j >= board[i].length) return;
+        if (board[i][j] < value || board[i][j] == -1) return;
 
-        board[i][j]= value;
-        fillDistance(board, i+1, j, value+1);
-        fillDistance(board, i-1, j, value+1);
-        fillDistance(board, i, j+1, value+1);
-        fillDistance(board, i, j-1, value+1);
+        board[i][j] = value;
+        fillDistance(board, i + 1, j, value + 1);
+        fillDistance(board, i - 1, j, value + 1);
+        fillDistance(board, i, j + 1, value + 1);
+        fillDistance(board, i, j - 1, value + 1);
     }
 
     /**
-     *
      * @param value
      * @param weight
      * @param total
      * @return
      */
-    public Item knapsackProblem(int[] value, int [] weight, int total){
+    public Item knapsackProblem(int[] value, int[] weight, int total) {
 
-        if(value==null || weight ==null || value.length==0 ||
-                weight.length==0|| value.length!=weight.length)
-            return new Item(0,0);
-        Item [] item = new Item[value.length];
-        for(int i = 0; i< value.length;i++){
+        if (value == null || weight == null || value.length == 0 ||
+                weight.length == 0 || value.length != weight.length)
+            return new Item(0, 0);
+        Item[] item = new Item[value.length];
+        for (int i = 0; i < value.length; i++) {
             item[i] = new Item(weight[i], value[i]);
         }
 
         Arrays.sort(item, new Comparator<Item>() {
             @Override
             public int compare(Item o1, Item o2) {
-                return (o1.value/o1.weight)-(o2.value/o2.weight);
+                return (o1.value / o1.weight) - (o2.value / o2.weight);
             }
         });
 
         int w = 0;
         int v = 0;
-        for(int i =item.length-1; i>=0;i--){
-           if(item[i].weight<total){
+        for (int i = item.length - 1; i >= 0; i--) {
+            if (item[i].weight < total) {
                 w += item[i].weight;
                 v += item[i].value;
-                total=total-item[i].weight;
-           }
+                total = total - item[i].weight;
+            }
         }
 
-        return new Item(w,v);
+        return new Item(w, v);
     }
 
     // USED IN KNAPSACK PROBLEM
     class Item {
         int weight;
         int value;
-        Item(int weight, int value){
+
+        Item(int weight, int value) {
             this.weight = weight;
             this.value = value;
         }
@@ -451,27 +488,27 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/merge-intervals/
      * merge intervals
+     *
      * @param intervals
      * @return
      */
     private static int[][] mergeIntervals(int[][] intervals) {
-        if(intervals==null || intervals.length==0) return null;
+        if (intervals == null || intervals.length == 0) return null;
 
         Arrays.sort(intervals, (o1, o2) -> {
-            return  o1[0] - o2[0];
+            return o1[0] - o2[0];
         });
 
         List<int[]> result = new ArrayList<>();
         int j = 0;
         int[] prev = intervals[0];
         int[] temp;
-        for(int i =1; i < intervals.length;){
+        for (int i = 1; i < intervals.length; ) {
             temp = intervals[i];
-            if(temp[0]>=prev[0] && temp[0]<=prev[1]){
+            if (temp[0] >= prev[0] && temp[0] <= prev[1]) {
                 prev[0] = Math.min(temp[0], prev[0]);
                 prev[1] = Math.max(temp[1], prev[1]);
-            }
-            else{
+            } else {
                 result.add(prev);
                 prev = temp;
             }
@@ -485,22 +522,24 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/jump-game/
+     *
      * @param nums
      * @return
      */
     public boolean canJump(int[] nums) {
 
         int n = nums.length;
-        int last = n-1;
-        for(int i = n-2;i>=0;i--){
-            if(i+nums[i]>=last) last = i;
+        int last = n - 1;
+        for (int i = n - 2; i >= 0; i--) {
+            if (i + nums[i] >= last) last = i;
         }
-        return last<=0;
+        return last <= 0;
     }
 
     /**
      * https://leetcode.com/problems/permutations-ii/
      * generate all unique permutation of a number
+     *
      * @param nums
      * @return
      */
@@ -512,17 +551,17 @@ public class ArrayProblems {
     }
 
 
-    private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, boolean[] used){
-        if(tempList.size()==nums.length){
+    private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int[] nums, boolean[] used) {
+        if (tempList.size() == nums.length) {
             list.add(new ArrayList<>(tempList));
             return;
         }
 
-        for(int i =0; i< nums.length;i++){
-            if(used[i] ||(i>0 && nums[i]== nums[i-1] && !used[i-1]) ) continue;
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i] || (i > 0 && nums[i] == nums[i - 1] && !used[i - 1])) continue;
             used[i] = true;
             tempList.add(nums[i]);
-            backtrack(list, tempList,nums,used);
+            backtrack(list, tempList, nums, used);
             used[i] = false;
             tempList.remove(tempList.size() - 1);
         }
@@ -532,17 +571,18 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/container-with-most-water/
+     *
      * @param arr
      * @return
      */
-    private static int maxWaterTrap(int [] arr){
-        if(arr==null|| arr.length<2) return 0;
+    private static int maxWaterTrap(int[] arr) {
+        if (arr == null || arr.length < 2) return 0;
         int max = 0;
         int start = 0;
-        int end = arr.length-1;
-        while(start<end){
-            max = Math.max(max, Math.min(arr[start], arr[end])*(end-start));
-            if(arr[start]<arr[end]) start++;
+        int end = arr.length - 1;
+        while (start < end) {
+            max = Math.max(max, Math.min(arr[start], arr[end]) * (end - start));
+            if (arr[start] < arr[end]) start++;
             else end--;
         }
 
@@ -552,6 +592,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/sliding-window-maximum/
+     *
      * @param arr
      * @param k
      * @return
@@ -569,16 +610,16 @@ public class ArrayProblems {
         }
         for (int i = k; i < arr.length; i++) {
             res[i - k] = arr[deque.peek()];
-            while (!deque.isEmpty() && deque.peek()<=i-k){
+            while (!deque.isEmpty() && deque.peek() <= i - k) {
                 deque.removeFirst();
             }
-            while (!deque.isEmpty() && arr[i]>=arr[deque.peekLast()]){
+            while (!deque.isEmpty() && arr[i] >= arr[deque.peekLast()]) {
                 deque.removeLast();
             }
             deque.addLast(i);
 
         }
-        res[res.length-1] = arr[deque.peek()];
+        res[res.length - 1] = arr[deque.peek()];
 
         return res;
 
@@ -587,6 +628,7 @@ public class ArrayProblems {
     /**
      * find max in subarray of given size
      * https://leetcode.com/problems/sliding-window-maximum/
+     *
      * @param arr
      * @param k
      */
