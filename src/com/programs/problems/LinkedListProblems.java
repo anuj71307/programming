@@ -158,6 +158,35 @@ public class LinkedListProblems<T> {
         return merge(head, right);
     }
 
+    /**
+     * https://leetcode.com/problems/merge-k-sorted-lists/
+     * @param lists
+     * @return
+     */
+    public LinkedList<Integer> mergeKLists(LinkedList<Integer>[] lists) {
+
+        if(lists==null || lists.length==0) return null;
+        if(lists.length==1) return lists[0];
+
+        int length = lists.length;
+        int l1 = length/2;
+        int l2 = length-l1;
+        LinkedList<Integer>[] left = new LinkedList[l1];
+        LinkedList<Integer>[] right = new LinkedList[l2];
+        System.arraycopy(lists,0,left,0,l1);
+        System.arraycopy(lists,l1,right,0,l2);
+        LinkedList<Integer> k = mergeKLists(left);
+        LinkedList<Integer> p = mergeKLists(right);
+        LinkedList<Integer> head = merge(k,p);
+        return head;
+    }
+
+    /**
+     * MERGE TWO SORTED LINKED-LIST
+     * @param first
+     * @param second
+     * @return
+     */
     LinkedList<Integer> merge(LinkedList<Integer> first, LinkedList<Integer> second) {
 
         if (first == null) return second;
