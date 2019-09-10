@@ -168,6 +168,37 @@ public class ArrayProblems {
 
     }
 
+
+    /**
+     * https://leetcode.com/problems/longest-increasing-subsequence/
+     * @param nums
+     * @return
+     */
+    public int lengthOfLIS(int[] nums) {
+
+        if(nums==null || nums.length==0) return 0;
+        if(nums.length==1) return 1;
+
+        int temp[] = new int[nums.length];
+        temp[0]=1;
+
+        int max = 1;
+        int j = 0;
+        for(int i =1; i< nums.length;i++){
+            j = 0;
+            temp[i]=1;
+            while(j<i){
+                if(nums[i]>nums[j]){
+                    temp[i] = Math.max(temp[i], temp[j]+1);
+                    max = Math.max(max, temp[i]);
+                }
+                j++;
+            }
+        }
+
+        return max;
+    }
+
     /**
      * https://leetcode.com/problems/target-sum/
      *
