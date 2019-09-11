@@ -200,6 +200,36 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/search-a-2d-matrix-ii/
+     * Search in sorted 2D array O(n) time
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+
+        if(matrix==null || matrix.length==0 || matrix[0].length==0) return false;
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        int i = 0;
+        int j = col-1;
+
+        while(i>=0 && j >= 0 && i < row && j < col){
+            if(matrix[i][j]==target) return true;
+            if(matrix[i][j]>target){
+                j--;
+            }
+            else{
+                i++;
+            }
+
+        }
+
+        return false;
+    }
+
+    /**
      * https://leetcode.com/problems/target-sum/
      *
      * You are given a list of non-negative integers, a1, a2, ..., an, and a target, S. Now you have 2 symbols + and -. For each integer, you should choose one from + and - as its new symbol.
