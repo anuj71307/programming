@@ -19,6 +19,39 @@ public class TreeProblems {
         System.out.print(isSymmetric(node));
     }
 
+    /**
+     * https://leetcode.com/problems/house-robber-iii/
+     * @param root
+     * @return
+     */
+    public int rob(Node root) {
+        return rob(root, new HashMap<>());
+    }
+
+
+    /**
+     * https://leetcode.com/problems/house-robber-iii/
+     * @param root
+     * @param map
+     * @return
+     */
+    public int rob(Node root, HashMap<Node, Integer> map){
+
+        if(root==null) return 0;
+        if(map.containsKey(root)) return map.get(root);
+        int val = root.data;
+        if(root.left!=null){
+            val+=rob(root.left.left, map)+rob(root.left.right, map);
+        }
+
+        if(root.right!=null){
+            val+=rob(root.right.left, map)+rob(root.right.right, map);
+        }
+
+        val=  Math.max(val, rob(root.left, map)+rob(root.right, map));
+        map.put(root, val);
+        return val;
+    }
 
     /**
      * https://leetcode.com/problems/symmetric-tree/
