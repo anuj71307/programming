@@ -168,6 +168,20 @@ public class ArrayProblems {
 
     }
 
+    /**
+     * https://leetcode.com/problems/find-the-duplicate-number/
+     * @param nums
+     * @return
+     */
+    public int findDuplicate(int[] nums) {
+        int j = nums[0];
+        while (j != 0) {
+            if (nums[j] < 0) return j;
+            nums[j] = nums[j] * -1;
+            j = Math.abs(nums[j]);
+        }
+        return j;
+    }
 
     /**
      * https://leetcode.com/problems/longest-increasing-subsequence/
