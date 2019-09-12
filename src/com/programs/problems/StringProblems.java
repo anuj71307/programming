@@ -638,6 +638,30 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/palindromic-substrings/
+     * @param s
+     * @return
+     */
+    public int countSubstrings(String s) {
+        if(s==null || s.length()==0) return 0;
+        int res[] = new int[1];
+        for(int i = 0; i< s.length();i++){
+            count(s,i,i,res);
+            count(s,i,i+1,res);
+        }
+        return res[0];
+    }
+
+    public void count(String s, int i , int j , int[] res){
+
+        while(i>=0 && j<s.length() && s.charAt(i) == s.charAt(j)){
+            res[0]+=1;
+            i--;
+            j++;
+        }
+    }
+
+    /**
      * https://leetcode.com/problems/partition-labels/
      *
      * @param str
