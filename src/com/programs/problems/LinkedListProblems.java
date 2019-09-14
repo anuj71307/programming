@@ -142,6 +142,56 @@ public class LinkedListProblems<T> {
     }
 
     /**
+     * https://leetcode.com/problems/reverse-nodes-in-k-group/
+     * @param node
+     * @param k
+     * @return
+     */
+    public LinkedList<T> reverseKGroup(LinkedList<T> node, int k) {
+        return reverseKGroup(node, k, size(node));
+    }
+
+    /**
+     * https://leetcode.com/problems/reverse-nodes-in-k-group/
+     * @param node
+     * @param k
+     * @param size
+     * @return
+     */
+    public LinkedList<T> reverseKGroup(LinkedList<T> node, int k, int size) {
+        if (node == null || node.next == null || k < 2 || size < k) return node;
+
+        int i = 1;
+        LinkedList<T> head = node;
+        node = node.next;
+        head.next = null;
+        LinkedList<T> tail = head;
+
+        LinkedList<T> temp = tail;
+        while (node != null && i < k) {
+            temp = node.next;
+            node.next = head;
+            head = node;
+            node = temp;
+            i++;
+        }
+
+        tail.next = reverseKGroup(node, k, size - k);
+
+        return head;
+    }
+
+
+    public int size(LinkedList<T> node) {
+        int k = 0;
+        while (node != null) {
+            k++;
+            node = node.next;
+        }
+        return k;
+    }
+
+    /**
      * https://leetcode.com/problems/sort-list/
      *
      * @param head
@@ -160,29 +210,31 @@ public class LinkedListProblems<T> {
 
     /**
      * https://leetcode.com/problems/merge-k-sorted-lists/
+     *
      * @param lists
      * @return
      */
     public LinkedList<Integer> mergeKLists(LinkedList<Integer>[] lists) {
 
-        if(lists==null || lists.length==0) return null;
-        if(lists.length==1) return lists[0];
+        if (lists == null || lists.length == 0) return null;
+        if (lists.length == 1) return lists[0];
 
         int length = lists.length;
-        int l1 = length/2;
-        int l2 = length-l1;
+        int l1 = length / 2;
+        int l2 = length - l1;
         LinkedList<Integer>[] left = new LinkedList[l1];
         LinkedList<Integer>[] right = new LinkedList[l2];
-        System.arraycopy(lists,0,left,0,l1);
-        System.arraycopy(lists,l1,right,0,l2);
+        System.arraycopy(lists, 0, left, 0, l1);
+        System.arraycopy(lists, l1, right, 0, l2);
         LinkedList<Integer> k = mergeKLists(left);
         LinkedList<Integer> p = mergeKLists(right);
-        LinkedList<Integer> head = merge(k,p);
+        LinkedList<Integer> head = merge(k, p);
         return head;
     }
 
     /**
      * MERGE TWO SORTED LINKED-LIST
+     *
      * @param first
      * @param second
      * @return
@@ -232,6 +284,7 @@ public class LinkedListProblems<T> {
 
     /**
      * return half length
+     *
      * @param head
      * @return
      */
@@ -334,6 +387,7 @@ public class LinkedListProblems<T> {
 
     /**
      * check if a linkedlist is palindrome or not
+     *
      * @param right
      * @return
      */
@@ -412,6 +466,7 @@ public class LinkedListProblems<T> {
 
     /**
      * Reverse linked list recursively
+     *
      * @param node
      * @return
      */
