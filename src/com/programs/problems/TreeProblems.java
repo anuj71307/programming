@@ -2,6 +2,7 @@ package com.programs.problems;
 
 
 import com.programs.stack.Stack;
+import com.programs.trees.BinarySearchTree;
 import com.programs.trees.BinaryTree;
 import com.programs.trees.ITree;
 
@@ -706,5 +707,46 @@ class Node {
         data = x;
         left = null;
         right = null;
+    }
+}
+
+
+/**
+ * https://leetcode.com/problems/binary-search-tree-iterator/
+ * Time O(1) on average, O(n) worst case
+ * Space O(h)
+ */
+class BSTIterator {
+
+    Stack<BinarySearchTree> stack;
+    public BSTIterator(BinarySearchTree<Integer> root) {
+        stack = new Stack<>();
+        iterate(root, stack);
+
+    }
+
+    void iterate(BinarySearchTree root, Stack<BinarySearchTree> stack){
+
+        while(root!=null){
+            stack.push(root);
+            root = (BinarySearchTree) root.getLeftNode();
+        }
+
+    }
+
+    /** @return the next smallest number */
+    public int next() {
+        BinarySearchTree<Integer> root = stack.pop();
+        if(root.getRightNode()!=null){
+            iterate((BinarySearchTree) root.getRightNode(), stack);
+        }
+
+        return  root.getData();
+
+    }
+
+    /** @return whether we have a next smallest number */
+    public boolean hasNext() {
+        return !stack.isEmpty();
     }
 }
