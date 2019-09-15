@@ -20,6 +20,25 @@ public class TreeProblems {
     }
 
     /**
+     * https://leetcode.com/problems/diameter-of-binary-tree/
+     * @param tree
+     * @return
+     */
+    public int diameterOfTree(ITree tree){
+        int []res = new int[1];
+        diameterOfTree(tree, res);
+        return res[0];
+    }
+
+    private int diameterOfTree(ITree tree, int[] res) {
+        if(tree==null) return 0;
+        int left = diameterOfTree(tree.getLeftNode(), res);
+        int right = diameterOfTree(tree.getRightNode(), res);
+        res[0] = Math.max(res[0], left+right+1);
+        return Math.max(left,right)+1;
+    }
+
+    /**
      * https://leetcode.com/problems/house-robber-iii/
      * @param root
      * @return
