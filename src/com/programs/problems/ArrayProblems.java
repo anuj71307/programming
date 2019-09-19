@@ -169,6 +169,35 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+     * @param nums
+     * @return
+     */
+    private int removeDuplicates(int[] nums) {
+        if(nums==null || nums.length==0) return 0;
+        int prev = nums[0];
+        int index = 1;
+        for(int i =1;i< nums.length;i++){
+            if(nums[i]==prev){
+
+            }
+            else{
+                prev = nums[i];
+                swap(nums,index,i);
+                index++;
+            }
+        }
+        return index;
+    }
+
+    private void swap(int[] nums, int i, int j){
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    /**
      * https://leetcode.com/problems/find-the-duplicate-number/
      * @param nums
      * @return
