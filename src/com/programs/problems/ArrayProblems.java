@@ -189,6 +189,37 @@ public class ArrayProblems {
         return result;
     }
 
+
+    /**
+     * https://leetcode.com/problems/task-scheduler/
+     * @param tasks
+     * @param n
+     * @return
+     */
+    public int leastInterval(char[] tasks, int n) {
+        int[] arr = new int[26];
+        for (char task : tasks) {
+            arr[task - 'A'] += 1;
+        }
+        Arrays.sort(arr);
+        int time = 0;
+        int i = 0;
+        while (arr[25] > 0) {
+            i = 0;
+            while (i <= n) {
+                if (arr[25] == 0) break;
+                if (i < 26 && arr[25 - i] > 0) {
+                    arr[25 - i] -= 1;
+                }
+                i++;
+                time++;
+            }
+
+            Arrays.sort(arr);
+        }
+        return time;
+    }
+
     /**
      * https://leetcode.com/problems/remove-duplicates-from-sorted-array/
      * @param nums
