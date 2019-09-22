@@ -632,9 +632,66 @@ public class StringProblems {
     public static void main(String[] args) throws Exception {
 
         StringProblems sp = new StringProblems();
-        String part = "ababcbacadefegdehijhklij";
-        System.out.print(sp.partitionLabels(part));
+        String sentence = "jesslookedjustlikehertimbrother";
 
+        HashSet<String> set = new HashSet<>();
+        set.add("looked");
+        set.add("like");
+        set.add("just");
+        set.add("her");
+        set.add("brother");
+        System.out.print(sp.bestSplit(set, sentence));
+
+    }
+
+    /**
+     * Given a dictinary and a sentence design an alogo to unconcatenate teh document
+     * in a way that minimize the number of unrecognized characters
+     * @param dict
+     * @param sentence
+     * @return
+     */
+    private String bestSplit(HashSet<String> dict, String sentence){
+
+        Result result = split(dict, sentence, 0, new HashMap<>());
+        System.out.println("Result is " + result.result+" invalid strings are " + result.invalid);
+        return result.result;
+    }
+
+    private Result split(HashSet<String> dict, String sentence, int index, HashMap<Integer, Result> map) {
+
+        if(index>=sentence.length()) return new Result(0, "");
+
+        if(map.containsKey(index)) return map.get(index);
+        int max = Integer.MAX_VALUE;
+        String splitString = null;
+        String parsed = "";
+        for(int i = index; i< sentence.length();i++){
+            parsed = parsed+sentence.charAt(i);
+            int invalid = dict.contains(parsed)?0:parsed.length();
+            if(invalid<=max){
+                Result result = split(dict, sentence, i+1, map);
+                if(invalid+result.invalid<=max){
+                    max = invalid+result.invalid;
+                    splitString = parsed+" "+result.result;
+                    if(max==0) break;
+                }
+
+            }
+        }
+
+        map.put(index, new Result(max, splitString));
+        return map.get(index);
+    }
+
+    class Result {
+        int invalid ;
+        String result;
+
+        Result(int invalid, String res){
+            this.invalid = invalid;
+            this.result = res;
+        }
     }
 
     /**
