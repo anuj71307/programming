@@ -629,19 +629,47 @@ public class StringProblems {
     }
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         StringProblems sp = new StringProblems();
-        String sentence = "jesslookedjustlikehertimbrother";
+        String[] str = {"awe", "some", "awesome", "is", "hello", "just", "", "isawesome"};
+        System.out.print(sp.searchLongestWord(str));
 
-        HashSet<String> set = new HashSet<>();
-        set.add("looked");
-        set.add("like");
-        set.add("just");
-        set.add("her");
-        set.add("brother");
-        System.out.print(sp.bestSplit(set, sentence));
+    }
 
+    /**
+     * Given a list of word, find longest word which is formed by other words
+     *
+     * @param str
+     * @return
+     */
+    private String searchLongestWord(String[] str) {
+        Arrays.sort(str, (o1, o2) -> o2.length() - o1.length());
+        HashMap<String, Boolean> map = new HashMap<>();
+        for (String s : str) {
+            map.put(s, true);
+        }
+        for (String s : str) {
+            if (canBuild(s, map, true)) {
+                return s;
+            }
+        }
+        return "not found";
+    }
+
+    private boolean canBuild(String s, HashMap<String, Boolean> map, boolean original) {
+        if (map.containsKey(s) && !original) return map.get(s);
+
+        for (int i = 1; i < s.length(); i++) {
+            String left = s.substring(0, i);
+            if (map.getOrDefault(left, false)) {
+                String right = s.substring(i);
+                if (canBuild(right, map, false)) return true;
+            }
+        }
+
+        map.put(s, false);
+        return false;
     }
 
     /**
