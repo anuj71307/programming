@@ -21,6 +21,31 @@ public class TreeProblems {
     }
 
     /**
+     * https://leetcode.com/problems/binary-tree-maximum-path-sum/
+     * @param root
+     * @return
+     */
+    public int maxPathSum(Node root) {
+        if(root==null) return 0;
+        int[] arr = new int[1];
+        arr[0] = Integer.MIN_VALUE;
+        maxPathSum(root,arr);
+        return arr[0];
+    }
+
+    public int maxPathSum(Node root, int[] res) {
+        if(root==null) return 0;
+        int left = maxPathSum(root.left, res);
+        int right = maxPathSum(root.right, res);
+        int max = Math.max(left,right)+root.data;
+        max = Math.max(max, root.data);
+        int r = max;
+        max = Math.max(max, left+right+root.data);
+        res[0] = Math.max(res[0], max);
+        return r;
+    }
+
+    /**
      * https://leetcode.com/problems/diameter-of-binary-tree/
      * @param tree
      * @return
