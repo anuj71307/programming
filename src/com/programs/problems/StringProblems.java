@@ -633,8 +633,44 @@ public class StringProblems {
 
         StringProblems sp = new StringProblems();
         String[] str = {"awe", "some", "awesome", "is", "hello", "just", "", "isawesome"};
-        System.out.print(sp.searchLongestWord(str));
+        System.out.print(sp.reArrangeString("AA"));
 
+    }
+
+    /**
+     * https://practice.geeksforgeeks.org/problems/rearrange-a-string/0
+     * @param str
+     * @return
+     */
+    private String reArrangeString(String str){
+        if(str==null || str.length()==0) return str;
+        int[] arr = new int[25];
+        int count =0;
+        for(int i =0; i< str.length();i++){
+            char c = str.charAt(i);
+            if(c>='0' && c<='9'){
+                count+=Character.getNumericValue(c);
+            }
+            else{
+                arr[c-'A']+=1;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i =0;i<arr.length;i++){
+
+            int k = arr[i];
+            char c = (char)('A'+i);
+            while(k>0){
+                sb.append(c);
+                k--;
+            }
+
+        }
+        if(count>0) {
+            sb.append(count);
+        }
+
+        return sb.toString();
     }
 
     /**
