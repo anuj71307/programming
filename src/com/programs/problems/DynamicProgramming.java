@@ -10,11 +10,38 @@ public class DynamicProgramming {
 
     public static void main(String[] args){
         int i = 4;
-        int j = 7;
+        int target = 7168;
+
         DynamicProgramming dp = new DynamicProgramming();
-        int arr[] = new int[]{2,2,5,3};
-        System.out.print(dp.canPartition(arr));
+        System.out.println(dp.numSquares(target));
     }
+
+    /**
+     * https://leetcode.com/problems/perfect-squares/
+     * @param n
+     * @return
+     */
+    public int numSquares(int n) {
+        if(n<=3) return n;
+       int[] arr = new int[n+1];
+
+       squares(n, arr);
+       return arr[n];
+    }
+
+    public int squares(int n, int[] cache){
+        if(n<=3) return n;
+
+        if(cache[n]!=0) return cache[n];
+
+        int res = n;
+        for(int i =1;i*i<=n;i++){
+            res = Math.min(res, 1+squares(n-i*i, cache));
+        }
+        cache[n] =res;
+        return cache[n];
+    }
+
 
     /**
      * https://leetcode.com/problems/coin-change/
