@@ -169,6 +169,39 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/minimum-size-subarray-sum/
+     * Find a min subaaray with sum >= s
+     * @param s
+     * @param nums
+     * @return
+     */
+    public int minSubArrayLen(int s, int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int len = 0;
+        int start = 0;
+        int end = 0;
+        int currSum = 0;
+        while (end < nums.length) {
+            currSum += nums[end];
+
+            while (currSum >= s && start <= end) {
+                if (end - start + 1 < len || len == 0) {
+                    len = end - start + 1;
+                    if (len == 1) return 1;
+                }
+                currSum -= nums[start];
+                start++;
+
+            }
+
+            end++;
+        }
+
+        if (len != 0) return len;
+        return 0;
+    }
+
+    /**
      * https://leetcode.com/problems/battleships-in-a-board/
      * @param board
      * @return
