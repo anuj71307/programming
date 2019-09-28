@@ -9,11 +9,30 @@ import java.util.HashMap;
 public class DynamicProgramming {
 
     public static void main(String[] args){
-        int i = 4;
         int target = 7168;
 
         DynamicProgramming dp = new DynamicProgramming();
-        System.out.println(dp.reduceToOne(target));
+        System.out.println(dp.countWays(4));
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/count-ofdifferent-ways-express-n-sum-1-3-4/
+     *
+     * @param num
+     * @return
+     */
+    private int countWays(int num) {
+        if (num <= 0) return 0;
+        int arr[] = new int[num + 1];
+        arr[0] = 0;
+        arr[1] = arr[2] = 1;
+        arr[3] = 2;
+        arr[4] = 4;
+        for (int i = 5; i <= num; i++) {
+            arr[i] = arr[i - 4] + arr[i - 3] + arr[i - 1];
+        }
+        return arr[num];
+
     }
 
     /**
