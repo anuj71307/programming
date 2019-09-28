@@ -1816,33 +1816,6 @@ public class ArrayProblems {
         System.out.println(-1);
     }
 
-    /**
-     * longest increasing subsequence
-     *
-     * @param arr
-     */
-    public static void printResult(int[] arr) {
-        int[] lis = new int[arr.length];
-        for (int i = 0; i < lis.length; i++) {
-            lis[i] = 1;
-        }
-
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < i; j++) {
-                if (arr[i] > arr[j] && lis[i] <= lis[j]) {
-                    lis[i] = lis[j] + 1;
-                }
-            }
-        }
-
-        int max = 1;
-        for (int k : lis) {
-            if (k > max) max = k;
-        }
-
-        System.out.println(max);
-    }
-
     public static void solve(char[][] board) {
 
 
