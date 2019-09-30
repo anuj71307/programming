@@ -638,35 +638,78 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/reverse-vowels-of-a-string/
+     *
+     * @param s
+     * @return
+     */
+    public String reverseVowels(String s) {
+        if (s == null || s.length() < 2) return s;
+        char arr[] = s.toCharArray();
+        int i = 0;
+        int j = arr.length - 1;
+        while (i < j) {
+
+            if (isVowel(arr[i]) && isVowel(arr[j])) {
+                swap(arr, i, j);
+                i++;
+                j--;
+            } else if (!isVowel(arr[i]) && !isVowel(arr[j])) {
+                i++;
+                j--;
+            } else if (!isVowel(arr[i])) {
+                i++;
+            } else if (!isVowel(arr[j])) {
+                j--;
+            }
+        }
+
+        return new String(arr);
+    }
+
+    boolean isVowel(char c) {
+
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+                || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    }
+
+    void swap(char[] arr, int i, int j) {
+
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    /**
      * https://practice.geeksforgeeks.org/problems/rearrange-a-string/0
+     *
      * @param str
      * @return
      */
-    private String reArrangeString(String str){
-        if(str==null || str.length()==0) return str;
+    private String reArrangeString(String str) {
+        if (str == null || str.length() == 0) return str;
         int[] arr = new int[25];
-        int count =0;
-        for(int i =0; i< str.length();i++){
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
-            if(c>='0' && c<='9'){
-                count+=Character.getNumericValue(c);
-            }
-            else{
-                arr[c-'A']+=1;
+            if (c >= '0' && c <= '9') {
+                count += Character.getNumericValue(c);
+            } else {
+                arr[c - 'A'] += 1;
             }
         }
         StringBuilder sb = new StringBuilder();
-        for(int i =0;i<arr.length;i++){
+        for (int i = 0; i < arr.length; i++) {
 
             int k = arr[i];
-            char c = (char)('A'+i);
-            while(k>0){
+            char c = (char) ('A' + i);
+            while (k > 0) {
                 sb.append(c);
                 k--;
             }
 
         }
-        if(count>0) {
+        if (count > 0) {
             sb.append(count);
         }
 
@@ -711,34 +754,35 @@ public class StringProblems {
     /**
      * Given a dictinary and a sentence design an alogo to unconcatenate teh document
      * in a way that minimize the number of unrecognized characters
+     *
      * @param dict
      * @param sentence
      * @return
      */
-    private String bestSplit(HashSet<String> dict, String sentence){
+    private String bestSplit(HashSet<String> dict, String sentence) {
 
         Result result = split(dict, sentence, 0, new HashMap<>());
-        System.out.println("Result is " + result.result+" invalid strings are " + result.invalid);
+        System.out.println("Result is " + result.result + " invalid strings are " + result.invalid);
         return result.result;
     }
 
     private Result split(HashSet<String> dict, String sentence, int index, HashMap<Integer, Result> map) {
 
-        if(index>=sentence.length()) return new Result(0, "");
+        if (index >= sentence.length()) return new Result(0, "");
 
-        if(map.containsKey(index)) return map.get(index);
+        if (map.containsKey(index)) return map.get(index);
         int max = Integer.MAX_VALUE;
         String splitString = null;
         String parsed = "";
-        for(int i = index; i< sentence.length();i++){
-            parsed = parsed+sentence.charAt(i);
-            int invalid = dict.contains(parsed)?0:parsed.length();
-            if(invalid<=max){
-                Result result = split(dict, sentence, i+1, map);
-                if(invalid+result.invalid<=max){
-                    max = invalid+result.invalid;
-                    splitString = parsed+" "+result.result;
-                    if(max==0) break;
+        for (int i = index; i < sentence.length(); i++) {
+            parsed = parsed + sentence.charAt(i);
+            int invalid = dict.contains(parsed) ? 0 : parsed.length();
+            if (invalid <= max) {
+                Result result = split(dict, sentence, i + 1, map);
+                if (invalid + result.invalid <= max) {
+                    max = invalid + result.invalid;
+                    splitString = parsed + " " + result.result;
+                    if (max == 0) break;
                 }
 
             }
@@ -749,10 +793,10 @@ public class StringProblems {
     }
 
     class Result {
-        int invalid ;
+        int invalid;
         String result;
 
-        Result(int invalid, String res){
+        Result(int invalid, String res) {
             this.invalid = invalid;
             this.result = res;
         }
@@ -760,23 +804,24 @@ public class StringProblems {
 
     /**
      * https://leetcode.com/problems/palindromic-substrings/
+     *
      * @param s
      * @return
      */
     public int countSubstrings(String s) {
-        if(s==null || s.length()==0) return 0;
+        if (s == null || s.length() == 0) return 0;
         int res[] = new int[1];
-        for(int i = 0; i< s.length();i++){
-            count(s,i,i,res);
-            count(s,i,i+1,res);
+        for (int i = 0; i < s.length(); i++) {
+            count(s, i, i, res);
+            count(s, i, i + 1, res);
         }
         return res[0];
     }
 
-    public void count(String s, int i , int j , int[] res){
+    public void count(String s, int i, int j, int[] res) {
 
-        while(i>=0 && j<s.length() && s.charAt(i) == s.charAt(j)){
-            res[0]+=1;
+        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
+            res[0] += 1;
             i--;
             j++;
         }
