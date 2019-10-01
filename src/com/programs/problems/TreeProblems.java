@@ -21,6 +21,26 @@ public class TreeProblems {
     }
 
     /**
+     * https://leetcode.com/problems/distribute-coins-in-binary-tree/
+     * @param root
+     * @return
+     */
+    public int distributeCoins(Node root) {
+        int res[] = new int[1];
+        distributeCoins(root, res);
+        return res[0];
+    }
+
+    public int distributeCoins(Node root, int[] res) {
+        if(root==null) return 0;
+        int left =  distributeCoins(root.left, res);
+        int right =  distributeCoins(root.right, res);
+        int sum = Math.abs(left)+Math.abs(right);
+        res[0]+=sum;
+        return root.data+left+right-1;
+    }
+
+    /**
      * https://leetcode.com/problems/binary-tree-maximum-path-sum/
      * @param root
      * @return
