@@ -10,11 +10,53 @@ public class DynamicProgramming {
 
     public static void main(String[] args) {
         int target = 7168;
-
         DynamicProgramming dp = new DynamicProgramming();
-        System.out.println(dp.sellWine(new int[]{2, 3, 5, 1, 4}));
+        int arr[] = new int[]{2, 3, 5};
+        int size = arr.length;
+        System.out.println(dp.roadCutPrice(arr, size));
+        System.out.println(dp.roadCutRecursive(arr, size));
+
     }
 
+    /**
+     * DP Solution
+     * https://www.geeksforgeeks.org/cutting-a-rod-dp-13/
+     *
+     * @param prices
+     * @param length
+     * @return
+     */
+    int roadCutPrice(int[] prices, int length) {
+        int dp[] = new int[length + 1];
+        int max = Integer.MIN_VALUE;
+        for (int i = 1; i <= length; i++) {
+            max = Integer.MIN_VALUE;
+            for (int j = 0; j < i; j++) {
+                max = Math.max(max, prices[j] + dp[i - j - 1]);
+            }
+            dp[i] = max;
+        }
+        return dp[length];
+    }
+
+    /**
+     * recursive solution to
+     * https://www.geeksforgeeks.org/cutting-a-rod-dp-13/
+     *
+     * @param prices
+     * @param length
+     * @return
+     */
+    int roadCutRecursive(int[] prices, int length) {
+
+        if (length <= 0) return 0;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < length; i++) {
+            max = Math.max(max, prices[i] + roadCutRecursive(prices, length - i - 1));
+        }
+
+        return max;
+    }
 
     /**
      * https://www.geeksforgeeks.org/maximum-profit-sale-wines/
