@@ -164,7 +164,29 @@ public class ArrayProblems {
         int arr[][] = new int[][]{{1, 1, 1, 1, 0},
                 {1, 1, 0, 1, 0}};
         System.out.print(new ArrayProblems().numIslands(arr));
+    }
 
+    /**
+     * https://leetcode.com/problems/subarray-sum-equals-k/
+     * Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum equals to k.
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraySum(int[] nums, int k) {
+
+        int count =0;
+        if(nums==null || nums.length==0) return count;
+        int sum =0;
+        for(int i =0; i<nums.length;i++){
+            sum=0;
+            for(int j=i;j<nums.length;j++){
+                sum+=nums[j];
+                if(sum==k) count++;
+            }
+        }
+
+        return count;
 
     }
 
