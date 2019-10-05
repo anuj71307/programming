@@ -14,7 +14,7 @@ public class Graph {
     int vertices;
     boolean directed = false;
     //Array of linked list
-    LinkedList<Integer> adjacencyList[];
+    public LinkedList<Integer> adjacencyList[];
 
     public Graph(int v, boolean directed) {
         vertices = v;
