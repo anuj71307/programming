@@ -23,7 +23,7 @@ public class Graph {
     }
 
     // add edge for given vertices
-   public  void addEdge(int source, int dest) {
+    public void addEdge(int source, int dest) {
         LinkedList<Integer> list = adjacencyList[source];
         if (list == null) {
             list = new LinkedList();
@@ -31,7 +31,7 @@ public class Graph {
         }
         list.add(dest);
 
-        if(directed) return;
+        if (directed) return;
         list = adjacencyList[dest];
         if (list == null) {
             list = new LinkedList();
@@ -44,7 +44,7 @@ public class Graph {
     /*
     print all the vertices and their respective/adjacent edges
      */
-   public void print() {
+    public void print() {
 
         for (int i = 0; i < adjacencyList.length; i++) {
             LinkedList<Integer> list = adjacencyList[i];
@@ -57,17 +57,17 @@ public class Graph {
         }
     }
 
-    public void bfs(int s){
-       if(s>=vertices) return;
-       boolean visited[] = new boolean[vertices];
+    public void bfs(int s) {
+        if (s >= vertices) return;
+        boolean visited[] = new boolean[vertices];
         Queue<Integer> queue = new LinkedList<>();
         queue.add(s);
         visited[s] = true;
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int k = queue.poll();
             System.out.println(k);
-            for( Integer j :adjacencyList[k]){
-                if(!visited[j]){
+            for (Integer j : adjacencyList[k]) {
+                if (!visited[j]) {
                     queue.add(j);
                     visited[j] = true;
                 }
@@ -77,17 +77,17 @@ public class Graph {
     }
 
 
-    public void iterativeDfs(int s, boolean[] visited){
-        if(s>=vertices) return;
+    public void iterativeDfs(int s, boolean[] visited) {
+        if (s >= vertices) return;
         Stack<Integer> stack = new Stack<>();
         stack.push(s);
         visited[s] = true;
-        while(!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             int k = stack.pop();
-            System.out.print(k +" ");
-            if(adjacencyList[k]==null) continue;
-            for(Integer j : adjacencyList[k]){
-                if(!visited[j]){
+            System.out.print(k + " ");
+            if (adjacencyList[k] == null) continue;
+            for (Integer j : adjacencyList[k]) {
+                if (!visited[j]) {
                     stack.push(j);
                     visited[j] = true;
                 }
@@ -95,34 +95,34 @@ public class Graph {
         }
     }
 
-    private void recursiveDfs(int s, boolean[] visited){
+    private void recursiveDfs(int s, boolean[] visited) {
         visited[s] = true;
-        System.out.print(s+" ");
+        System.out.print(s + " ");
 
-            // reverse iterator
-        if(adjacencyList[s]==null) return;
-            Iterator<Integer> it = adjacencyList[s].iterator();
-            while(it.hasNext()){
-                int j = it.next();
-                if(!visited[j]){
-                    recursiveDfs(j, visited);
-                }
+        // reverse iterator
+        if (adjacencyList[s] == null) return;
+        Iterator<Integer> it = adjacencyList[s].iterator();
+        while (it.hasNext()) {
+            int j = it.next();
+            if (!visited[j]) {
+                recursiveDfs(j, visited);
             }
+        }
 
     }
 
 
     //dfs frm given source
-    public void recursiveDfs(int s){
-        if(s>=vertices) return;
+    public void recursiveDfs(int s) {
+        if (s >= vertices) return;
         boolean[] visited = new boolean[vertices];
-        recursiveDfs(s,visited);
+        recursiveDfs(s, visited);
     }
 
-    public void dfs(){
+    public void dfs() {
         boolean[] visited = new boolean[vertices];
-        for(int i = 0; i< vertices;i++){
-            if(!visited[i]){
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i]) {
                 iterativeDfs(i, visited);
             }
         }
