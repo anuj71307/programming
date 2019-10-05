@@ -36,12 +36,10 @@ public class GraphProblems {
 
     public static void main(String[] args) {
 
-        int n = 6;
-        int arr[][] = {{0, 3}, {1, 3}, {2, 3}, {4, 3}, {5, 4}};
+        int n = 3;
+        int arr[][] = {{1, 0}, {0,2}};
 
-        GraphProblems gp = new GraphProblems();
-        System.out.println(gp.findMinHeightTrees(n, arr));
-        System.out.println(gp.findMinHeightTrees_optimized(n, arr));
+        System.out.println(new GraphTopologicalSort().canFinish(n, arr));
 
     }
 
