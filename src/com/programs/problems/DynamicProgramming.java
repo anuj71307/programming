@@ -9,44 +9,81 @@ import java.util.HashMap;
 public class DynamicProgramming {
 
     public static void main(String[] args) {
-        int target = 7168;
         DynamicProgramming dp = new DynamicProgramming();
-        int arr[] = new int[]{2, 3, 5};
-        int size = arr.length;
-        System.out.println(dp.roadCutPrice(arr, size));
-        System.out.println(dp.roadCutRecursive(arr, size));
+        System.out.println(dp.editDistDP("horse", "ros"));
 
     }
 
     /**
+     * https://www.geeksforgeeks.org/edit-distance-dp-5/
+     * https://leetcode.com/problems/edit-distance/
+     * @param word1
+     * @param word2
+     * @return
+     */
+    int editDistDP(String word1, String word2) {
+        // Create a table to store results of subproblems
+        if(word1==null && word2==null) return 0;
+        if(word1.length()==0) return word2.length();
+        if(word2.length()==0) return word1.length();
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m+1][n+1];
+        for(int i = 0; i <= n;i++){
+            dp[0][i] = i;
+        }
+
+        for(int i=0;i<=m;i++){
+            dp[i][0] = i;
+        }
+
+        for(int i=1; i<=m; i++){
+            for(int j =1; j<=n; j++){
+
+                if(word1.charAt(i-1)==word2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1];
+                }
+                else dp[i][j] = 1+min(dp[i-1][j-1], dp[i][j-1], dp[i-1][j]);
+            }
+        }
+
+        return dp[m][n];
+    }
+
+    private static int min(int x, int y, int z) {
+        return Math.min(Math.min(x, y), z);
+    }
+
+    /**
      * https://leetcode.com/problems/maximal-square/
+     *
      * @param matrix
      * @return
      */
     public int maximalSquare(char[][] matrix) {
-        if(matrix==null || matrix.length==0) return 0;
+        if (matrix == null || matrix.length == 0) return 0;
         int r = matrix.length;
         int c = matrix[0].length;
-        int dp[][] = new int[r+1][c+1];
+        int dp[][] = new int[r + 1][c + 1];
         int max = 0;
-        for(int i =1; i<=r;i++){
-            for(int j =1;j<=c;j++){
-                if(matrix[i-1][j-1]=='1'){
-                    dp[i][j] = getMin(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) +1;
-                    max = Math.max(max,dp[i][j]);
+        for (int i = 1; i <= r; i++) {
+            for (int j = 1; j <= c; j++) {
+                if (matrix[i - 1][j - 1] == '1') {
+                    dp[i][j] = getMin(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]) + 1;
+                    max = Math.max(max, dp[i][j]);
                 }
             }
 
         }
-        return max*max;
+        return max * max;
     }
 
 
-    int getMin(int x, int y, int z){
+    int getMin(int x, int y, int z) {
 
         int min = x;
-        if(y<min) min =y;
-        if(z<min) min = z;
+        if (y < min) min = y;
+        if (z < min) min = z;
         return min;
     }
 
