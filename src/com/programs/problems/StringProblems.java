@@ -633,8 +633,124 @@ public class StringProblems {
 
         StringProblems sp = new StringProblems();
         String[] str = {"awe", "some", "awesome", "is", "hello", "just", "", "isawesome"};
-        System.out.print(sp.reArrangeString("AA"));
+        System.out.println(sp.findAnagrams("abcab", "ab"));
+        System.out.println(sp.findAnagramss("abcab", "ab"));
 
+    }
+
+    public List<Integer> findAnagramss(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if (s == null || s.length() == 0) {
+            return result;
+        }
+        if (p.length() > s.length()) {
+            return result;
+        }
+
+        int[] chars = new int[26];
+        for(char c: p.toCharArray()){
+            chars[c-'a']++;
+        }
+        int diff = p.length();
+        for(int i =0; i<p.length();i++){
+
+            char key = s.charAt(i);
+            chars[key-'a']--;
+            //If it's still >= 0, the anagram still "needed" it so we count it towards the anagram by
+            //decrementing diff
+            if(chars[key-'a']>=0) diff--;
+        }
+
+        //This would mean that s began with an anagram of p
+        if(diff==0) result.add(0);
+
+        int start = 0;
+        int end = p.length();
+        //At this point, we keep start  at 0, end has moved so that the window is the length of the anagram
+        //from this point on we are going to be moving start AND end on each iteration, to shift the window
+        //along the string
+        while(end<s.length()){
+
+            //Temp represents the current first character of the window. The character that is
+            //going to be "left behind" as the window moves.
+            char temp = s.charAt(start);
+            //If it's not negative, this means that the character WAS part of the anagram. That means we
+            //are one step "farther away" from completing an anagram. So we must increment diff.
+            if(chars[temp-'a']>=0){
+               diff++;
+            }
+            //Increment the count for this character, because it is no longer contained in the window
+            chars[temp-'a']++;
+            start++;
+            //Temp represents the last character of the window, the "new" character from the window shift.
+            //This character "replaces" the one we removed before so the window stays the same length (p.length())
+            temp = s.charAt(end);
+            //Decrement count for this character, because it is now a part of the window
+            chars[temp-'a']--;
+            //Again, if it's not negative it is part of the anagram. So decrement diff
+            if(chars[temp-'a']>=0) diff--;
+            //If diff has reached zero, that means for the last p.length() iterations, diff was decremented and
+            //NOT decremented, which means every one of those characters was in the anagram, so it must be an anagram
+
+            //Note: If many windows in a row find anagrams, then each iteration will have diff incremented then decremented again
+            if(diff==0) result.add(start);
+            end++;
+        }
+
+        return  result;
+    }
+
+    /**
+     * s: "cbaebabacd" p: "abc"
+     *
+     * Output:
+     * [0, 6]
+     * @param s
+     * @param p
+     * @return
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+
+        List<Integer> list = new ArrayList<>();
+        if(s==null || s.length()==0 || p==null || s.length()<p.length()) return list;
+        int start =0;
+        int index = p.length()-1;
+        HashMap<Character, Integer> pMap = new HashMap<>();
+        for(char c: p.toCharArray()){
+
+            if(pMap.containsKey(c)){
+                pMap.put(c, pMap.get(c)+1);
+            }
+            else{
+                pMap.put(c,1);
+            }
+        }
+        while(index<s.length()){
+           boolean res=  isAnagram(s, start, index,pMap);
+           if(res) list.add(start);
+            start++;
+            index++;
+        }
+
+        return list;
+    }
+
+    private boolean isAnagram(String s, int start, int index, HashMap<Character, Integer> pMap) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        for(int i = start; i<=index;i++){
+            char c = s.charAt(i);
+            if(!map.containsKey(c)){
+                map.put(c, 0);
+            }
+            map.put(c, map.get(c)+1);
+        }
+        for(Map.Entry<Character, Integer> entry: map.entrySet()){
+            char key = entry.getKey();
+            int val = entry.getValue();
+            int cVal = pMap.getOrDefault(key, -1);
+            if(val!=cVal) return false;
+        }
+        return  true;
     }
 
     /**
