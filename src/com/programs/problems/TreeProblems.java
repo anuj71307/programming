@@ -21,6 +21,24 @@ public class TreeProblems {
     }
 
     /**
+     * https://leetcode.com/problems/sum-root-to-leaf-numbers/
+     * @param root
+     * @return
+     */
+    public int sumNumbers(Node root) {
+        return sum(root,0);
+    }
+
+    public int sum(Node root, int sum){
+        if(root==null) return 0;
+        if(root.left==null && root.right==null){
+            return sum*10+root.data;
+        }
+
+        return sum(root.left, sum*10+root.data)+sum(root.right, sum*10+root.data);
+    }
+
+    /**
      * https://leetcode.com/problems/distribute-coins-in-binary-tree/
      * @param root
      * @return
