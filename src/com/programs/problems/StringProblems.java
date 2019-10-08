@@ -638,6 +638,25 @@ public class StringProblems {
 
     }
 
+    /**
+     * https://leetcode.com/problems/repeated-dna-sequences/
+     * @param s
+     * @return
+     */
+    public List<String> findRepeatedDnaSequences(String s) {
+        List<String> list = new ArrayList<>();
+        if(s==null || s.length()<=9) return list;
+        HashSet<String> seen = new HashSet<>();
+        HashSet<String> repeated = new HashSet<>();
+        for(int i = 0; i+9< s.length(); i++){
+            String suffix = s.substring(i, i+10);
+            if(!seen.add(suffix)){
+                repeated.add(suffix);
+            }
+        }
+        return new ArrayList<>(repeated);
+    }
+
     public List<Integer> findAnagramss(String s, String p) {
         List<Integer> result = new ArrayList<>();
         if (s == null || s.length() == 0) {
