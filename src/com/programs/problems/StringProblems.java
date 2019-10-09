@@ -630,27 +630,75 @@ public class StringProblems {
 
 
     public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("02 May 2019");
 
-        StringProblems sp = new StringProblems();
-        String[] str = {"awe", "some", "awesome", "is", "hello", "just", "", "isawesome"};
-        System.out.println(sp.findAnagrams("abcab", "ab"));
-        System.out.println(sp.findAnagramss("abcab", "ab"));
+        list.add("01 May 2019");
+        list.add("04 May 2019");
+
+        System.out.println(new StringProblems().sortDates(list));
 
     }
 
     /**
+     * https://www.geeksforgeeks.org/python-sort-list-of-dates-given-as-strings/
+     * @param dates
+     * @return
+     */
+    public static List<String> sortDates(List<String> dates) {
+
+        final HashMap<String, Integer> map = new HashMap<>();
+        map.put("Jan", 1);
+        map.put("Feb", 2);
+        map.put("Mar", 3);
+        map.put("Apr", 4);
+        map.put("May", 5);
+        map.put("Jun", 6);
+        map.put("Jul", 7);
+        map.put("Aug", 8);
+        map.put("Sep", 9);
+        map.put("Oct", 10);
+        map.put("Nov", 11);
+        map.put("Dec", 12);
+        Collections.sort(dates, (o1, o2) -> {
+            String str1 = o1.substring(7);
+            String str2 = o2.substring(7);
+            int k = str1.compareTo(str2);
+            if (k != 0) {
+                return k;
+            }
+
+            String month_f = o1.substring(3, 6);
+            String month_s = o2.substring(3, 6);
+            Integer ma = map.get(month_f);
+            Integer ms = map.get(month_s);
+            k = ma.compareTo(ms);
+            if (k != 0) return k;
+            String day1 = o1.substring(0, 2);
+            String day2 = o2.substring(0, 2);
+
+            return day1.compareTo(day2);
+
+
+        });
+
+        return dates;
+    }
+
+    /**
      * https://leetcode.com/problems/repeated-dna-sequences/
+     *
      * @param s
      * @return
      */
     public List<String> findRepeatedDnaSequences(String s) {
         List<String> list = new ArrayList<>();
-        if(s==null || s.length()<=9) return list;
+        if (s == null || s.length() <= 9) return list;
         HashSet<String> seen = new HashSet<>();
         HashSet<String> repeated = new HashSet<>();
-        for(int i = 0; i+9< s.length(); i++){
-            String suffix = s.substring(i, i+10);
-            if(!seen.add(suffix)){
+        for (int i = 0; i + 9 < s.length(); i++) {
+            String suffix = s.substring(i, i + 10);
+            if (!seen.add(suffix)) {
                 repeated.add(suffix);
             }
         }
@@ -667,63 +715,64 @@ public class StringProblems {
         }
 
         int[] chars = new int[26];
-        for(char c: p.toCharArray()){
-            chars[c-'a']++;
+        for (char c : p.toCharArray()) {
+            chars[c - 'a']++;
         }
         int diff = p.length();
-        for(int i =0; i<p.length();i++){
+        for (int i = 0; i < p.length(); i++) {
 
             char key = s.charAt(i);
-            chars[key-'a']--;
+            chars[key - 'a']--;
             //If it's still >= 0, the anagram still "needed" it so we count it towards the anagram by
             //decrementing diff
-            if(chars[key-'a']>=0) diff--;
+            if (chars[key - 'a'] >= 0) diff--;
         }
 
         //This would mean that s began with an anagram of p
-        if(diff==0) result.add(0);
+        if (diff == 0) result.add(0);
 
         int start = 0;
         int end = p.length();
         //At this point, we keep start  at 0, end has moved so that the window is the length of the anagram
         //from this point on we are going to be moving start AND end on each iteration, to shift the window
         //along the string
-        while(end<s.length()){
+        while (end < s.length()) {
 
             //Temp represents the current first character of the window. The character that is
             //going to be "left behind" as the window moves.
             char temp = s.charAt(start);
             //If it's not negative, this means that the character WAS part of the anagram. That means we
             //are one step "farther away" from completing an anagram. So we must increment diff.
-            if(chars[temp-'a']>=0){
-               diff++;
+            if (chars[temp - 'a'] >= 0) {
+                diff++;
             }
             //Increment the count for this character, because it is no longer contained in the window
-            chars[temp-'a']++;
+            chars[temp - 'a']++;
             start++;
             //Temp represents the last character of the window, the "new" character from the window shift.
             //This character "replaces" the one we removed before so the window stays the same length (p.length())
             temp = s.charAt(end);
             //Decrement count for this character, because it is now a part of the window
-            chars[temp-'a']--;
+            chars[temp - 'a']--;
             //Again, if it's not negative it is part of the anagram. So decrement diff
-            if(chars[temp-'a']>=0) diff--;
+            if (chars[temp - 'a'] >= 0) diff--;
             //If diff has reached zero, that means for the last p.length() iterations, diff was decremented and
             //NOT decremented, which means every one of those characters was in the anagram, so it must be an anagram
 
             //Note: If many windows in a row find anagrams, then each iteration will have diff incremented then decremented again
-            if(diff==0) result.add(start);
+            if (diff == 0) result.add(start);
             end++;
         }
 
-        return  result;
+        return result;
     }
 
     /**
      * s: "cbaebabacd" p: "abc"
-     *
+     * <p>
      * Output:
      * [0, 6]
+     *
      * @param s
      * @param p
      * @return
@@ -731,22 +780,21 @@ public class StringProblems {
     public List<Integer> findAnagrams(String s, String p) {
 
         List<Integer> list = new ArrayList<>();
-        if(s==null || s.length()==0 || p==null || s.length()<p.length()) return list;
-        int start =0;
-        int index = p.length()-1;
+        if (s == null || s.length() == 0 || p == null || s.length() < p.length()) return list;
+        int start = 0;
+        int index = p.length() - 1;
         HashMap<Character, Integer> pMap = new HashMap<>();
-        for(char c: p.toCharArray()){
+        for (char c : p.toCharArray()) {
 
-            if(pMap.containsKey(c)){
-                pMap.put(c, pMap.get(c)+1);
-            }
-            else{
-                pMap.put(c,1);
+            if (pMap.containsKey(c)) {
+                pMap.put(c, pMap.get(c) + 1);
+            } else {
+                pMap.put(c, 1);
             }
         }
-        while(index<s.length()){
-           boolean res=  isAnagram(s, start, index,pMap);
-           if(res) list.add(start);
+        while (index < s.length()) {
+            boolean res = isAnagram(s, start, index, pMap);
+            if (res) list.add(start);
             start++;
             index++;
         }
@@ -756,20 +804,20 @@ public class StringProblems {
 
     private boolean isAnagram(String s, int start, int index, HashMap<Character, Integer> pMap) {
         HashMap<Character, Integer> map = new HashMap<>();
-        for(int i = start; i<=index;i++){
+        for (int i = start; i <= index; i++) {
             char c = s.charAt(i);
-            if(!map.containsKey(c)){
+            if (!map.containsKey(c)) {
                 map.put(c, 0);
             }
-            map.put(c, map.get(c)+1);
+            map.put(c, map.get(c) + 1);
         }
-        for(Map.Entry<Character, Integer> entry: map.entrySet()){
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
             char key = entry.getKey();
             int val = entry.getValue();
             int cVal = pMap.getOrDefault(key, -1);
-            if(val!=cVal) return false;
+            if (val != cVal) return false;
         }
-        return  true;
+        return true;
     }
 
     /**
