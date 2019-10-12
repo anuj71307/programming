@@ -10,8 +10,47 @@ public class DynamicProgramming {
 
     public static void main(String[] args) {
         DynamicProgramming dp = new DynamicProgramming();
-        System.out.println(dp.editDistDP("horse", "ros"));
+       // System.out.println(dp.editDistDP("horse", "ros"));
+        int[][] res = {{0,0,0,0}, {0,1,0,0}, {0,0,0,0}};
 
+        System.out.println(dp.uniquePathsWithObstacles(res));
+
+    }
+
+    /**
+     * https://leetcode.com/problems/unique-paths-ii/
+     * @param grid
+     * @return
+     */
+    public int uniquePathsWithObstacles(int[][] grid) {
+        if(grid==null || grid.length==0) return 0;
+        int x = grid[0].length;
+        int y = grid.length;
+        if(grid[0][0]==1) return 0;
+        grid[0][0]=1;
+        for(int i =1; i<x;i++){
+            if(grid[0][i]==1 || grid[0][i-1]==0) {
+                grid[0][i]=0;
+            }
+            else {
+                grid[0][i]=1;
+            }
+
+        }
+        for(int i =1;i<y;i++){
+            if(grid[i][0]==1 || grid[i-1][0]==0) grid[i][0]=0;
+            else grid[i][0]=1;
+        }
+        for(int i =1;i< y;i++){
+            for(int j =1;j<x;j++){
+                if(grid[i][j]==1) {
+                    grid[i][j]=0;
+                }
+                else grid[i][j] = grid[i-1][j]+grid[i][j-1];
+            }
+        }
+
+        return grid[y-1][x-1];
     }
 
     /**
