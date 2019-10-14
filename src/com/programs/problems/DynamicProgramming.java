@@ -2,6 +2,7 @@ package com.programs.problems;
 
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Dynamic Programming problems
@@ -15,6 +16,32 @@ public class DynamicProgramming {
 
         System.out.println(dp.uniquePathsWithObstacles(res));
 
+    }
+
+    /**
+     * https://leetcode.com/problems/triangle/
+     *
+     * @param triangle
+     * @return
+     */
+    public int minimumTotal(List<List<Integer>> triangle) {
+        return triangle.get(0).get(0) + minimumTotal(triangle, 1, 0, new HashMap<>());
+
+    }
+
+    public int minimumTotal(List<List<Integer>> triangle, int index, int i, HashMap<String, Integer> map) {
+        if (index >= triangle.size()) return 0;
+        if (i >= triangle.get(index).size()) return 0;
+        String key = index + " " + i;
+        if (map.containsKey(key)) return map.get(key);
+        int val1 = triangle.get(index).get(i);
+        val1 += minimumTotal(triangle, index + 1, i, map);
+        int val2 = triangle.get(index).get(i + 1);
+        val2 += minimumTotal(triangle, index + 1, i + 1, map);
+
+        val1 = Math.min(val1, val2);
+        map.put(key, val1);
+        return val1;
     }
 
     /**
