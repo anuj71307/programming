@@ -11,10 +11,34 @@ public class DynamicProgramming {
 
     public static void main(String[] args) {
         DynamicProgramming dp = new DynamicProgramming();
-       // System.out.println(dp.editDistDP("horse", "ros"));
+        // System.out.println(dp.editDistDP("horse", "ros"));
         int[][] res = {{0,0,0,0}, {0,1,0,0}, {0,0,0,0}};
 
         System.out.println(dp.uniquePathsWithObstacles(res));
+
+    }
+
+    /**
+     * https://leetcode.com/problems/triangle/
+     * @param triangle
+     * @return
+     */
+    public int minimumTotal_arr(List<List<Integer>> triangle) {
+
+        int size = triangle.size();
+        int res [] = new int[triangle.get(size-1).size()];
+        for(int i =0;i< res.length;i++){
+            res[i] = triangle.get(size-1).get(i);
+        }
+
+        for(int i = size-2;i>=0;i--){
+            List<Integer> curr = triangle.get(i);
+            for(int j =0; j< curr.size();j++){
+                res[j] = Math.min(res[j], res[j+1])+curr.get(j);
+            }
+        }
+
+        return res[0];
 
     }
 
@@ -24,7 +48,7 @@ public class DynamicProgramming {
      * @param triangle
      * @return
      */
-    public int minimumTotal(List<List<Integer>> triangle) {
+    public int minimumTotal_hashMap(List<List<Integer>> triangle) {
         return triangle.get(0).get(0) + minimumTotal(triangle, 1, 0, new HashMap<>());
 
     }
