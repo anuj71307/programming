@@ -128,4 +128,41 @@ public class Graph {
         }
     }
 
+
+    public boolean isCyclic_undirected(){
+        boolean visited[] = new boolean[vertices];
+        for(int i =0; i< vertices;i++){
+            if(!visited[i]){
+                if(isCyclic_undirected(i, visited, -1)){
+                  return true;
+                }
+            }
+        }
+        return  false;
+    }
+
+    /**
+     * detect cycle in graph using DFS
+     * Time complexity O(V+E)
+     *
+     * @param i
+     * @param visited
+     * @param parent
+     * @return
+     */
+    private boolean isCyclic_undirected(int i, boolean[] visited, int parent) {
+        visited[i] = true;
+
+        for (Integer child : adjacencyList[i]) {
+            if (child != parent) {
+                if (visited[child]) return true;
+                if (isCyclic_undirected(child, visited, i)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }
