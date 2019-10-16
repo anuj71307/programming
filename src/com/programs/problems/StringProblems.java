@@ -636,12 +636,62 @@ public class StringProblems {
         list.add("01 May 2019");
         list.add("04 May 2019");
 
-        System.out.println(new StringProblems().sortDates(list));
+        System.out.println(new StringProblems().allPartition("mamakfjyffeurtufcfcgcgcituydsfd"));
 
     }
 
     /**
+     * https://leetcode.com/problems/palindrome-partitioning/
+     * https://www.geeksforgeeks.org/given-a-string-print-all-possible-palindromic-partition/
+     *
+     * @param str
+     * @return
+     */
+    List<List<String>> allPartition(String str) {
+
+        List<List<String>> res = new ArrayList<>();
+        List<String> curr = new ArrayList<>();
+        partitionString(str.toLowerCase(), 0, res, curr);
+        return res;
+    }
+
+    /**
+     * Idea is to start iterating string from 1st character and check if its palindrome , if it is then get list of palindrome
+     * from remaining substring, For ex "nitin" n is palindrome so check recursively for itin. itin should return {{i,t,i,n}, {iti,n}}
+     * @param str
+     * @param start
+     * @param res
+     * @param curr
+     */
+    private void partitionString(String str, int start, List<List<String>> res, List<String> curr) {
+        if (start >= str.length()) {
+            res.add(new ArrayList<>(curr));
+            return;
+        }
+        for (int i = start; i < str.length(); i++) {
+
+            if (isPalindrome(str, start, i)) {
+                curr.add(str.substring(start, i + 1));
+                partitionString(str.substring(i + 1), 0, res, curr);
+                curr.remove(curr.size() - 1);
+            }
+        }
+    }
+
+    private boolean isPalindrome(String str, int start, int end) {
+
+        if (start < 0 || end < 0 || start >= str.length() || end >= str.length()) return false;
+        while (start < end) {
+            if (str.charAt(start) != str.charAt(end)) return false;
+            start++;
+            end--;
+        }
+        return true;
+    }
+
+    /**
      * https://www.geeksforgeeks.org/python-sort-list-of-dates-given-as-strings/
+     *
      * @param dates
      * @return
      */
