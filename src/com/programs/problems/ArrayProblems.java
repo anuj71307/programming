@@ -161,9 +161,48 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int arr[][] = new int[][]{{1, 1, 1, 1, 0},
-                {1, 1, 0, 1, 0}};
-        System.out.print(new ArrayProblems().numIslands(arr));
+        int arr[] = {1,2,3};
+        System.out.print(new ArrayProblems().movesToMakeZigzag(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+     * The idea is to check if and element i price at i is greater then price at i-1, if yes
+     * we can find the diff and add it out profit. For ex even if we have {1,2,3} our best profit will come by to
+     * buy at 1 and sell at 3, so even if we buy at 1 and sell at 2 and again buy at 2 and sell at one out profit remains same.
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        if(prices==null || prices.length<2) return 0;
+
+        int max =0;
+        for(int i =1;i<prices.length;i++){
+            if(prices[i]>prices[i-1]){
+                max+=prices[i]-prices[i-1];
+            }
+        }
+
+        return max;
+    }
+
+    public int movesToMakeZigzag(int[] nums) {
+        boolean flag = true;
+        int res =0;
+        for(int i=0; i< nums.length-1;i++){
+            if(flag && nums[i]>nums[i+1]){
+                int k = Math.abs(nums[i]-nums[i+1]);
+                res = res+k+1;
+            }
+            else if(!flag && nums[i] < nums[i+1]){
+                int k = Math.abs(nums[i]-nums[i+1]);
+                res = res+k+1;
+            }
+            flag = !flag;
+        }
+
+        return 0;
     }
 
     /**
