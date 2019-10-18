@@ -12,29 +12,74 @@ public class DynamicProgramming {
     public static void main(String[] args) {
         DynamicProgramming dp = new DynamicProgramming();
         // System.out.println(dp.editDistDP("horse", "ros"));
-        int[][] res = {{0,0,0,0}, {0,1,0,0}, {0,0,0,0}};
+        System.out.println(dp.integerBreak(4));
 
-        System.out.println(dp.uniquePathsWithObstacles(res));
+    }
 
+    public int integerBreak(int n) {
+
+        if (n < 4) return n - 1;
+        return prod_dp(n, new int[n + 1]);
+    }
+
+    /**
+     * https://leetcode.com/problems/integer-break/
+     *
+     * @param n
+     * @param dp
+     * @return
+     */
+    int prod_dp(int n, int[] dp) {
+        if (n <= 4) return n;
+        if (dp[n] != 0) return dp[n];
+        int max;
+        int run = 1;
+        for (int i = 2; i <= n; i++) {
+            max = 1;
+            max = max * i * prod_dp(n - i, dp);
+            run = Math.max(run, max);
+        }
+        dp[n] = run;
+        return run;
+    }
+
+    /**
+     * https://leetcode.com/problems/integer-break/
+     *
+     * @param n
+     * @return
+     */
+    int prod(int n) {
+        if (n < 1) return 1;
+        int max = 1;
+        int run = 1;
+        for (int i = 1; i <= n; i++) {
+            max = 1;
+            max = max * i * prod(n - i);
+            run = Math.max(run, max);
+        }
+
+        return run;
     }
 
     /**
      * https://leetcode.com/problems/triangle/
+     *
      * @param triangle
      * @return
      */
     public int minimumTotal_arr(List<List<Integer>> triangle) {
 
         int size = triangle.size();
-        int res [] = new int[triangle.get(size-1).size()];
-        for(int i =0;i< res.length;i++){
-            res[i] = triangle.get(size-1).get(i);
+        int res[] = new int[triangle.get(size - 1).size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = triangle.get(size - 1).get(i);
         }
 
-        for(int i = size-2;i>=0;i--){
+        for (int i = size - 2; i >= 0; i--) {
             List<Integer> curr = triangle.get(i);
-            for(int j =0; j< curr.size();j++){
-                res[j] = Math.min(res[j], res[j+1])+curr.get(j);
+            for (int j = 0; j < curr.size(); j++) {
+                res[j] = Math.min(res[j], res[j + 1]) + curr.get(j);
             }
         }
 
@@ -70,70 +115,69 @@ public class DynamicProgramming {
 
     /**
      * https://leetcode.com/problems/unique-paths-ii/
+     *
      * @param grid
      * @return
      */
     public int uniquePathsWithObstacles(int[][] grid) {
-        if(grid==null || grid.length==0) return 0;
+        if (grid == null || grid.length == 0) return 0;
         int x = grid[0].length;
         int y = grid.length;
-        if(grid[0][0]==1) return 0;
-        grid[0][0]=1;
-        for(int i =1; i<x;i++){
-            if(grid[0][i]==1 || grid[0][i-1]==0) {
-                grid[0][i]=0;
-            }
-            else {
-                grid[0][i]=1;
+        if (grid[0][0] == 1) return 0;
+        grid[0][0] = 1;
+        for (int i = 1; i < x; i++) {
+            if (grid[0][i] == 1 || grid[0][i - 1] == 0) {
+                grid[0][i] = 0;
+            } else {
+                grid[0][i] = 1;
             }
 
         }
-        for(int i =1;i<y;i++){
-            if(grid[i][0]==1 || grid[i-1][0]==0) grid[i][0]=0;
-            else grid[i][0]=1;
+        for (int i = 1; i < y; i++) {
+            if (grid[i][0] == 1 || grid[i - 1][0] == 0) grid[i][0] = 0;
+            else grid[i][0] = 1;
         }
-        for(int i =1;i< y;i++){
-            for(int j =1;j<x;j++){
-                if(grid[i][j]==1) {
-                    grid[i][j]=0;
-                }
-                else grid[i][j] = grid[i-1][j]+grid[i][j-1];
+        for (int i = 1; i < y; i++) {
+            for (int j = 1; j < x; j++) {
+                if (grid[i][j] == 1) {
+                    grid[i][j] = 0;
+                } else grid[i][j] = grid[i - 1][j] + grid[i][j - 1];
             }
         }
 
-        return grid[y-1][x-1];
+        return grid[y - 1][x - 1];
     }
 
     /**
      * https://www.geeksforgeeks.org/edit-distance-dp-5/
      * https://leetcode.com/problems/edit-distance/
+     *
      * @param word1
      * @param word2
      * @return
      */
     int editDistDP(String word1, String word2) {
         // Create a table to store results of subproblems
-        if(word1==null && word2==null) return 0;
-        if(word1.length()==0) return word2.length();
-        if(word2.length()==0) return word1.length();
+        if (word1 == null && word2 == null) return 0;
+        if (word1.length() == 0) return word2.length();
+        if (word2.length() == 0) return word1.length();
         int m = word1.length();
         int n = word2.length();
-        int[][] dp = new int[m+1][n+1];
-        for(int i = 0; i <= n;i++){
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= n; i++) {
             dp[0][i] = i;
         }
 
-        for(int i=0;i<=m;i++){
+        for (int i = 0; i <= m; i++) {
             dp[i][0] = i;
         }
 
-        for(int i=1; i<=m; i++){
-            for(int j =1; j<=n; j++){
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
 
-                if(word1.charAt(i-1)==word2.charAt(j-1)){
-                    dp[i][j] = dp[i-1][j-1];
-                }
-                else dp[i][j] = 1+min(dp[i-1][j-1], dp[i][j-1], dp[i-1][j]);
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else dp[i][j] = 1 + min(dp[i - 1][j - 1], dp[i][j - 1], dp[i - 1][j]);
             }
         }
 
