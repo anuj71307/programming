@@ -21,6 +21,50 @@ public class TreeProblems {
     }
 
     /**
+     * print top view of a binary tree
+     *
+     * @param root
+     */
+    public void topView(Node root) {
+
+        if (root == null) return;
+
+        QueueO obj = new QueueO(root, 0);
+        Queue<QueueO> q = new LinkedList<>();
+        q.add(obj);
+
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        while (!q.isEmpty()) {
+            obj = q.poll();
+            if (!map.containsKey(obj.hd)) {
+                map.put(obj.hd, obj.node.data);
+            }
+
+            if (obj.node.left != null) {
+                q.add(new QueueO(obj.node.left, obj.hd - 1));
+            }
+            if (obj.node.right != null) {
+                q.add(new QueueO(obj.node.right, obj.hd + 1));
+            }
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            System.out.print(entry.getValue() + " ");
+        }
+
+    }
+
+    class QueueO {
+        int hd;
+        Node node;
+
+        QueueO(Node node, int h) {
+            this.node = node;
+            hd = h;
+        }
+    }
+
+    /**
      * https://leetcode.com/problems/sum-root-to-leaf-numbers/
      * @param root
      * @return
