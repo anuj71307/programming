@@ -13,11 +13,44 @@ public class TreeProblems {
 
 
     public static void main(String args[]) throws Exception {
+        TreeProblems tp = new TreeProblems();
+        //create BST
+        Node node = new Node(5);
+        node.left = new Node(3);
+        node.left.left = new Node(2);
+        node.left.right = new Node(4);
+        Node temp = tp.deleteNode(node, 3);
+    }
 
-        BinaryTree<Integer> node = new BinaryTree<>(8);
-        node.add(10);
-        node.add(10);
-        System.out.print(isSymmetric(node));
+    /**
+     * https://leetcode.com/problems/delete-node-in-a-bst/
+     *
+     * @param root
+     * @param key
+     * @return
+     */
+    public Node deleteNode(Node root, int key) {
+        if (root == null) return root;
+        if (root.data < key) {
+            root.right = deleteNode(root.right, key);
+        } else if (root.data > key) {
+            root.left = deleteNode(root.left, key);
+        } else {
+            if (root.left == null) return root.right;
+            if (root.right == null) return root.left;
+            int min = getMin(root.right, key);
+            root.data = min;
+            root.right = deleteNode(root.right, min);
+        }
+        return root;
+    }
+
+
+    int getMin(Node node, int key) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node.data;
     }
 
     /**
@@ -66,24 +99,26 @@ public class TreeProblems {
 
     /**
      * https://leetcode.com/problems/sum-root-to-leaf-numbers/
+     *
      * @param root
      * @return
      */
     public int sumNumbers(Node root) {
-        return sum(root,0);
+        return sum(root, 0);
     }
 
-    public int sum(Node root, int sum){
-        if(root==null) return 0;
-        if(root.left==null && root.right==null){
-            return sum*10+root.data;
+    public int sum(Node root, int sum) {
+        if (root == null) return 0;
+        if (root.left == null && root.right == null) {
+            return sum * 10 + root.data;
         }
 
-        return sum(root.left, sum*10+root.data)+sum(root.right, sum*10+root.data);
+        return sum(root.left, sum * 10 + root.data) + sum(root.right, sum * 10 + root.data);
     }
 
     /**
      * https://leetcode.com/problems/distribute-coins-in-binary-tree/
+     *
      * @param root
      * @return
      */
@@ -94,60 +129,63 @@ public class TreeProblems {
     }
 
     public int distributeCoins(Node root, int[] res) {
-        if(root==null) return 0;
-        int left =  distributeCoins(root.left, res);
-        int right =  distributeCoins(root.right, res);
-        int sum = Math.abs(left)+Math.abs(right);
-        res[0]+=sum;
-        return root.data+left+right-1;
+        if (root == null) return 0;
+        int left = distributeCoins(root.left, res);
+        int right = distributeCoins(root.right, res);
+        int sum = Math.abs(left) + Math.abs(right);
+        res[0] += sum;
+        return root.data + left + right - 1;
     }
 
     /**
      * https://leetcode.com/problems/binary-tree-maximum-path-sum/
+     *
      * @param root
      * @return
      */
     public int maxPathSum(Node root) {
-        if(root==null) return 0;
+        if (root == null) return 0;
         int[] arr = new int[1];
         arr[0] = Integer.MIN_VALUE;
-        maxPathSum(root,arr);
+        maxPathSum(root, arr);
         return arr[0];
     }
 
     public int maxPathSum(Node root, int[] res) {
-        if(root==null) return 0;
+        if (root == null) return 0;
         int left = maxPathSum(root.left, res);
         int right = maxPathSum(root.right, res);
-        int max = Math.max(left,right)+root.data;
+        int max = Math.max(left, right) + root.data;
         max = Math.max(max, root.data);
         int r = max;
-        max = Math.max(max, left+right+root.data);
+        max = Math.max(max, left + right + root.data);
         res[0] = Math.max(res[0], max);
         return r;
     }
 
     /**
      * https://leetcode.com/problems/diameter-of-binary-tree/
+     *
      * @param tree
      * @return
      */
-    public int diameterOfTree(ITree tree){
-        int []res = new int[1];
+    public int diameterOfTree(ITree tree) {
+        int[] res = new int[1];
         diameterOfTree(tree, res);
         return res[0];
     }
 
     private int diameterOfTree(ITree tree, int[] res) {
-        if(tree==null) return 0;
+        if (tree == null) return 0;
         int left = diameterOfTree(tree.getLeftNode(), res);
         int right = diameterOfTree(tree.getRightNode(), res);
-        res[0] = Math.max(res[0], left+right+1);
-        return Math.max(left,right)+1;
+        res[0] = Math.max(res[0], left + right + 1);
+        return Math.max(left, right) + 1;
     }
 
     /**
      * https://leetcode.com/problems/house-robber-iii/
+     *
      * @param root
      * @return
      */
@@ -158,24 +196,25 @@ public class TreeProblems {
 
     /**
      * https://leetcode.com/problems/house-robber-iii/
+     *
      * @param root
      * @param map
      * @return
      */
-    public int rob(Node root, HashMap<Node, Integer> map){
+    public int rob(Node root, HashMap<Node, Integer> map) {
 
-        if(root==null) return 0;
-        if(map.containsKey(root)) return map.get(root);
+        if (root == null) return 0;
+        if (map.containsKey(root)) return map.get(root);
         int val = root.data;
-        if(root.left!=null){
-            val+=rob(root.left.left, map)+rob(root.left.right, map);
+        if (root.left != null) {
+            val += rob(root.left.left, map) + rob(root.left.right, map);
         }
 
-        if(root.right!=null){
-            val+=rob(root.right.left, map)+rob(root.right.right, map);
+        if (root.right != null) {
+            val += rob(root.right.left, map) + rob(root.right.right, map);
         }
 
-        val=  Math.max(val, rob(root.left, map)+rob(root.right, map));
+        val = Math.max(val, rob(root.left, map) + rob(root.right, map));
         map.put(root, val);
         return val;
     }
@@ -203,6 +242,7 @@ public class TreeProblems {
 
     /**
      * https://leetcode.com/problems/validate-binary-search-tree/
+     *
      * @param root
      * @return
      */
@@ -741,14 +781,15 @@ public class TreeProblems {
 
     /**
      * https://leetcode.com/problems/path-sum/
+     *
      * @param node
      * @param sum
      */
     static boolean hasPathSum(Node node, int sum) {
         // Your code here
-        if(node==null) return false;
-        if(node.left==null && node.right==null) return node.data==sum;
-        return hasPathSum(node.left, sum-node.data)|| hasPathSum(node.right, sum-node.data);
+        if (node == null) return false;
+        if (node.left == null && node.right == null) return node.data == sum;
+        return hasPathSum(node.left, sum - node.data) || hasPathSum(node.right, sum - node.data);
 
     }
 
@@ -756,6 +797,7 @@ public class TreeProblems {
     /**
      * find all path from toor to left which equals a given sum
      * https://leetcode.com/problems/path-sum-ii/
+     *
      * @param root
      * @param sum
      * @return
@@ -764,29 +806,28 @@ public class TreeProblems {
 
         List<List<Integer>> res = new ArrayList();
         List<Integer> list = new ArrayList();
-        pathSum(root,sum,res,list);
+        pathSum(root, sum, res, list);
         return res;
     }
 
     public void pathSum(Node root, int sum, List<List<Integer>> res, List<Integer> list) {
 
-        if(root==null) return ;
+        if (root == null) return;
 
-        if(root.left==null && root.right==null){
-            if(sum==root.data){
+        if (root.left == null && root.right == null) {
+            if (sum == root.data) {
                 list.add(root.data);
                 res.add(new ArrayList(list));
-                list.remove(list.size()-1);
-            }
-            else{
+                list.remove(list.size() - 1);
+            } else {
                 return;
             }
         }
 
         list.add(root.data);
-        pathSum(root.left,sum-root.data,res,list);
-        pathSum(root.right,sum-root.data,res,list);
-        list.remove(list.size()-1);
+        pathSum(root.left, sum - root.data, res, list);
+        pathSum(root.right, sum - root.data, res, list);
+        list.remove(list.size() - 1);
     }
 
 
@@ -845,33 +886,38 @@ class Node {
 class BSTIterator {
 
     Stack<BinarySearchTree> stack;
+
     public BSTIterator(BinarySearchTree<Integer> root) {
         stack = new Stack<>();
         iterate(root, stack);
 
     }
 
-    void iterate(BinarySearchTree root, Stack<BinarySearchTree> stack){
+    void iterate(BinarySearchTree root, Stack<BinarySearchTree> stack) {
 
-        while(root!=null){
+        while (root != null) {
             stack.push(root);
             root = (BinarySearchTree) root.getLeftNode();
         }
 
     }
 
-    /** @return the next smallest number */
+    /**
+     * @return the next smallest number
+     */
     public int next() {
         BinarySearchTree<Integer> root = stack.pop();
-        if(root.getRightNode()!=null){
+        if (root.getRightNode() != null) {
             iterate((BinarySearchTree) root.getRightNode(), stack);
         }
 
-        return  root.getData();
+        return root.getData();
 
     }
 
-    /** @return whether we have a next smallest number */
+    /**
+     * @return whether we have a next smallest number
+     */
     public boolean hasNext() {
         return !stack.isEmpty();
     }
