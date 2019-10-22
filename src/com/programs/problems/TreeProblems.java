@@ -309,6 +309,29 @@ public class TreeProblems {
         }
     }
 
+    /**
+     * https://leetcode.com/problems/binary-tree-preorder-traversal/
+     * We first visit all the left nodes of a tree and keep processing it. ie print it.
+     * While doing this we also add it to stack
+     * Later when we have traversed all left node. we pop element from stack and traverse right node of it in similar way
+     * @param root
+     * @param <T>
+     */
+    public <T extends Comparable> void preorderTraversal(ITree<T> root) {
+        Stack<ITree> st = new Stack();
+
+        while (!st.isEmpty() || root != null) {
+            if (root != null) {
+                System.out.print(root.getData() + " ");
+                st.push(root);
+                root = root.getLeftNode();
+            } else {
+                root = st.pop();
+                root = root.getRightNode();
+            }
+        }
+    }
+
     /*
      Traverse left of a binary tree and put it in Stack
      */
