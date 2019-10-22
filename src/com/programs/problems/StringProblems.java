@@ -642,6 +642,43 @@ public class StringProblems {
 
     /**
      * https://leetcode.com/problems/word-break/
+     * Basically what we do here is we iterate over the string. we find all the substring and check if dictionary contains the word or not
+     * if yes then we process further
+     * for ex if string is applepenapple and dict is {apple,pen}
+     * we iterate over applepenapple and find all substring using two pointer approach
+     * first we check if a contains in dictionary if yes we set dp[1] = true or false
+     * in our example we come to i =4 when we have first valid word if this is then we set dp[4] = true
+     * no other substring in apple is paert of dictionary so all index will be false;
+     * similarly when we reach applepen i = 9  we start with applepen and keep removing one letter from start untill the dict cotains the word
+     * when dictionary contains word we check if the substring 0-j is also a valid word or not. This can be found by accessing dp[j]
+     * In this when we are at applepen we check pen is word then we also validate if apple is word or not.
+     * in the end if whole string is processed dp[n] should be true.
+     *
+     * @param s
+     * @param dict
+     * @return
+     */
+    public boolean wordBreak_dp(String s, List<String> dict) {
+
+        if (s == null || s.length() == 0) return false;
+
+        int n = s.length();
+        boolean dp[] = new boolean[n + 1];
+        dp[0] = true;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && dict.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+
+        return dp[n];
+    }
+
+    /**
+     * https://leetcode.com/problems/word-break/
      *
      * @param s
      * @param wordDict
