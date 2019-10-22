@@ -641,6 +641,57 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/word-break/
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+
+        Set<String> set = new HashSet<>();
+        set.addAll(wordDict);
+        return wordBreakProblems(s, set, new HashMap<String, String>()) != null;
+    }
+
+    /**
+     * This is a recursive approach where we check every substring of a string. There are 2 possibilities
+     * 1. subString is a valid word
+     * 2. subString is not a valid word
+     * while doing this Also there might be chances where we are calculating already evaluated string.
+     * In such case we keep a map for any such string and their corresponding value(list of word from dictionary)
+     * ie we are caching the result evaluated so far
+     * <p>
+     * Similarly there are chances where we are evaluating a already processed string for which there was no result.
+     * We cache this also in map with value as null. which mean for such there are no possible break ups.
+     * So each time before processing any string we just check if our map(which contains valid break up) contains a string if so we return its value
+     *
+     * @param str  String to process
+     * @param dict list of valid words
+     * @param map  contains list of string and there break up words
+     * @return null if string can not be split into valid dictionary words
+     */
+    private static String wordBreakProblems(String str, Set<String> dict, HashMap<String, String> map) {
+        if (dict.contains(str)) return str;
+        if (map.containsKey(str)) return map.get(str);
+
+        //catsanddog
+        for (int i = 1; i < str.length(); i++) {
+            String prefix = str.substring(0, i);
+            if (dict.contains(prefix)) {
+                String suffix = wordBreakProblems(str.substring(i, str.length()), dict, map);
+                if (suffix != null) {
+                    String s = prefix + " " + suffix;
+                    map.put(str, s);
+                    return s;
+                }
+            }
+        }
+        map.put(str, null);
+        return null;
+    }
+
+    /**
      * https://leetcode.com/problems/palindrome-partitioning/
      * https://www.geeksforgeeks.org/given-a-string-print-all-possible-palindromic-partition/
      *
@@ -658,6 +709,7 @@ public class StringProblems {
     /**
      * Idea is to start iterating string from 1st character and check if its palindrome , if it is then get list of palindrome
      * from remaining substring, For ex "nitin" n is palindrome so check recursively for itin. itin should return {{i,t,i,n}, {iti,n}}
+     *
      * @param str
      * @param start
      * @param res
@@ -1882,33 +1934,6 @@ public class StringProblems {
             System.out.println();
         }
 
-    }
-
-
-    /**
-     * https://www.geeksforgeeks.org/word-break-problem-dp-32/
-     *
-     * @param str
-     * @param dict
-     * @param map
-     * @return
-     */
-    private static String wordBreakProblems(String str, Set<String> dict, HashMap<String, String> map) {
-        if (dict.contains(str)) return str;
-        if (map.containsKey(str)) return map.get(str);
-        //catsanddog
-        for (int i = 1; i < str.length(); i++) {
-            String prefix = str.substring(0, i);
-            if (dict.contains(prefix)) {
-                String suffix = wordBreakProblems(str.substring(i, str.length()), dict, map);
-                if (suffix != null) {
-                    String s = prefix + " " + suffix;
-                    map.put(str, s);
-                    return s;
-                }
-            }
-        }
-        return null;
     }
 
 
