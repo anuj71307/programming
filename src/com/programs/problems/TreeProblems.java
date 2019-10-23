@@ -22,6 +22,135 @@ public class TreeProblems {
         Node temp = tp.deleteNode(node, 3);
     }
 
+
+    /**
+     * https://leetcode.com/problems/delete-nodes-and-return-forest/
+     * check below method for optimized version
+     * @param root
+     * @param to_delete
+     * @return
+     */
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+        if (to_delete == null || to_delete.length == 0) {
+            List<TreeNode> temp = new ArrayList<TreeNode>();
+            temp.add(root);
+            return temp;
+        }
+        HashSet<Integer> set = new HashSet<>();
+        for (Integer i : to_delete) {
+            set.add(i);
+        }
+
+        Queue<Item> q = new LinkedList();
+        q.add(new Item(root, null));
+        List<Item> list_delete = new ArrayList();
+
+        while (!q.isEmpty()) {
+            Item it = q.poll();
+            TreeNode temp = it.node;
+            if (set.contains(temp.val)) {
+                list_delete.add(new Item(temp, it.parent));
+            }
+            if (temp.left != null) {
+                q.add(new Item(temp.left, temp));
+            }
+            if (temp.right != null) {
+                q.add(new Item(temp.right, temp));
+            }
+        }
+
+        boolean root_delete = false;
+        HashSet<TreeNode> res = new HashSet<>();
+        for (Item item : list_delete) {
+            if (item.node == root) root_delete = true;
+            if (res.contains(item.node)) {
+                res.remove(item.node);
+            }
+            if (item.node.left != null) {
+                res.add(item.node.left);
+            }
+            if (item.node.right != null) {
+                res.add(item.node.right);
+            }
+
+            if (item.parent != null && item.parent.left == item.node) {
+                item.parent.left = null;
+            }
+            if (item.parent != null && item.parent.right == item.node) {
+                item.parent.right = null;
+            }
+        }
+        if (!root_delete) res.add(root);
+        return new ArrayList<>(res);
+    }
+
+    class Item {
+        TreeNode node;
+        TreeNode parent;
+
+        Item(TreeNode n, TreeNode p) {
+            node = n;
+            parent = p;
+        }
+
+    }
+
+    /**
+     * https://leetcode.com/problems/delete-nodes-and-return-forest/
+     * First we add all the keys to be deleted to set for quick access and check
+     * Next we do recursive traversal. and check if node has to be deleted. if a node has to be delete we update their parent's reference to this node
+     * such that now it doesnt have any parent. then we can traverse left and right subtree of this node which is supposed to be deleted.
+     * Since its parent reference has changed ie node doesn;t exist ie it can be reached from parent node so for all of its chilren parent will be null.
+     * we can use this check to see if we need to add this node in result set or not.
+     * so if a node's parent is null and it's key doesn't exist in set then its a valid node to considered. so we add it to result set
+     * Next we consider if a node's key doesn;t exist in set . in this case we traverse its' left and right subtree with this node as parent reference. cause we haven't changed its parent.
+     * since we add node to result set when parent is null we are avoiding adding any subtree again in result set whose parent exist.
+     *
+     * @param root
+     * @param to_delete
+     * @return
+     */
+    public List<TreeNode> delNodes_recursve(TreeNode root, int[] to_delete) {
+        if (to_delete == null || to_delete.length == 0) {
+            List<TreeNode> temp = new ArrayList<TreeNode>();
+            temp.add(root);
+            return temp;
+        }
+        HashSet<Integer> set = new HashSet<>();
+        for (Integer i : to_delete) {
+            set.add(i);
+        }
+        List<TreeNode> res = new ArrayList<>();
+
+        delete(root, null, set, res);
+
+        return res;
+    }
+
+    public void delete(TreeNode root, TreeNode p, HashSet<Integer> set, List<TreeNode> res) {
+        if (root == null) return;
+        if (p == null && !set.contains(root.val)) {
+            res.add(root);
+        }
+
+        if (set.contains(root.val)) {
+
+            if (p != null) {
+                if (p.left == root) {
+                    p.left = null;
+                } else {
+                    p.right = null;
+                }
+            }
+
+            delete(root.left, null, set, res);
+            delete(root.right, null, set, res);
+        } else {
+            delete(root.left, root, set, res);
+            delete(root.right, root, set, res);
+        }
+    }
+
     /**
      * https://leetcode.com/problems/delete-node-in-a-bst/
      *
@@ -314,6 +443,7 @@ public class TreeProblems {
      * We first visit all the left nodes of a tree and keep processing it. ie print it.
      * While doing this we also add it to stack
      * Later when we have traversed all left node. we pop element from stack and traverse right node of it in similar way
+     *
      * @param root
      * @param <T>
      */
@@ -943,5 +1073,15 @@ class BSTIterator {
      */
     public boolean hasNext() {
         return !stack.isEmpty();
+    }
+}
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
     }
 }
