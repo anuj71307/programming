@@ -12,8 +12,50 @@ public class DynamicProgramming {
     public static void main(String[] args) {
         DynamicProgramming dp = new DynamicProgramming();
         // System.out.println(dp.editDistDP("horse", "ros"));
-        System.out.println(dp.integerBreak(4));
+        System.out.println(dp.isMatch_dp("aa", "a*"));
 
+    }
+
+    /**
+     * https://leetcode.com/problems/regular-expression-matching/
+     * @param str
+     * @param pattern
+     * @return
+     */
+    public boolean isMatch_dp(String str, String pattern) {
+        Result dp[][] = new Result[str.length() + 1][pattern.length() + 1];
+
+        return isMatch(str, pattern, 0, 0, dp);
+    }
+
+    enum Result {
+        TRUE, FALSE
+    }
+
+    boolean isMatch(String str, String pattern, int i, int j, Result[][] dp) {
+        if (dp[i][j] != null) {
+            return dp[i][j] == Result.TRUE;
+        }
+        boolean ans;
+        if (j == pattern.length()) {
+            ans = (i == str.length());
+
+        } else {
+            boolean isSameChar = (i < str.length() && (str.charAt(i) == pattern.charAt(j) || pattern.charAt(j) == '.'));
+
+            if (j + 1 < pattern.length() && pattern.charAt(j + 1) == '*') {
+                ans = isMatch(str, pattern, i, j + 2, dp);
+                if (!ans) {
+                    ans = isSameChar && isMatch(str, pattern, i + 1, j, dp);
+                }
+
+            } else {
+                ans = isSameChar && isMatch(str, pattern, i + 1, j + 1, dp);
+            }
+        }
+
+        dp[i][j] = ans ? Result.TRUE : Result.FALSE;
+        return ans;
     }
 
     /**
