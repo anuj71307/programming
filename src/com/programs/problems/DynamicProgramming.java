@@ -16,6 +16,47 @@ public class DynamicProgramming {
 
     }
 
+    /**
+     * https://leetcode.com/problems/regular-expression-matching/
+     * We do a recursive approach. character in str at index matches the character in pattern at same index if pattern has same char or '.'
+     * We need special handling of scenario when pattern has '*'. if pattern.charAt(index+1) is '*' then there are 2 scenarios
+     * 1. we check of string and pattern.substring(2). For ex if string is a and pattern is c*a then we need to
+     * check if a and a(substring of pattern)match cause c can be present 0 or more time
+     * 2. if character of str and pattern match at same index and pattern has * as next char then we can ignore the
+     * character in str and continue with same pattern. In this lets say our string is aab and pattern is a*b
+     * we check then pattern has * so we check recursively for ab and a*b. which in turn do recursive call for b and a*b.
+     * and then b and b which result true.
+     * aab a*b
+     * aab , b -> false
+     * ab a*b
+     * ab, b-> false
+     * b, a*b
+     * b,b -> true
+     *
+     * @param str
+     * @param pattern
+     * @return
+     */
+    boolean isMatch(String str, String pattern) {
+        if (pattern.isEmpty() && str.isEmpty()) return true;
+        if (pattern.isEmpty()) return false;
+        //check if character matches
+        boolean isSameChar = str.length() > 0 && (str.charAt(0) == pattern.charAt(0) || pattern.charAt(0) == '.');
+        if (pattern.length() > 1 && pattern.charAt(1) == '*') {
+            if (isMatch(str, pattern.substring(2))) return true;
+            if (isSameChar) {
+                return isMatch(str.substring(1), pattern);
+            }
+
+        } else {
+            if (isSameChar) {
+                return isMatch(str.substring(1), pattern.substring(1));
+            }
+        }
+        return false;
+
+    }
+
     public int integerBreak(int n) {
 
         if (n < 4) return n - 1;
