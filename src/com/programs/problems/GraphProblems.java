@@ -36,13 +36,22 @@ public class GraphProblems {
 
     public static void main(String[] args) {
 
-        int n = 3;
-        int arr[][] = {{1, 0}, {0,2}};
-
-        System.out.println(new GraphTopologicalSort().canFinish(n, arr));
+        GraphProblems gp = new GraphProblems();
+        gp.shortestPath();
 
     }
 
+    public void shortestPath() {
+        Graph gp = new Graph(7, true);
+        gp.addEdge(0, 1);
+        gp.addEdge(0, 2);
+        gp.addEdge(1, 6);
+        gp.addEdge(2, 3);
+        gp.addEdge(3, 4);
+        gp.addEdge(3, 5);
+        gp.shortestPath(2, 0);
+
+    }
 
     /**
      * https://leetcode.com/problems/minimum-height-trees/
