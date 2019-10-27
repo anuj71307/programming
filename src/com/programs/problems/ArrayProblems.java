@@ -6,6 +6,49 @@ import java.util.*;
 
 public class ArrayProblems {
 
+    public static void main(String[] args) {
+        // System.out.print(uniquePaths(3,2));
+        ArrayProblems ap = new ArrayProblems();
+        int arr[] = {1,3,5,4,7,8};
+        System.out.print(new ArrayProblems().findNumberOfLIS(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/number-of-longest-increasing-subsequence/
+     *
+     * @param nums
+     * @return
+     */
+    public int findNumberOfLIS(int[] nums) {
+        int dp[] = new int[nums.length];
+        int cnt[] = new int[nums.length];
+        Arrays.fill(cnt, 1);
+        int max = 0;
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    if (dp[j] >= dp[i]) {
+                        dp[i] = dp[j] + 1;
+                        cnt[i] = cnt[j];
+                    } else if (dp[j] + 1 == dp[i]) {
+                        cnt[i] = cnt[i] + cnt[j];
+
+                    }
+                }
+            }
+            if (max == dp[i]) {
+                res += cnt[i];
+            } else if (max < dp[i]) {
+                max = dp[i];
+                res = cnt[i];
+            }
+
+        }
+        return res;
+    }
+
     //An array is given of n length, and we need to calculate the next greater element
     // for each element in given array. If next greater element is not available in
     // given array then we need to fill ‘_’ at that index place
@@ -155,14 +198,6 @@ public class ArrayProblems {
         }
 
         return maxValue;
-    }
-
-
-    public static void main(String[] args) {
-        // System.out.print(uniquePaths(3,2));
-        ArrayProblems ap = new ArrayProblems();
-        int arr[] = {1,2,3};
-        System.out.print(new ArrayProblems().movesToMakeZigzag(arr));
     }
 
     /**
