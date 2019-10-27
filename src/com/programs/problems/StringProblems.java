@@ -6,6 +6,16 @@ import java.util.*;
 public class StringProblems {
 
 
+    public static void main(String[] args) {
+        StringProblems sp = new StringProblems();
+        String org = "vmokgggqzp";
+        int[] index = {3,5,1};
+        String[] source = {"kg","ggq","mo"};
+        String dest[] = {"s","so","bfr"};
+        System.out.print(sp.findReplaceString(org, index,source, dest));
+
+    }
+
     //form smallest possible number from number given as string
     public static String smallestNumber(String str) {
 
@@ -628,15 +638,64 @@ public class StringProblems {
         }
     }
 
+    /**
+     * https://leetcode.com/problems/find-and-replace-in-string/
+     * @param str
+     * @param index
+     * @param sources
+     * @param targets
+     * @return
+     */
+    public String findReplaceString(String str, int[] index, String[] sources, String[] targets)     {
+        if(index==null || index.length==0 || str==null) return str;
+        Replacement[] repl = new Replacement[index.length];
 
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("02 May 2019");
+        for(int i =0; i< index.length;i++){
+            repl[i] = new Replacement(index[i], sources[i], targets[i]);
+        }
+        Arrays.sort(repl, new Comparator<Replacement>() {
+            @Override
+            public int compare(Replacement o1, Replacement o2) {
+                return  o1.index-o2.index;
+            }
+        });
+        StringBuilder sb = new StringBuilder();
+        int i =0;
+        int j = str.length();
+        for(Replacement r:repl){
+            if(!match(str,r)) continue;
+            sb.append(str.substring(i,r.index));
+            sb.append(r.after);
+            i = r.index+r.before.length();
+        }
 
-        list.add("01 May 2019");
-        list.add("04 May 2019");
+        sb.append(str.substring(i));
 
-        System.out.println(new StringProblems().allPartition("mamakfjyffeurtufcfcgcgcituydsfd"));
+        return sb.toString();
+
+    }
+
+    boolean match(String str, Replacement repl){
+        int index = repl.index;
+        int j = 0;
+        for(int i = index;i<index+repl.before.length()&&  i< str.length(); i++){
+            if(str.charAt(i)!=repl.before.charAt(j))return false;
+            j++;
+        }
+        if(j<repl.before.length()) return false;
+        return true;
+    }
+
+    class Replacement{
+        int index;
+        String before;
+        String after;
+
+        Replacement(int i, String s1, String s2){
+            index=i;
+            before =s1;
+            after = s2;
+        }
 
     }
 
