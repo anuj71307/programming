@@ -8,12 +8,97 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        String org = "vmokgggqzp";
-        int[] index = {3,5,1};
-        String[] source = {"kg","ggq","mo"};
-        String dest[] = {"s","so","bfr"};
-        System.out.print(sp.findReplaceString(org, index,source, dest));
+        String s = "abc";
+        String t = "bahgdcc";
+        System.out.println(sp.isSubsequence_followUp(s, t));
 
+    }
+
+    /**
+     * https://leetcode.com/problems/is-subsequence/
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubsequence(String s, String t) {
+        if (s == null && t == null) return true;
+        if (s == null || t == null) return false;
+        if (s.length() > t.length()) return false;
+        int i = 0;
+        int j = 0;
+        while (i < s.length() && j < t.length()) {
+            if (s.charAt(i) == t.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                j++;
+            }
+        }
+
+        return i == s.length();
+    }
+
+    /**
+     * https://leetcode.com/problems/is-subsequence/
+     * If there t is final but and method can be called mutiple times we can preprocess and
+     * keep all occurrence of each character is sorted order. Then we iterate over s and check whether each character's occurance is after previous character's occurance or not
+     * // For this example we will preprocess t. Eg-2. s="abc", t="bahgdcbc"
+     * // list[] =[ a={1}, b={0,6}, c={5}] t will look like this
+     * // prev = -1
+     * //  i=0 ('a'):  binary search a in [a{1}] prev=1
+     * //  i=1 ('b'): binary search b in [b{0,6}] but we should not consider 0 as a was present at 1. so prev=6
+     * //  i=2 ('c'): prev=? (return false)
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubsequence_followUp(String s, String t) {
+        if (s == null && t == null) return true;
+        if (s == null || t == null) return false;
+        if (s.length() > t.length()) return false;
+        List<Integer>[] list = new ArrayList[28];
+        //preprocess the t and store each character and their indexes in sorted order
+        for (int i = 0; i < t.length(); i++) {
+            char key = t.charAt(i);
+            if (list[key - 'a'] == null) {
+                list[key - 'a'] = new ArrayList<>();
+            }
+            list[key - 'a'].add(i);
+        }
+
+        int prev = -1;
+
+        for (int i = 0; i < s.length(); i++) {
+            int pos = s.charAt(i) - 'a';
+            if (list[pos] == null) return false;
+            int k = binarySearchItem(list[pos], prev + 1);
+            if (k <= prev || k >= t.length()) return false;
+            prev = k;
+        }
+
+        return true;
+
+    }
+
+    //{0,2,5,6,8}
+    // 0 1 2 3 4
+    private int binarySearchItem(List<Integer> list, int key) {
+
+        int i = 0;//1
+        int j = list.size() - 1;//1
+        while (i <= j) {
+            int mid = (i + j) / 2;//1
+            if ((list.get(mid) == key || list.get(mid) > key) && (mid == 0 || list.get(mid - 1) < key)) {
+                return list.get(mid);
+            } else if (list.get(mid) > key) {
+                j = mid - 1;
+            } else {
+                i = mid + 1;
+            }
+        }
+        return -1;
     }
 
     //form smallest possible number from number given as string
@@ -640,33 +725,34 @@ public class StringProblems {
 
     /**
      * https://leetcode.com/problems/find-and-replace-in-string/
+     *
      * @param str
      * @param index
      * @param sources
      * @param targets
      * @return
      */
-    public String findReplaceString(String str, int[] index, String[] sources, String[] targets)     {
-        if(index==null || index.length==0 || str==null) return str;
+    public String findReplaceString(String str, int[] index, String[] sources, String[] targets) {
+        if (index == null || index.length == 0 || str == null) return str;
         Replacement[] repl = new Replacement[index.length];
 
-        for(int i =0; i< index.length;i++){
+        for (int i = 0; i < index.length; i++) {
             repl[i] = new Replacement(index[i], sources[i], targets[i]);
         }
         Arrays.sort(repl, new Comparator<Replacement>() {
             @Override
             public int compare(Replacement o1, Replacement o2) {
-                return  o1.index-o2.index;
+                return o1.index - o2.index;
             }
         });
         StringBuilder sb = new StringBuilder();
-        int i =0;
+        int i = 0;
         int j = str.length();
-        for(Replacement r:repl){
-            if(!match(str,r)) continue;
-            sb.append(str.substring(i,r.index));
+        for (Replacement r : repl) {
+            if (!match(str, r)) continue;
+            sb.append(str.substring(i, r.index));
             sb.append(r.after);
-            i = r.index+r.before.length();
+            i = r.index + r.before.length();
         }
 
         sb.append(str.substring(i));
@@ -675,25 +761,25 @@ public class StringProblems {
 
     }
 
-    boolean match(String str, Replacement repl){
+    boolean match(String str, Replacement repl) {
         int index = repl.index;
         int j = 0;
-        for(int i = index;i<index+repl.before.length()&&  i< str.length(); i++){
-            if(str.charAt(i)!=repl.before.charAt(j))return false;
+        for (int i = index; i < index + repl.before.length() && i < str.length(); i++) {
+            if (str.charAt(i) != repl.before.charAt(j)) return false;
             j++;
         }
-        if(j<repl.before.length()) return false;
+        if (j < repl.before.length()) return false;
         return true;
     }
 
-    class Replacement{
+    class Replacement {
         int index;
         String before;
         String after;
 
-        Replacement(int i, String s1, String s2){
-            index=i;
-            before =s1;
+        Replacement(int i, String s1, String s2) {
+            index = i;
+            before = s1;
             after = s2;
         }
 
@@ -903,6 +989,13 @@ public class StringProblems {
         return new ArrayList<>(repeated);
     }
 
+    /**
+     * https://leetcode.com/problems/find-all-anagrams-in-a-string/description/
+     *
+     * @param s
+     * @param p
+     * @return
+     */
     public List<Integer> findAnagramss(String s, String p) {
         List<Integer> result = new ArrayList<>();
         if (s == null || s.length() == 0) {
@@ -966,6 +1059,7 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/find-all-anagrams-in-a-string/description/
      * s: "cbaebabacd" p: "abc"
      * <p>
      * Output:
