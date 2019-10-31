@@ -1,6 +1,7 @@
 package com.programs.problems;
 
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +14,38 @@ public class DynamicProgramming {
         DynamicProgramming dp = new DynamicProgramming();
         // System.out.println(dp.editDistDP("horse", "ros"));
         System.out.println(dp.isMatch_dp("aa", "a*"));
+
+    }
+
+    /**
+     *  https://leetcode.com/problems/combination-sum-iv/
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int combinationSum4(int[] nums, int target) {
+
+        int[] dp = new int[target + 1];
+        Arrays.fill(dp, -1);
+        dp[0] = 1;
+        Arrays.sort(nums);
+        target(nums, target, dp);
+        return dp[target];
+    }
+
+    public int target(int[] nums, int target, int[] dp) {
+
+        if (dp[target] != -1) return dp[target];
+        if (target < 0) return 0;
+        if (target == 0) return 1;
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (target - nums[i] < 0) break;
+            res += target(nums, target - nums[i], dp);
+        }
+
+        dp[target] = res;
+        return res;
 
     }
 
