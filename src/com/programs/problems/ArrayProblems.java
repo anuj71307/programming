@@ -9,8 +9,71 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int arr[] = {1,3,5,4,7,8};
+        int arr[] = {1, 3, 5, 4, 7, 8};
         System.out.print(new ArrayProblems().findNumberOfLIS(arr));
+    }
+
+    /**
+     * Dp solution is in DynamicProgramming class
+     *https://leetcode.com/problems/combination-sum-iv/
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int combinationSum4(int[] nums, int target) {
+        List<List<Integer>> list = new ArrayList<>();
+        if (nums == null || nums.length == 0) return list.size();
+        //Arrays.sort(nums);
+        backtrack(nums, target, list, new ArrayList(), 0);
+        return list.size();
+    }
+
+    void backtrack(int[] arr, int target, List<List<Integer>> list, List<Integer> tempList, int start) {
+        if (target < 0) return;
+        if (target == 0) {
+
+            list.add(new ArrayList<>(tempList));
+
+            return;
+        }
+
+
+        for (int i = start; i < arr.length; i++) {
+            tempList.add(arr[i]);
+            backtrack(arr, target - arr[i], list, tempList, i);
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/combination-sum-iii/
+     *
+     * @param k
+     * @param n
+     * @return
+     */
+    public List<List<Integer>> combinationSum3(int k, int n) {
+
+        List<List<Integer>> list = new ArrayList<>();
+        //if(n>45 || k>9) return list;
+        backtrack(k, n, list, new ArrayList<>(), 1);
+        return list;
+    }
+
+    void backtrack(int k, int n, List<List<Integer>> list, List<Integer> tempList, int start) {
+        if (n == 0) {
+            if (tempList.size() == k) {
+                list.add(new ArrayList<>(tempList));
+            }
+            return;
+        }
+        if (n < 0 || tempList.size() > k) return;
+
+        for (int i = start; i < 10; i++) {
+            tempList.add(i);
+            backtrack(k, n - i, list, tempList, i + 1);
+            tempList.remove(tempList.size() - 1);
+        }
     }
 
     /**
@@ -210,12 +273,12 @@ public class ArrayProblems {
      * @return
      */
     public int maxProfit(int[] prices) {
-        if(prices==null || prices.length<2) return 0;
+        if (prices == null || prices.length < 2) return 0;
 
-        int max =0;
-        for(int i =1;i<prices.length;i++){
-            if(prices[i]>prices[i-1]){
-                max+=prices[i]-prices[i-1];
+        int max = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i - 1]) {
+                max += prices[i] - prices[i - 1];
             }
         }
 
@@ -224,15 +287,14 @@ public class ArrayProblems {
 
     public int movesToMakeZigzag(int[] nums) {
         boolean flag = true;
-        int res =0;
-        for(int i=0; i< nums.length-1;i++){
-            if(flag && nums[i]>nums[i+1]){
-                int k = Math.abs(nums[i]-nums[i+1]);
-                res = res+k+1;
-            }
-            else if(!flag && nums[i] < nums[i+1]){
-                int k = Math.abs(nums[i]-nums[i+1]);
-                res = res+k+1;
+        int res = 0;
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (flag && nums[i] > nums[i + 1]) {
+                int k = Math.abs(nums[i] - nums[i + 1]);
+                res = res + k + 1;
+            } else if (!flag && nums[i] < nums[i + 1]) {
+                int k = Math.abs(nums[i] - nums[i + 1]);
+                res = res + k + 1;
             }
             flag = !flag;
         }
@@ -243,20 +305,21 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/subarray-sum-equals-k/
      * Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum equals to k.
+     *
      * @param nums
      * @param k
      * @return
      */
     public int subarraySum(int[] nums, int k) {
 
-        int count =0;
-        if(nums==null || nums.length==0) return count;
-        int sum =0;
-        for(int i =0; i<nums.length;i++){
-            sum=0;
-            for(int j=i;j<nums.length;j++){
-                sum+=nums[j];
-                if(sum==k) count++;
+        int count = 0;
+        if (nums == null || nums.length == 0) return count;
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum = 0;
+            for (int j = i; j < nums.length; j++) {
+                sum += nums[j];
+                if (sum == k) count++;
             }
         }
 
@@ -267,6 +330,7 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/minimum-size-subarray-sum/
      * Find a min subaaray with sum >= s
+     *
      * @param s
      * @param nums
      * @return
@@ -299,17 +363,18 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/battleships-in-a-board/
+     *
      * @param board
      * @return
      */
     public int countBattleships(char[][] board) {
-        if(board==null || board.length==0 || board[0].length==0) return 0;
-        int result =0;
-        for(int i =0;i<board.length;i++){
-            for(int j =0;j<board[i].length;j++){
-                if(board[i][j]=='X'){
-                    if(i>0 && board[i-1][j]=='X') continue;
-                    if(j>0 && board[i][j-1]=='X') continue;
+        if (board == null || board.length == 0 || board[0].length == 0) return 0;
+        int result = 0;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 'X') {
+                    if (i > 0 && board[i - 1][j] == 'X') continue;
+                    if (j > 0 && board[i][j - 1] == 'X') continue;
                     result++;
                 }
 
@@ -321,6 +386,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/task-scheduler/
+     *
      * @param tasks
      * @param n
      * @return
@@ -351,27 +417,27 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+     *
      * @param nums
      * @return
      */
     private int removeDuplicates(int[] nums) {
-        if(nums==null || nums.length==0) return 0;
+        if (nums == null || nums.length == 0) return 0;
         int prev = nums[0];
         int index = 1;
-        for(int i =1;i< nums.length;i++){
-            if(nums[i]==prev){
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == prev) {
 
-            }
-            else{
+            } else {
                 prev = nums[i];
-                swap(nums,index,i);
+                swap(nums, index, i);
                 index++;
             }
         }
         return index;
     }
 
-    private void swap(int[] nums, int i, int j){
+    private void swap(int[] nums, int i, int j) {
 
         int temp = nums[i];
         nums[i] = nums[j];
@@ -380,6 +446,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/find-the-duplicate-number/
+     *
      * @param nums
      * @return
      */
@@ -395,25 +462,26 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/longest-increasing-subsequence/
+     *
      * @param nums
      * @return
      */
     public int lengthOfLIS(int[] nums) {
 
-        if(nums==null || nums.length==0) return 0;
-        if(nums.length==1) return 1;
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return 1;
 
         int temp[] = new int[nums.length];
-        temp[0]=1;
+        temp[0] = 1;
 
         int max = 1;
         int j = 0;
-        for(int i =1; i< nums.length;i++){
+        for (int i = 1; i < nums.length; i++) {
             j = 0;
-            temp[i]=1;
-            while(j<i){
-                if(nums[i]>nums[j]){
-                    temp[i] = Math.max(temp[i], temp[j]+1);
+            temp[i] = 1;
+            while (j < i) {
+                if (nums[i] > nums[j]) {
+                    temp[i] = Math.max(temp[i], temp[j] + 1);
                     max = Math.max(max, temp[i]);
                 }
                 j++;
@@ -426,25 +494,25 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/search-a-2d-matrix-ii/
      * Search in sorted 2D array O(n) time
+     *
      * @param matrix
      * @param target
      * @return
      */
     public boolean searchMatrix(int[][] matrix, int target) {
 
-        if(matrix==null || matrix.length==0 || matrix[0].length==0) return false;
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
         int row = matrix.length;
         int col = matrix[0].length;
 
         int i = 0;
-        int j = col-1;
+        int j = col - 1;
 
-        while(i>=0 && j >= 0 && i < row && j < col){
-            if(matrix[i][j]==target) return true;
-            if(matrix[i][j]>target){
+        while (i >= 0 && j >= 0 && i < row && j < col) {
+            if (matrix[i][j] == target) return true;
+            if (matrix[i][j] > target) {
                 j--;
-            }
-            else{
+            } else {
                 i++;
             }
 
@@ -455,10 +523,11 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/target-sum/
-     *
+     * <p>
      * You are given a list of non-negative integers, a1, a2, ..., an, and a target, S. Now you have 2 symbols + and -. For each integer, you should choose one from + and - as its new symbol.
-     *
+     * <p>
      * Find out how many ways to assign symbols to make sum of integers equal to target S.
+     *
      * @param nums
      * @param S
      * @return
