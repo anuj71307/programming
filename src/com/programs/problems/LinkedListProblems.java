@@ -9,27 +9,48 @@ public class LinkedListProblems<T> {
 
         LinkedListProblems lp = new LinkedListProblems();
         //lp.sortList();
-
-
     }
 
+    /**
+     * https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
+     *
+     * @param head
+     * @return
+     */
+    public ListNode removeZeroSumSublists(ListNode head) {
+        if (head == null) return head;
+        ListNode temp = new ListNode(1);
+        ListNode prev = temp;
 
-    // Definition for a Node.
-    class Node {
-        public int val;
-        public Node prev;
-        public Node next;
-        public Node child;
+        ListNode node = head;
+        int sum = 0;
+        boolean found;
+        while (node != null) {
+            sum = 0;
+            ListNode t = node;
+            found = false;
+            while (t != null) {
+                sum += t.val;
+                if (sum == 0) {
+                    found = true;
+                    break;
+                }
+                t = t.next;
+            }
 
-        public Node() {
+            if (found) {
+                node = t.next;
+            } else {
+                ListNode next = node.next;
+                node.next = null;
+                prev.next = node;
+                prev = prev.next;
+                node = next;
+            }
         }
 
-        public Node(int _val, Node _prev, Node _next, Node _child) {
-            val = _val;
-            prev = _prev;
-            next = _next;
-            child = _child;
-        }
+
+        return temp.next;
     }
 
     /**
@@ -258,8 +279,8 @@ public class LinkedListProblems<T> {
     public LinkedList<Integer> sortList(LinkedList<Integer> head) {
         if (head == null || head.next == null) return head;
 
-        LinkedList<Integer> left = getMid(head, halflength(head));
-        LinkedList<Integer> right = left.next != null ? left.next : null;
+        LinkedList<Integer> left = getMid(head);
+        LinkedList<Integer> right = left.next;
         left.next = null;
         head = sortList(head);
         right = sortList(right);
@@ -329,31 +350,16 @@ public class LinkedListProblems<T> {
     }
 
 
-    LinkedList<Integer> getMid(LinkedList<Integer> head, int mid) {
+    LinkedList<Integer> getMid(LinkedList<Integer> head) {
 
-        while (head != null && mid > 1) {
-            mid--;
-            head = head.next;
+        LinkedList<Integer> slow = head;
+        LinkedList<Integer> fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        return head;
-    }
-
-
-    /**
-     * return half length
-     *
-     * @param head
-     * @return
-     */
-    int halflength(LinkedList<Integer> head) {
-        int len = 0;
-        while (head != null) {
-            head = head.next;
-            len++;
-        }
-
-        return len / 2;
+        return slow;
     }
 
     /**
@@ -566,4 +572,35 @@ public class LinkedListProblems<T> {
 
         return num;
     }
+
+    // Definition for a Node.
+    class Node {
+        public int val;
+        public Node prev;
+        public Node next;
+        public Node child;
+
+        public Node() {
+        }
+
+        public Node(int _val, Node _prev, Node _next, Node _child) {
+            val = _val;
+            prev = _prev;
+            next = _next;
+            child = _child;
+        }
+    }
+
+    class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+        }
+    }
 }
+
+
+
+
