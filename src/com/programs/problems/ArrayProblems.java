@@ -14,6 +14,35 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/gas-station/
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int len = gas.length;
+        if(len==1 && gas[0]-cost[0]<0) return -1; //edge case
+        int start =0;
+        int end = (start+1)%len;
+        int petrol = gas[start]-cost[start];
+
+        while(end !=start || petrol<0){
+
+            while(petrol<0 && start!=end){
+
+                petrol-=gas[start]-cost[start];
+                start = (start+1)%len;
+                if(start==0) return -1;
+            }
+
+            petrol+=gas[end]-cost[end];
+            end = (end+1)%len;
+        }
+
+        return start;
+    }
+
+    /**
      * Dp solution is in DynamicProgramming class
      *https://leetcode.com/problems/combination-sum-iv/
      * @param nums
