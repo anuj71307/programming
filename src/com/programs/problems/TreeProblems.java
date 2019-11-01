@@ -22,6 +22,64 @@ public class TreeProblems {
         Node temp = tp.deleteNode(node, 3);
     }
 
+    /**
+     * https://leetcode.com/problems/flip-equivalent-binary-trees/
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+
+        if(root1==null && root2==null) return true;
+        if(root1==null || root2==null) return false;
+        if(root1.val!=root2.val) return false;
+
+        if(root1.left==root2.left || (root1.left!=null && root2.left!=null && root2.left.val==root1.left.val)){
+            return flipEquiv(root1.left,root2.left) && flipEquiv(root1.right, root2.right);
+
+        }
+        TreeNode left = root2.left;
+        root2.left=root2.right;
+        root2.right = left;
+
+        return flipEquiv(root1.left,root2.left) && flipEquiv(root1.right, root2.right);
+    }
+
+    /**
+     * https://leetcode.com/problems/print-binary-tree/
+     * @param root
+     * @return
+     */
+    public List<List<String>> printTree(TreeNode root) {
+
+        int h = height(root);
+        String arr[][] = new String[h][(1<<h)-1];
+
+        for(String[] a:arr){
+            Arrays.fill(a,"");
+        }
+
+        fill(root, arr, 0, 0, arr[0].length-1);
+        List<List<String>> list = new ArrayList<>();
+        for(String[] a:arr){
+            list.add(Arrays.asList(a));
+        }
+        return list;
+    }
+
+    void fill(TreeNode root, String[][] arr, int index, int start, int end){
+        if(root==null) return;
+        int mid = (start+end)/2;
+        arr[index][mid] = ""+root.val;
+        fill(root.left,arr, index+1, start, mid-1);
+        fill(root.right, arr, index+1, mid+1, end);
+    }
+
+    int height(TreeNode root){
+        if(root==null) return 0;
+        return Math.max(height(root.left), height(root.right))+1;
+    }
+
 
     /**
      * https://leetcode.com/problems/delete-nodes-and-return-forest/
