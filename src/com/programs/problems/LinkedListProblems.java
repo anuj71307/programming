@@ -5,6 +5,118 @@ import com.programs.linkedlist.LinkedList;
 
 public class LinkedListProblems<T> {
 
+    public static void main(String[] args) {
+
+        LinkedListProblems lp = new LinkedListProblems();
+        //lp.sortList();
+
+
+    }
+
+
+    // Definition for a Node.
+    class Node {
+        public int val;
+        public Node prev;
+        public Node next;
+        public Node child;
+
+        public Node() {
+        }
+
+        public Node(int _val, Node _prev, Node _next, Node _child) {
+            val = _val;
+            prev = _prev;
+            next = _next;
+            child = _child;
+        }
+    }
+
+    /**
+     * Time complexity Worst case : O(n)
+     * check below solution for easy understanding in O(n^2)
+     *
+     * @param head
+     * @return
+     */
+    public Node flattend(Node head) {
+
+        flater(head);
+        return head;
+    }
+
+    public Node flater(Node head) {
+
+        Node temp = head;
+        while (temp != null) {
+            if (temp.child != null) {
+                Node nxt = temp.next;
+                Node child = temp.child;
+                Node tail = flater(temp.child);
+                temp.child = null;
+                temp.next = child;
+                child.prev = temp;
+                tail.next = nxt;
+                if (nxt != null) {
+                    nxt.prev = tail;
+                }
+                if (nxt == null) {
+                    return tail;
+                }
+
+            }
+
+
+            if (temp.next == null) return temp;
+            temp = temp.next;
+        }
+        return null;
+    }
+
+    /**
+     * https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/
+     * Idea is to recursively flatten each node.
+     * We start with head and move forward untill traversal is complete. While traversing we check if any node has child or not
+     * If it does then we recursively flatten child. After a child is flatten we need to change pointers for node, its' child and node's next node's
+     * pointers. We have to be careful when we return from flattening of child since returned node would be head of child list.
+     * We will first change pointer's (next and prev) of node and it's child.
+     * Then we will change pointer's of tail of child list and node's next
+     * We also need to set every child as null.
+     * Time complexity worst case O(n^2).
+     *
+     * @param head
+     * @return
+     */
+    public Node flatten(Node head) {
+
+        if (head == null) return head;
+        Node temp = head;
+        while (temp != null) {
+            if (temp.child != null) {
+                Node n = flatten(temp.child);
+                Node nxt = temp.next;
+                temp.next = n;
+                n.prev = temp;
+                while (n.next != null) {
+                    n = n.next;
+                }
+                n.next = nxt;
+                if (nxt != null) {
+                    nxt.prev = n;
+                }
+                temp.child = null;
+                temp = nxt;
+            } else {
+                temp = temp.next;
+            }
+
+
+        }
+
+
+        return head;
+    }
+
 
     /**
      * source: https://www.geeksforgeeks.org/delete-nodes-list-greater-x/
@@ -85,64 +197,9 @@ public class LinkedListProblems<T> {
         return length;
     }
 
-    /*
-      //temporary class
-      static class Node {
-          public int val;
-          public Node prev;
-          public Node next;
-          public Node child;
-
-          public Node(int v){
-              val = v;
-          }
-          public Node(int _val,Node _prev,Node _next,Node _child) {
-              val = _val;
-              prev = _prev;
-              next = _next;
-              child = _child;
-          }
-      }
-
-      //https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/
-
-      static public Node flatten(Node head) {
-          if (head == null) return null;
-          Node temp = head;
-          while (temp != null) {
-              if (temp.child != null) {
-                  Node next = temp.next;
-
-                  temp.next = temp.child;
-                  temp.child=null;
-                  flatten(temp.next);//7
-                  Node n = temp.next;
-                  n.prev = temp;
-                  while (n.next != null) {
-                      n = n.next;
-                  }
-                  n.next = next;
-                  if(next!=null)
-                  next.prev = n;
-              }
-              temp = temp.next;
-          }
-
-          return head;
-
-      }
-
-       */
-    public static void main(String[] args) {
-
-        LinkedListProblems lp = new LinkedListProblems();
-        //lp.sortList();
-
-
-    }
-
     /**
      * https://leetcode.com/problems/reverse-nodes-in-k-group/
+     *
      * @param node
      * @param k
      * @return
@@ -153,6 +210,7 @@ public class LinkedListProblems<T> {
 
     /**
      * https://leetcode.com/problems/reverse-nodes-in-k-group/
+     *
      * @param node
      * @param k
      * @param size
