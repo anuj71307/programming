@@ -14,6 +14,41 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/path-with-maximum-gold/
+     * @param grid
+     * @return
+     */
+    public int getMaximumGold(int[][] grid) {
+        int max = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] != 0) {
+                    //res[0]=0;
+                    max = Math.max(visit(grid, i, j), max);
+                }
+            }
+        }
+        return max;
+    }
+
+
+    int visit(int[][] grid, int i, int j) {
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[i].length
+                || grid[i][j] == 0) {
+
+            return 0;
+        }
+        int c = grid[i][j];
+        grid[i][j] = 0;
+        int val = visit(grid, i + 1, j);
+        val = Math.max(visit(grid, i - 1, j), val);
+        val = Math.max(visit(grid, i, j + 1), val);
+        val = Math.max(visit(grid, i, j - 1), val);
+        grid[i][j] = c;
+        return c + val;
+    }
+
+    /**
      * https://leetcode.com/problems/array-nesting/
      *
      * @param nums
