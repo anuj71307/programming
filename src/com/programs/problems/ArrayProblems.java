@@ -9,8 +9,56 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int arr[] = {1, 3, 5, 4, 7, 8};
-        System.out.print(new ArrayProblems().findNumberOfLIS(arr));
+        int arr[] = {1,5,2};
+        System.out.print(ap.predictTheWinner(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/array-nesting/
+     *
+     * @param nums
+     * @return
+     */
+    public int arrayNesting(int[] nums) {
+        boolean[] visited = new boolean[nums.length];
+        int len = 0;
+        int i = 0;
+        while (i < nums.length) {
+            int length = 0;
+            int j = i;
+            while (!visited[j]) {
+                visited[j] = true;
+                j = nums[j];
+                length++;
+            }
+            i++;
+            len = Math.max(len, length);
+        }
+        return len;
+    }
+
+    public boolean predictTheWinner(int[] nums) {
+
+        return win(nums,0,nums.length-1,0,0,true);
+    }
+
+    public boolean win(int[] nums, int i , int j, int a, int b, boolean t){
+        if(i>j){
+            if(a>b) return true;
+            return false;
+        }
+
+        boolean k = false;
+        if(t){
+            k =k || win(nums, i+1,j,a+nums[i],b, !t);
+            k= k || win(nums,i,j-1,a+nums[j],b,!t);
+        }
+        else{
+            k =k || win(nums, i+1,j,a,b+nums[i], !t);
+            k= k || win(nums,i,j-1,a,b+nums[j],!t);
+        }
+
+        return k;
     }
 
     /**
