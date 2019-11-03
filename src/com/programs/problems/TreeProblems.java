@@ -23,6 +23,27 @@ public class TreeProblems {
     }
 
     /**
+     * https://www.geeksforgeeks.org/find-closest-element-binary-search-tree/
+     *
+     * @param root
+     * @param k
+     * @return
+     */
+    public static int maxDiff(Node root, int k) {
+        if (root == null) return Integer.MAX_VALUE;
+        if (root.data == k) return 0;
+        int diff = Math.abs(k - root.data);
+        int d = 0;
+        if (root.data < k) {
+            d = maxDiff(root.right, k);
+        } else {
+            d = maxDiff(root.left, k);
+        }
+
+        return Math.min(diff, d);
+    }
+
+    /**
      * https://leetcode.com/problems/count-complete-tree-nodes/
      *
      * @param root
