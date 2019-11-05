@@ -1,5 +1,7 @@
 package com.programs.problems;
 
+import com.programs.heap.BinaryHeap;
+import com.programs.heap.MaxHeap;
 import com.programs.map.THashMap;
 
 import java.util.*;
@@ -10,7 +12,20 @@ public class ArrayProblems {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
         int arr[] = {1,5,2};
-        System.out.print(ap.predictTheWinner(arr));
+        ap.test();
+    }
+
+    public void test(){
+        int arr[] = {2,5,1,3,4,7,8};
+        BinaryHeap maxHeap = new MaxHeap(7);
+        for(int i:arr){
+            maxHeap.insert(i);
+        }
+        arr = maxHeap.sortArray();
+
+        for(int i:arr){
+            System.out.print(i+" ");
+        }
     }
 
     /**
