@@ -8,10 +8,56 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        String s = "abc";
-        String t = "bahgdcc";
-        System.out.println(sp.isSubsequence_followUp(s, t));
+        System.out.println(sp.removeInvalidParenthesis("((ab)c"));
 
+    }
+
+    /**
+     * Given a string which might contain Invalid parenthesis. Return a string which has balanced parenthesis. Parenthesis can only be removed
+     * ie remove invalid parenthesis. If there are multiple solution return any balanced solution.
+     * For ex if given string is (v)())()
+     * return either (v)()() or  (v())()
+     * Note: parenthesis can only be removed
+     * Problem is similar to https://www.geeksforgeeks.org/remove-invalid-parentheses/
+     * @param str
+     * @return
+     */
+    public String removeInvalidParenthesis(String str) {
+        if (str == null || str.length() == 0) return str;
+
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (!isParenthesis(c)) continue;
+
+            if (st.isEmpty() || c == '(') st.push(i);
+            else {
+                char temp = str.charAt(st.peek());
+                if (temp == '(') st.pop();
+                else {
+                    st.push(i);
+                }
+            }
+        }
+
+        HashSet<Integer> set = new HashSet<>();
+        while (!st.isEmpty()) {
+            set.add(st.pop());
+        }
+
+        char arr[] = new char[str.length() - set.size()];
+        int j = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (set.contains(i)) continue;
+            arr[j] = str.charAt(i);
+            j++;
+        }
+
+        return new String(arr);
+    }
+
+    private boolean isParenthesis(char c) {
+        return c == '(' || c == ')';
     }
 
     /**
