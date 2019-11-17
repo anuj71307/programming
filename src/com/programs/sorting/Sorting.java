@@ -33,11 +33,47 @@ public class Sorting {
     }
 
     public static void main(String[] args) {
-        int arr2[] = new int[]{2,2,4,1,3,2};
-        quickSort(arr2, 0, arr2.length-1);
+        int arr2[] = new int[]{3,2,3,1,2,4,5,5,6};
+        //quickSort(arr2, 0, arr2.length-1);
         System.out.println(Arrays.toString(arr2));
+       int k =  kthLargest(arr2, 4);
+       System.out.println(k);
+
+    }
+
+    /**
+     * https://leetcode.com/problems/kth-largest-element-in-an-array/
+     * @param arr
+     * @param k
+     * @return
+     */
+    private static int kthLargest(int[] arr, int k) {
+        return kthLargest(arr, 0, arr.length - 1, k);
+    }
 
 
+    private static int kthLargest(int[] arr, int start, int end, int k) {
+
+        int pivot = arr[end];
+        int index = start;
+        for (int i = start; i < end; i++) {
+            if (arr[i] < pivot) {
+                swap(arr, i, index);
+                index++;
+            }
+        }
+        swap(arr, index, end);
+        if (arr.length-index==k) return arr[index];
+        if (arr.length-index > k) {
+            return kthLargest(arr, index + 1, end, k);
+        }
+        return kthLargest(arr, start, index - 1, k);
+    }
+
+    private static void swap(int[] arr, int i, int index) {
+        int temp = arr[i];
+        arr[i] = arr[index];
+        arr[index] = temp;
     }
 
     /**
