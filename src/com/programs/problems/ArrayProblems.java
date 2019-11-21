@@ -11,21 +11,51 @@ public class ArrayProblems {
     public static void main(String[] args) {
         // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
-        int arr[] = {1,5,2};
-        ap.test();
+        int res [] = ap.plusOne(new int[]{0,0,1,9});
+        System.out.println(Arrays.toString(res));
     }
 
-    public void test(){
-        int arr[] = {2,5,1,3,4,7,8};
-        BinaryHeap maxHeap = new MaxHeap(7);
-        for(int i:arr){
-            maxHeap.insert(i);
-        }
-        arr = maxHeap.sortArray();
+    /**
+     * Add one to a number
+     * https://www.interviewbit.com/problems/add-one-to-number/
+     *
+     * @param arr
+     * @return
+     */
+    public int[] plusOne(int[] arr) {
 
-        for(int i:arr){
-            System.out.print(i+" ");
+        int i = 0;
+        while (i < arr.length && arr[i] == 0) {
+            i++;
         }
+
+        if (i >= arr.length) {
+            int[] res = new int[1];
+            res[0] = 1;
+            return res;
+        }
+        int carry = 1;
+        for (int j = arr.length - 1; j >= i; j--) {
+            int sum = arr[j] + carry;
+            arr[j] = sum % 10;
+            carry = sum / 10;
+        }
+        int res[];
+        int k = 0;
+        if (carry > 0) {
+            res = new int[arr.length - i + 1];
+            res[0] = carry;
+            k = 1;
+        } else {
+            res = new int[arr.length - i];
+        }
+
+        for (; k < res.length; k++) {
+            res[k] = arr[i];
+            i++;
+        }
+
+        return res;
     }
 
     /**
