@@ -1,7 +1,5 @@
 package com.programs.problems;
 
-import com.programs.heap.BinaryHeap;
-import com.programs.heap.MaxHeap;
 import com.programs.map.THashMap;
 
 import java.util.*;
@@ -9,10 +7,34 @@ import java.util.*;
 public class ArrayProblems {
 
     public static void main(String[] args) {
-        // System.out.print(uniquePaths(3,2));
         ArrayProblems ap = new ArrayProblems();
         int res [] = ap.plusOne(new int[]{0,0,1,9});
         System.out.println(Arrays.toString(res));
+    }
+
+
+    /**
+     * https://leetcode.com/problems/subsets/
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+
+        List<List<Integer>> list = new ArrayList();
+        if (nums == null || nums.length == 0) return list;
+        backtrack(list, new ArrayList(), nums, 0);
+        return list;
+    }
+
+    void backtrack(List<List<Integer>> list, List<Integer> temp, int[] nums, int index) {
+        list.add(new ArrayList(temp));
+        for (int i = index; i < nums.length; i++) {
+
+            temp.add(nums[i]);
+            backtrack(list, temp, nums, i + 1);
+            temp.remove(temp.size() - 1);
+        }
     }
 
     /**
