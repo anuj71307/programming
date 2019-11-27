@@ -12,6 +12,26 @@ public class ArrayProblems {
         System.out.println(Arrays.toString(res));
     }
 
+    /**
+     * Given an array which needs to be sorted constraint is an elemenet can move either 1 postion to left or right of it.
+     * Input: [4 ,2, 6, 8, 10, 9]
+     * Result: [2, 3, 5, 6, 8, 9, 10]
+     *
+     * @param arr
+     */
+    void sortArray(int[] arr) {
+        if (arr == null || arr.length < 2) return;
+
+        int i = 0;
+        while (i < arr.length - 1) { //4
+            if (arr[i] > arr[i + 1]) {
+                swap(arr, i, i + 1);
+                i++;
+            }
+            i++;
+        }
+
+    }
 
     /**
      * https://leetcode.com/problems/subsets/
