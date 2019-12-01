@@ -1,5 +1,6 @@
 package com.programs.problems;
 
+import com.programs.heap.MaxHeap;
 import com.programs.map.THashMap;
 
 import java.util.*;
@@ -8,8 +9,13 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int res [] = ap.plusOne(new int[]{0,0,1,9});
-        System.out.println(Arrays.toString(res));
+        int res[] = {1, 3, 2, 2, 8, 9, 7};
+        // MaxHeap max = new MaxHeap(res);
+
+        ap.sortArray(res, 2);
+        for (int j : res) {
+            System.out.print(j + " ");
+        }
     }
 
     /**
@@ -29,6 +35,44 @@ public class ArrayProblems {
                 i++;
             }
             i++;
+        }
+
+    }
+
+    /**
+     * Given an array and k where k is always less than length of array. We need to sort the array
+     * Constraint: Any otem can move k posotion to its left or right. We need to sort the array
+     * Solution: Idea is if we keep right side of array sorted we need to process only left side with k+1 element.
+     * First create max heap and insert k+1 element from end of array to it.
+     * Start traversing array from end. Extract element from max heap and insert at last [position
+     * and then insert new elemenet to max heap. Keep doing this untill all of element is traversed.
+     * <p>
+     * Min heal can also be used here.
+     * Time complexity O(nlogk), Space O(k)
+     *
+     * @param arr
+     * @param k
+     */
+    void sortArray(int[] arr, int k) {
+        if (arr == null || arr.length < 2) return;
+        MaxHeap mh = new MaxHeap(k + 1);
+        int j = k;
+        // 1 2 3 4 5 6
+        for (int i = arr.length - 1; i >= 0; i--) {
+            mh.insert(arr[i]);
+            j--;
+            if (j < 0) break;
+        }
+
+        int m = arr.length - 1;
+        for (int i = arr.length - 2 - k; i >= 0; i--, m--) {
+            arr[m] = mh.extractMax();
+            mh.insert(arr[i]);
+
+        }
+        while (m > 0) {
+            arr[m] = mh.extractMax();
+            m--;
         }
 
     }
@@ -102,6 +146,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/path-with-maximum-gold/
+     *
      * @param grid
      * @return
      */
@@ -161,23 +206,22 @@ public class ArrayProblems {
 
     public boolean predictTheWinner(int[] nums) {
 
-        return win(nums,0,nums.length-1,0,0,true);
+        return win(nums, 0, nums.length - 1, 0, 0, true);
     }
 
-    public boolean win(int[] nums, int i , int j, int a, int b, boolean t){
-        if(i>j){
-            if(a>b) return true;
+    public boolean win(int[] nums, int i, int j, int a, int b, boolean t) {
+        if (i > j) {
+            if (a > b) return true;
             return false;
         }
 
         boolean k = false;
-        if(t){
-            k =k || win(nums, i+1,j,a+nums[i],b, !t);
-            k= k || win(nums,i,j-1,a+nums[j],b,!t);
-        }
-        else{
-            k =k || win(nums, i+1,j,a,b+nums[i], !t);
-            k= k || win(nums,i,j-1,a,b+nums[j],!t);
+        if (t) {
+            k = k || win(nums, i + 1, j, a + nums[i], b, !t);
+            k = k || win(nums, i, j - 1, a + nums[j], b, !t);
+        } else {
+            k = k || win(nums, i + 1, j, a, b + nums[i], !t);
+            k = k || win(nums, i, j - 1, a, b + nums[j], !t);
         }
 
         return k;
@@ -185,28 +229,29 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/gas-station/
+     *
      * @param gas
      * @param cost
      * @return
      */
     public int canCompleteCircuit(int[] gas, int[] cost) {
         int len = gas.length;
-        if(len==1 && gas[0]-cost[0]<0) return -1; //edge case
-        int start =0;
-        int end = (start+1)%len;
-        int petrol = gas[start]-cost[start];
+        if (len == 1 && gas[0] - cost[0] < 0) return -1; //edge case
+        int start = 0;
+        int end = (start + 1) % len;
+        int petrol = gas[start] - cost[start];
 
-        while(end !=start || petrol<0){
+        while (end != start || petrol < 0) {
 
-            while(petrol<0 && start!=end){
+            while (petrol < 0 && start != end) {
 
-                petrol-=gas[start]-cost[start];
-                start = (start+1)%len;
-                if(start==0) return -1;
+                petrol -= gas[start] - cost[start];
+                start = (start + 1) % len;
+                if (start == 0) return -1;
             }
 
-            petrol+=gas[end]-cost[end];
-            end = (end+1)%len;
+            petrol += gas[end] - cost[end];
+            end = (end + 1) % len;
         }
 
         return start;
@@ -214,7 +259,8 @@ public class ArrayProblems {
 
     /**
      * Dp solution is in DynamicProgramming class
-     *https://leetcode.com/problems/combination-sum-iv/
+     * https://leetcode.com/problems/combination-sum-iv/
+     *
      * @param nums
      * @param target
      * @return
