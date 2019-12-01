@@ -12,7 +12,7 @@ public class MaxHeap extends BinaryHeap {
 
     @Override
     public int getMax() {
-        return 0;
+        return arr[0];
     }
 
     @Override
@@ -77,7 +77,13 @@ public class MaxHeap extends BinaryHeap {
     }
 
     @Override
-    public int extractMin() {
-        return 0;
+    public int extractMax() {
+        int val = arr[0];
+        if (size == 0) return val;
+        arr[0] = arr[size - 1];
+        arr[size - 1] = Integer.MIN_VALUE; // change to any default value
+        size--;
+        heapify(0, size);
+        return val;
     }
 }
