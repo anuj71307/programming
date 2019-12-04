@@ -19,6 +19,27 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/remove-element/
+     * @param arr
+     * @param val
+     * @return
+     */
+    public int removeElement(int[] arr, int val) {
+        int i = 0;
+        int j = arr.length-1;
+        while(i<=j){
+            if(arr[i]== val){
+                swap(arr,i,j);
+                j--;
+            }
+            else{
+                i++;
+            }
+        }
+        return j+1;
+    }
+
+    /**
      * Given an array which needs to be sorted constraint is an elemenet can move either 1 postion to left or right of it.
      * Input: [4 ,2, 6, 8, 10, 9]
      * Result: [2, 3, 5, 6, 8, 9, 10]
