@@ -41,12 +41,6 @@ public class MaxHeap extends BinaryHeap {
     }
 
     @Override
-    public void heapify() {
-
-
-    }
-
-    @Override
     public int[] sortArray() {
         int len = size-1;
         while(len>=0){

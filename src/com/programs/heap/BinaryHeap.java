@@ -44,7 +44,6 @@ public abstract  class BinaryHeap {
     }
     public abstract void insert(int value);
     public abstract void delete(int value);
-    public abstract void heapify();
     public abstract int[] sortArray();
     public abstract void heapify(int index, int length);
     int extractMin(){
