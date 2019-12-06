@@ -1,5 +1,9 @@
 package com.programs.heap;
 
+/**
+ * This class should be used to create max heap of a array.
+ * Currently it support integer data only.
+ */
 public class MaxHeap extends BinaryHeap {
 
     public MaxHeap(int capacity){
