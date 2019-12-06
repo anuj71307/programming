@@ -23,11 +23,6 @@ public class MinHeap extends BinaryHeap {
     }
 
     @Override
-    public void heapify() {
-
-    }
-
-    @Override
     public int[] sortArray() {
         return new int[0];
     }
