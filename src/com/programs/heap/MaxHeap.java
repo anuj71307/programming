@@ -6,11 +6,11 @@ package com.programs.heap;
  */
 public class MaxHeap extends BinaryHeap {
 
-    public MaxHeap(int capacity){
+    public MaxHeap(int capacity) {
         super(capacity);
     }
 
-    public MaxHeap(int arr[]){
+    public MaxHeap(int arr[]) {
         super(arr);
     }
 
@@ -22,17 +22,17 @@ public class MaxHeap extends BinaryHeap {
     @Override
     public void insert(int value) {
 
-        if(size==capacitiy){
+        if (size == capacitiy) {
             throw new RuntimeException("Array full");
         }
-        if(size==-1){
-            size=0;
+        if (size == -1) {
+            size = 0;
         }
         arr[size] = value;
         size++;
 
-        int index = size-1;
-        while(index>=0 && getParent(index) >=0 && arr[index]>arr[getParent(index)]){
+        int index = size - 1;
+        while (index >= 0 && getParent(index) >= 0 && arr[index] > arr[getParent(index)]) {
             swap(index, getParent(index));
             index = getParent(index);
         }
@@ -46,8 +46,8 @@ public class MaxHeap extends BinaryHeap {
 
     @Override
     public int[] sortArray() {
-        int len = size-1;
-        while(len>=0){
+        int len = size - 1;
+        while (len >= 0) {
             swap(0, len);
             heapify(0, len);
             len--;
@@ -62,13 +62,13 @@ public class MaxHeap extends BinaryHeap {
         int left = getLeft(index);
         int right = getRight(index);
         int max = index;
-        if(left<length && arr[max]<arr[left]){
+        if (left < length && arr[max] < arr[left]) {
             max = left;
         }
-        if(right<length && arr[max]<arr[right]){
+        if (right < length && arr[max] < arr[right]) {
             max = right;
         }
-        if(max!=index){
+        if (max != index) {
             swap(index, max);
             heapify(max, length);
         }
