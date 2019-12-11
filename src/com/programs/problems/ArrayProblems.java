@@ -1,6 +1,7 @@
 package com.programs.problems;
 
 import com.programs.heap.MaxHeap;
+import com.programs.heap.MinHeap;
 import com.programs.map.THashMap;
 
 import java.util.*;
@@ -8,13 +9,14 @@ import java.util.*;
 public class ArrayProblems {
 
     public static void main(String[] args) {
-        ArrayProblems ap = new ArrayProblems();
-        int res[] = {1, 3, 2, 2, 8, 9, 7};
-        // MaxHeap max = new MaxHeap(res);
-
-        ap.sortArray(res, 2);
-        for (int j : res) {
-            System.out.print(j + " ");
+        int[] arr = {2,1,3,1,2,5,6,7};
+        MinHeap minHeap = new MinHeap(8);
+        for(int k : arr){
+            minHeap.insert(k);
+        }
+        arr = minHeap.sortArray();
+        for(int i : arr){
+            System.out.print(i+" ");
         }
     }
 
