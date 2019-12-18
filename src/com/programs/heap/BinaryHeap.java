@@ -3,7 +3,7 @@ package com.programs.heap;
 public abstract  class BinaryHeap {
 
     int arr[];
-    int size;
+    public int size;
     int capacitiy;
 
     BinaryHeap(int capacitiy){
