@@ -9,15 +9,26 @@ import java.util.*;
 public class ArrayProblems {
 
     public static void main(String[] args) {
-        int[] arr = {2,1,3,1,2,5,6,7};
-        MinHeap minHeap = new MinHeap(8);
-        for(int k : arr){
-            minHeap.insert(k);
+        ArrayProblems ap = new ArrayProblems();
+        int[] arr = {2,1,1,1};
+        System.out.print(ap.lastStoneWeight(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/last-stone-weight/
+     * @return
+     */
+    public int lastStoneWeight(int[] arr){
+        MaxHeap maxHeap = new MaxHeap(arr);
+        while(maxHeap.size>1){
+            int f = maxHeap.extractMax();
+            int v = maxHeap.extractMax();
+            int p = Math.abs(f-v);
+            if(p>0){
+                maxHeap.insert(p);
+            }
         }
-        arr = minHeap.sortArray();
-        for(int i : arr){
-            System.out.print(i+" ");
-        }
+        return maxHeap.size>=1 ? maxHeap.extractMax():0;
     }
 
     /**
