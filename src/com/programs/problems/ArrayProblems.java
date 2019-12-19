@@ -10,8 +10,28 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {2,1,1,1};
-        System.out.print(ap.lastStoneWeight(arr));
+        int[] arr = {1,8,5,3};
+        System.out.print(ap.minimum_cost_to_stick(arr));
+    }
+
+    /**
+     * https://algorithm-notes-allinone.blogspot.com/2019/08/leetcode-1167-minimum-cost-to-connect.html
+     * Leet code 1167
+     * @param arr
+     * @return
+     */
+    public int minimum_cost_to_stick(int [] arr){
+        MinHeap minHeap = new MinHeap(arr);
+        int cost = 0;
+        while(minHeap.size>1){
+            int f = minHeap.extractMin();
+            int v = minHeap.extractMin();
+            int curr_cost = f+v;
+            cost += curr_cost;
+            minHeap.insert(curr_cost);
+        }
+
+        return cost;
     }
 
     /**
