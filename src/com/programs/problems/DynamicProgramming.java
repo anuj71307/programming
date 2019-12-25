@@ -18,6 +18,21 @@ public class DynamicProgramming {
     }
 
     /**
+     * https://leetcode.com/problems/divisor-game/
+     *
+     * @param N
+     * @return
+     */
+    public boolean divisorGame(int N) {
+        for (int x = 1; x < N; x++) {
+            if ((N % x == 0) && !divisorGame(N - x)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      *  https://leetcode.com/problems/combination-sum-iv/
      * @param nums
      * @param target
