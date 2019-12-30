@@ -19,6 +19,25 @@ public class DynamicProgramming {
 
     /**
      * https://leetcode.com/problems/divisor-game/
+     * Cache the result
+     *
+     * @param N
+     * @return
+     */
+    public boolean divisorGame(int N, HashMap<Integer, Boolean> map) {
+        if (map.containsKey(N)) return map.get(N);
+        for (int x = 1; x < N; x++) {
+            if ((N % x == 0) && !divisorGame(N - x, map)) {
+                map.put(N, true);
+                return true;
+            }
+        }
+        map.put(N, false);
+        return false;
+    }
+
+    /**
+     * https://leetcode.com/problems/divisor-game/
      *
      * @param N
      * @return
@@ -33,7 +52,8 @@ public class DynamicProgramming {
     }
 
     /**
-     *  https://leetcode.com/problems/combination-sum-iv/
+     * https://leetcode.com/problems/combination-sum-iv/
+     *
      * @param nums
      * @param target
      * @return
@@ -71,28 +91,29 @@ public class DynamicProgramming {
      * but the number we pick first time we can not pick 2nd time so our choices of number limited to 10-1 = 9
      * so tatal would be 9*9
      * similary when n =3, the number we pich for 1st and 2nd position we can not keep for 3rd position so our choices would be
-     *  9*9*8 . 8 cause total numbers to pick is 10 but we have already picked 2 so its 10-2
-     *  similary for n =4 it is 9*9*8*7
-     *  ..
-     *  ..
+     * 9*9*8 . 8 cause total numbers to pick is 10 but we have already picked 2 so its 10-2
+     * similary for n =4 it is 9*9*8*7
+     * ..
+     * ..
      * for n =11 there would defintely be a duplicated number after picking 10 numbers to our max count is limited till number with 10 digits only
+     *
      * @param n
-     * @return
-     * Time complexity 0(1);
+     * @return Time complexity 0(1);
      */
     public int countNumbersWithUniqueDigits(int n) {
-        if(n==0) return 1;
+        if (n == 0) return 1;
         int ans = 10;
         int base = 9;
-        for(int i =2; i<=n && i<=10;i++){
-            base = base*(9-i+2);
-            ans+=base;
+        for (int i = 2; i <= n && i <= 10; i++) {
+            base = base * (9 - i + 2);
+            ans += base;
         }
         return ans;
     }
 
     /**
      * https://leetcode.com/problems/regular-expression-matching/
+     *
      * @param str
      * @param pattern
      * @return
