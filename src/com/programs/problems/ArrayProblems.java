@@ -15,6 +15,25 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/container-with-most-water/
+     * @param arr
+     * @return
+     */
+    public int maxArea(int[] arr) {
+        int max = 0;
+        int start = 0;
+        int end = arr.length - 1;
+        while (start < end) {
+            int min = Math.min(arr[start], arr[end]);
+            int water = min * Math.abs(start - end);
+            max = Math.max(max, water);
+            if (arr[start] < arr[end]) start++;
+            else end--;
+        }
+        return max;
+    }
+
+    /**
      * https://leetcode.com/problems/maximum-product-subarray/
      * @param nums
      * @return
