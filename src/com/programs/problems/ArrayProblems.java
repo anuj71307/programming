@@ -10,8 +10,45 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {1,8,5,3};
-        System.out.print(ap.minimum_cost_to_stick(arr));
+        int[] arr = {5,1,3};
+        System.out.print(ap.searchInRotatedArray(arr, 3));
+    }
+
+    /**
+     * https://leetcode.com/problems/search-in-rotated-sorted-array/
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int searchInRotatedArray(int[] nums, int target) {
+        int start = 0;
+        int end = nums.length-1;
+        int mid = start;
+        while(start<=end){
+            mid = (start+end)/2;
+            if(nums[mid]==target){
+                return mid;
+            }
+            if(nums[start]<=nums[mid]){
+                if(target>=nums[start] && target <=nums[mid]){
+                    end = mid-1;
+                }
+                else{
+                    start = mid+1;
+                }
+            }
+            else{
+                if(target>=nums[mid] && target <=nums[end]){
+                    start = mid+1;
+                }
+                else{
+                    end = mid-1;
+                }
+
+            }
+        }
+
+        return -1;
     }
 
     /**
