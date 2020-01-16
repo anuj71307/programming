@@ -13,6 +13,39 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/reverse-only-letters/
+     * @param S
+     * @return reversed string
+     */
+    public String reverseOnlyLetters(String S) {
+
+        char[] arr = reverse(S.toCharArray());
+        return new String(arr);
+    }
+
+    char[] reverse(char[] arr){
+        int i = 0;
+        int j = arr.length-1;
+        while(i<=j){
+            if(!isChar(arr[i])){
+                i++;
+            }
+            else if(!isChar(arr[j])){
+                j--;
+            }
+            else{
+               swap(arr, i , j);
+            }
+        }
+        return arr;
+    }
+
+    boolean isChar(char c){
+
+        return (c>='a' && c <='z') || (c>='A' && c<='Z');
+    }
+
+    /**
      * Given a string which might contain Invalid parenthesis. Return a string which has balanced parenthesis. Parenthesis can only be removed
      * ie remove invalid parenthesis. If there are multiple solution return any balanced solution.
      * For ex if given string is (v)())()
