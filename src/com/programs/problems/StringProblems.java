@@ -8,7 +8,7 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.removeInvalidParenthesis("((ab)c"));
+        System.out.println(sp.reverseOnlyLetters("a-bc"));
 
     }
 
@@ -35,6 +35,8 @@ public class StringProblems {
             }
             else{
                swap(arr, i , j);
+               i++;
+               j--;
             }
         }
         return arr;
