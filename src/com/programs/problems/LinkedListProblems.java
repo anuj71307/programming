@@ -2,13 +2,64 @@ package com.programs.problems;
 
 
 import com.programs.linkedlist.LinkedList;
+import com.programs.stack.Stack;
 
 public class LinkedListProblems<T> {
 
     public static void main(String[] args) {
 
         LinkedListProblems lp = new LinkedListProblems();
+        ListNode node = new ListNode(1);
+        ListNode prev = node;
+        for(int i =2;i<9;i++){
+            prev.next = new ListNode(i);
+            prev = prev.next;
+        }
+        ListNode t = node;
+        while(t!=null){
+            System.out.print(t.val+" -> ");
+            t=t.next;
+        }
+        lp.reorderList(node);
+        ListNode tu = node;
+        System.out.println();
+
+        System.out.println();
+        while(tu!=null){
+            System.out.print(tu.val+" -> ");
+            tu=tu.next;
+        }
+
         //lp.sortList();
+    }
+
+    /**
+     * https://leetcode.com/problems/reorder-list/
+     * @param head
+     */
+    public void reorderList(ListNode head) {
+        if(head==null || head.next==null || head.next.next==null){
+            return;
+        }
+        Stack<ListNode> st = new Stack();
+        ListNode temp = head;
+        while(temp!=null){
+            st.push(temp);
+            temp=temp.next;
+        }
+        ListNode node = head;//2
+        while(node!=st.top() && node!=null){
+            ListNode n = st.pop();//3
+            st.top().next=null;
+            ListNode next = node.next;//2
+            node.next=n;
+            n.next=next;
+            node=next;
+        }
+        if(node!=null) {
+            node.next = null;
+        }
+
     }
 
     /**
@@ -591,7 +642,7 @@ public class LinkedListProblems<T> {
         }
     }
 
-    class ListNode {
+    static class ListNode {
         int val;
         ListNode next;
 
