@@ -8,8 +8,44 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.reverseOnlyLetters("a-bc"));
+        System.out.println(sp.addStrings("99", "10"));
+    }
 
+    /**
+     * https://leetcode.com/problems/add-strings/submissions/
+     * @param num1
+     * @param num2
+     * @return
+     */
+    public String addStrings(String num1, String num2) {
+
+        if (num1 == null || num1.length() == 0) return num2;
+        if (num2 == null || num2.length() == 0) return num1;
+        StringBuilder str = new StringBuilder();
+        int carry = 0;
+        int sum = 0;
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+
+        while (i >= 0 || j >= 0) {
+            if (i >= 0) {
+                sum = sum + (num1.charAt(i) - '0');
+            }
+            if (j >= 0) {
+                sum = sum + (num2.charAt(j) - '0');
+            }
+            sum = sum + carry;
+            carry = sum / 10;
+            str.append(sum % 10);
+            sum = 0;
+            i--;
+            j--;
+        }
+        if (carry > 0) {
+            str.append(carry);
+        }
+        str.reverse();
+        return str.toString();
     }
 
     /**
