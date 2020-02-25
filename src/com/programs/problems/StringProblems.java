@@ -49,6 +49,34 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/split-a-string-in-balanced-strings/
+     * @param s
+     * @return
+     */
+    public int balancedStringSplit(String s) {
+        if(s==null || s.length()==0) return 0;
+        int lc = 0;
+        int rc = 0;
+        int res=0;
+        for(int i =0;i<s.length();i++){
+            if(s.charAt(i)=='R'){
+                rc++;
+            }
+            else if(s.charAt(i)=='L'){
+
+                lc++;
+            }
+            if(lc==rc){
+
+                res++;
+                lc =0;
+                rc=0;
+            }
+        }
+        return res;
+    }
+
+    /**
      * https://leetcode.com/problems/reverse-only-letters/
      * @param S
      * @return reversed string
