@@ -9,23 +9,26 @@ package com.programs.trees;
 public class BinarySearchTree<T extends Comparable> implements ITree<T> {
     private static final String TAG = BinarySearchTree.class.getSimpleName();
     private T data;
-    private ITree<T> leftTree;
-    private ITree<T> rightTree;
+    private ITree<T> leftNode;
+    private ITree<T> rightNode;
 
+    public void setData(T data) {
+        this.data = data;
+    }
 
     public BinarySearchTree(T data) {
         this.data = data;
-        this.leftTree = null;
-        this.rightTree = null;
+        this.leftNode = null;
+        this.rightNode = null;
     }
 
     public static int getHeight(BinarySearchTree root) {
         //Write your code here
-        if (root == null || (root.leftTree == null && root.rightTree == null)) {
+        if (root == null || (root.leftNode == null && root.rightNode == null)) {
 
             return 0;
         }
-        return 1 + max(getHeight((BinarySearchTree) root.leftTree), getHeight((BinarySearchTree) root.rightTree));
+        return 1 + max(getHeight((BinarySearchTree) root.leftNode), getHeight((BinarySearchTree) root.rightNode));
     }
 
     public static int max(int left, int right) {
@@ -40,16 +43,16 @@ public class BinarySearchTree<T extends Comparable> implements ITree<T> {
         if (this.data.compareTo(data) == 0) {
             System.out.println("Data is same " + this.data + " " + data);
         } else if (this.data.compareTo(data) < 0) {
-            if (this.rightTree == null) {
-                this.rightTree = new BinarySearchTree(data);
+            if (this.rightNode == null) {
+                this.rightNode = new BinarySearchTree(data);
             } else {
-                this.rightTree.add(data);
+                this.rightNode.add(data);
             }
         } else {
-            if (this.leftTree == null) {
-                this.leftTree = new BinarySearchTree(data);
+            if (this.leftNode == null) {
+                this.leftNode = new BinarySearchTree(data);
             } else {
-                this.leftTree.add(data);
+                this.leftNode.add(data);
             }
         }
 
@@ -63,11 +66,11 @@ public class BinarySearchTree<T extends Comparable> implements ITree<T> {
     @Override
     public int size() {
         int size = 1;
-        if (this.leftTree != null) {
-            size += this.leftTree.size();
+        if (this.leftNode != null) {
+            size += this.leftNode.size();
         }
-        if (this.rightTree != null) {
-            size += this.rightTree.size();
+        if (this.rightNode != null) {
+            size += this.rightNode.size();
         }
         return size;
     }
@@ -95,12 +98,12 @@ public class BinarySearchTree<T extends Comparable> implements ITree<T> {
         if (this.data.compareTo(data) == 0) {
             return true;
         } else if (this.data.compareTo(data) < 0) {
-            if (this.rightTree != null) {
-                return this.rightTree.isMember(data);
+            if (this.rightNode != null) {
+                return this.rightNode.isMember(data);
             }
         } else {
-            if (this.leftTree != null) {
-                return this.leftTree.isMember(data);
+            if (this.leftNode != null) {
+                return this.leftNode.isMember(data);
             }
 
         }
@@ -113,21 +116,21 @@ public class BinarySearchTree<T extends Comparable> implements ITree<T> {
 
     @Override
     public ITree getLeftNode() {
-        return leftTree;
+        return leftNode;
     }
 
     @Override
     public ITree getRightNode() {
-        return rightTree;
+        return rightNode;
     }
 
     @Override
     public void setLeftNode(ITree<T> node) {
-        leftTree = node;
+        leftNode = node;
     }
 
     @Override
     public void setRightNode(ITree<T> node) {
-        rightTree = node;
+        rightNode = node;
     }
 }
