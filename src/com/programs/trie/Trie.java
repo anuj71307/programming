@@ -116,6 +116,7 @@ public class Trie {
     }
 
     /**
+     * https://leetcode.com/problems/add-and-search-word-data-structure-design/
      * Give a dictionary implement an API to find word in it l. Ex Boy, B.z, ..., Dot should be matched with any charger in between
      */
     boolean searchDfs(String word) {
