@@ -12,7 +12,52 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/verifying-an-alien-dictionary/
+     * @param words
+     * @param order
+     * @return
+     */
+    public boolean isAlienSorted(String[] words, String order) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < order.length(); i++) {
+            map.put(order.charAt(i), i);
+        }
+
+        for (int i = 0; i < words.length - 1; i++) {
+
+            if (isFirstBigger(words[i], words[i + 1], map)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isFirstBigger(String first, String second, HashMap<Character, Integer> map) {
+        int i = 0;
+        int j = 0;
+        while (i < first.length() && j < second.length()) {
+            int f = map.get(first.charAt(i));
+            int s = map.get(second.charAt(j));
+            if (f > s) {
+                return true;
+            }
+            // continue checking further characters only if current chars are same.
+            if (f != s) {
+                return false;
+            }
+            i++;
+            j++;
+        }
+        //if second is subset of first but first is bigger in size then its not sorted
+        if (i < first.length()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * https://leetcode.com/problems/add-strings/submissions/
+     *
      * @param num1
      * @param num2
      * @return
@@ -50,27 +95,27 @@ public class StringProblems {
 
     /**
      * https://leetcode.com/problems/split-a-string-in-balanced-strings/
+     *
      * @param s
      * @return
      */
     public int balancedStringSplit(String s) {
-        if(s==null || s.length()==0) return 0;
+        if (s == null || s.length() == 0) return 0;
         int lc = 0;
         int rc = 0;
-        int res=0;
-        for(int i =0;i<s.length();i++){
-            if(s.charAt(i)=='R'){
+        int res = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == 'R') {
                 rc++;
-            }
-            else if(s.charAt(i)=='L'){
+            } else if (s.charAt(i) == 'L') {
 
                 lc++;
             }
-            if(lc==rc){
+            if (lc == rc) {
 
                 res++;
-                lc =0;
-                rc=0;
+                lc = 0;
+                rc = 0;
             }
         }
         return res;
@@ -78,6 +123,7 @@ public class StringProblems {
 
     /**
      * https://leetcode.com/problems/reverse-only-letters/
+     *
      * @param S
      * @return reversed string
      */
@@ -87,28 +133,26 @@ public class StringProblems {
         return new String(arr);
     }
 
-    char[] reverse(char[] arr){
+    char[] reverse(char[] arr) {
         int i = 0;
-        int j = arr.length-1;
-        while(i<=j){
-            if(!isChar(arr[i])){
+        int j = arr.length - 1;
+        while (i <= j) {
+            if (!isChar(arr[i])) {
                 i++;
-            }
-            else if(!isChar(arr[j])){
+            } else if (!isChar(arr[j])) {
                 j--;
-            }
-            else{
-               swap(arr, i , j);
-               i++;
-               j--;
+            } else {
+                swap(arr, i, j);
+                i++;
+                j--;
             }
         }
         return arr;
     }
 
-    boolean isChar(char c){
+    boolean isChar(char c) {
 
-        return (c>='a' && c <='z') || (c>='A' && c<='Z');
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
     }
 
     /**
@@ -118,6 +162,7 @@ public class StringProblems {
      * return either (v)()() or  (v())()
      * Note: parenthesis can only be removed
      * Problem is similar to https://www.geeksforgeeks.org/remove-invalid-parentheses/
+     *
      * @param str
      * @return
      */
