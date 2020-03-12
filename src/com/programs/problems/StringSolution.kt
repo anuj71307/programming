@@ -1,9 +1,44 @@
 package com.programs.problems
 
+import java.util.*
+
 
 fun main() {
     println("Hello World!")
-    print(countPalindromes("aaa"))
+    print(reorganizeString("aaabbcc"))
+}
+
+/**
+ * https://leetcode.com/problems/reorganize-string/
+ */
+fun reorganizeString(str: String): String {
+
+    val len = str.length
+    var count = IntArray(26) // used to decode the chars
+    str.forEach {
+        count[it-'a']+=100 // add 100 for each time a char appears
+    }
+    for(i in count.indices){
+        count[i]+=i
+    }
+    // count represent count*100+char
+    Arrays.sort(count) ///sort the count array
+    val ans = CharArray(len)
+    var t = 1
+    count.forEach {total->
+         val cnt = total/100
+         if(cnt>(len+1)/2) return ""
+         if(cnt>0) {
+             val ch: Char = ('a' + total % 100)
+             for (i in 0 until cnt) {
+                 if (t >= len) t = 0
+                 ans[t] = ch
+                 t += 2
+             }
+         }
+
+    }
+    return String(ans)
 }
 
 /**
@@ -22,7 +57,7 @@ fun countPalindromes(s: String): Any? {
 
 fun countPalindromes(s: String, i: Int, j: Int, res: IntArray) {
     var left = i
-    var right = j;
+    var right = j
     while(left>=0 && right<s.length && s[left]==s[right]){
         res[0]+=1
         left--
