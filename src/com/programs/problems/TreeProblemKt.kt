@@ -59,6 +59,9 @@ fun maxDepth(root: NAryTree?): Int {
     return max + 1
 }
 
-data class TreeNode(var value: Int, var left: TreeNode? = null, var right: TreeNode? = null) {
+data class TreeNode constructor(@JvmField var value: Int, @JvmField  var left: TreeNode? = null,
+                    @JvmField var right: TreeNode? = null) {
+    constructor(value: Int) : this(value, null ,null) {
 
+    }
 }

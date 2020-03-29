@@ -15,11 +15,11 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
         TreeProblems tp = new TreeProblems();
         //create BST
-        Node node = new Node(5);
-        node.left = new Node(3);
-        node.left.left = new Node(2);
-        node.left.right = new Node(4);
-        Node temp = tp.deleteNode(node, 3);
+        TreeNode node = new TreeNode(0);
+        node.left = new TreeNode(3);
+        node.left.left = new TreeNode(3);
+        node.left.right = new TreeNode(4);
+        System.out.println(pathSumAll(node, 3));
     }
 
     /**
@@ -33,12 +33,12 @@ public class TreeProblems {
     public int rangeSumBST(TreeNode root, int L, int R) {
         if (root == null) return 0;
         int sum = 0;
-        if (root.val >= L && root.val <= R) {
-            sum += root.val;
+        if (root.value >= L && root.value <= R) {
+            sum += root.value;
             return sum + rangeSumBST(root.left, L, R) + rangeSumBST(root.right, L, R);
         }
 
-        if (root.val < L) {
+        if (root.value < L) {
             return sum + rangeSumBST(root.right, L, R);
         }
         return sum + rangeSumBST(root.left, L, R);
@@ -110,9 +110,9 @@ public class TreeProblems {
 
         if (root1 == null && root2 == null) return true;
         if (root1 == null || root2 == null) return false;
-        if (root1.val != root2.val) return false;
+        if (root1.value != root2.value) return false;
 
-        if (root1.left == root2.left || (root1.left != null && root2.left != null && root2.left.val == root1.left.val)) {
+        if (root1.left == root2.left || (root1.left != null && root2.left != null && root2.left.value == root1.left.value)) {
             return flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right);
 
         }
@@ -149,7 +149,7 @@ public class TreeProblems {
     void fill(TreeNode root, String[][] arr, int index, int start, int end) {
         if (root == null) return;
         int mid = (start + end) / 2;
-        arr[index][mid] = "" + root.val;
+        arr[index][mid] = "" + root.value;
         fill(root.left, arr, index + 1, start, mid - 1);
         fill(root.right, arr, index + 1, mid + 1, end);
     }
@@ -186,7 +186,7 @@ public class TreeProblems {
         while (!q.isEmpty()) {
             Item it = q.poll();
             TreeNode temp = it.node;
-            if (set.contains(temp.val)) {
+            if (set.contains(temp.value)) {
                 list_delete.add(new Item(temp, it.parent));
             }
             if (temp.left != null) {
@@ -267,11 +267,11 @@ public class TreeProblems {
 
     public void delete(TreeNode root, TreeNode p, HashSet<Integer> set, List<TreeNode> res) {
         if (root == null) return;
-        if (p == null && !set.contains(root.val)) {
+        if (p == null && !set.contains(root.value)) {
             res.add(root);
         }
 
-        if (set.contains(root.val)) {
+        if (set.contains(root.value)) {
 
             if (p != null) {
                 if (p.left == root) {
@@ -1086,14 +1086,14 @@ public class TreeProblems {
 
 
     /**
-     * find all path from toor to left which equals a given sum
+     * find all path from root to leaf which equals a given sum
      * https://leetcode.com/problems/path-sum-ii/
      *
      * @param root
      * @param sum
      * @return
      */
-    public List<List<Integer>> pathSum(Node root, int sum) {
+    public static List<List<Integer>> pathSum(Node root, int sum) {
 
         List<List<Integer>> res = new ArrayList();
         List<Integer> list = new ArrayList();
@@ -1101,7 +1101,7 @@ public class TreeProblems {
         return res;
     }
 
-    public void pathSum(Node root, int sum, List<List<Integer>> res, List<Integer> list) {
+    public static void pathSum(Node root, int sum, List<List<Integer>> res, List<Integer> list) {
 
         if (root == null) return;
 
@@ -1119,6 +1119,33 @@ public class TreeProblems {
         pathSum(root.left, sum - root.data, res, list);
         pathSum(root.right, sum - root.data, res, list);
         list.remove(list.size() - 1);
+    }
+
+    /**
+     * https://leetcode.com/problems/path-sum-iii/
+     *
+     * @param root
+     * @param sum
+     * @return
+     */
+    public static int pathSumAll(TreeNode root, int sum) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        return pathSum(root, map, sum, 0);
+    }
+
+    private static int pathSum(TreeNode root, HashMap<Integer, Integer> map, int target, int runningSum) {
+
+        if (root == null) return 0;
+
+        runningSum += root.value;
+        int sum = runningSum - target;
+        int total = map.getOrDefault(sum, 0);
+        if (runningSum == target) total++;
+        map.put(runningSum, map.getOrDefault(runningSum, 0) + 1);
+        total += pathSum(root.left, map, target, runningSum);
+        total += pathSum(root.right, map, target, runningSum);
+        map.put(runningSum, map.getOrDefault(runningSum, 0) - 1);
+        return total;
     }
 
 
@@ -1211,15 +1238,5 @@ class BSTIterator {
      */
     public boolean hasNext() {
         return !stack.isEmpty();
-    }
-}
-
-class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode(int x) {
-        val = x;
     }
 }
