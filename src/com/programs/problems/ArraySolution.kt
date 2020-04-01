@@ -1,33 +1,34 @@
 package com.programs.problems
 
+import kotlin.math.abs
+
 
 fun main() {
-    val first: Array<IntArray> = arrayOf(
-            intArrayOf(0, 4, 6),
-            intArrayOf(1, 0, 3)
-    )
+}
 
-    val sec: Array<IntArray> = arrayOf(
-            intArrayOf(0, 4, 6),
-            intArrayOf(1, 0, 3)
-    )
-
-    zeroMatrix(first)
-    setZero(sec)
-    for (i in first.indices) {
-        for (j in first[0].indices) {
-            print("${first[i][j]} ")
+/**
+ * https://www.geeksforgeeks.org/smallest-difference-pair-values-two-unsorted-arrays/
+ * Sort both array and increase pointer of array which element is smaller
+ * Time complexity: Sorting O(NLogN+MLogM) then comparison is O(N+M)
+ */
+fun minDiff(first: IntArray, second: IntArray): Int {
+    first.sort()
+    second.sort()
+    var i = 0
+    var j = 0
+    var diff = Int.MAX_VALUE
+    while (i < first.size && j < second.size) {
+        if (abs(first[i] - second[j]) < diff) {
+            diff = abs(first[i] - second[j])
         }
-        println()
+        if (first[i] < second[j]) {
+            i++
+        } else {
+            j++
+        }
     }
 
-    println("Another")
-    for (i in sec.indices) {
-        for (j in sec[0].indices) {
-            print("${sec[i][j]} ")
-        }
-        println()
-    }
+    return diff
 }
 
 /**
