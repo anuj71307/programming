@@ -4,7 +4,26 @@ import java.util.*
 
 
 fun main() {
-    print(checkPalindromePermutation("aba&"))
+    println(countWords("One two       three\n four\tfive  "))
+}
+
+
+/**
+ * https://www.geeksforgeeks.org/count-words-in-a-given-string/
+ */
+fun countWords(word: String): Int {
+    var count = 0;
+    var state = true
+
+    word.forEach {
+        if (it == ' ' || it == '\n' || it == '\t') {
+            state = true
+        } else if (state) {
+            state = false
+            count++
+        }
+    }
+    return count
 }
 
 /**
