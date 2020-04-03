@@ -2,6 +2,7 @@ package com.programs.problems
 
 import com.programs.trees.BinarySearchTree
 import com.programs.trees.NAryTree
+import kotlin.math.max
 
 fun main() {
     println("Hello World!")
@@ -15,6 +16,27 @@ fun main() {
 }
 
 /**
+ * https://leetcode.com/problems/diameter-of-binary-tree/
+ */
+fun longestPath(root: TreeNode?): Int {
+    val res = IntArray(1) { 0 }
+    height(root, res)
+    return res[0]
+}
+
+/**
+ * find height of a tree
+ */
+fun height(root: TreeNode?, res: IntArray): Int {
+    if (root == null) return 0
+    val lh = height(root.left, res)
+    val rh = height(root.right, res)
+    //update longest oath while finding height
+    res[0] = max(res[0], lh + rh + 1)
+    return max(lh, rh) + 1
+}
+
+    /**
  * https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
  */
 fun lowestCommonAncestor(root: BinarySearchTree<Int>?, p: BinarySearchTree<Int>?, q: BinarySearchTree<Int>?): BinarySearchTree<Int>? {
