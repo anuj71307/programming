@@ -8,11 +8,61 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.addStrings("99", "10"));
+        System.out.println(sp.patternMatch("catcatgo", "aab"));
     }
 
     /**
+     * https://leetcode.com/problems/word-pattern-ii/
+     *
+     * @param word
+     * @param pattern
+     * @return
+     */
+    boolean patternMatch(String word, String pattern) {
+
+        return patternMatch(word, pattern, 0, new HashMap<Character, String>(), new HashSet<>());
+    }
+
+    private boolean patternMatch(String word,
+                                 String pattern, int index,
+                                 HashMap<Character, String> map,
+                                 HashSet<String> set) {
+
+        if (index >= pattern.length()) {
+            return word.length() == 0;
+        }
+        Character c = pattern.charAt(index);
+        if (map.containsKey(c)) {
+            String val = map.get(c);
+            if (val.length() > word.length()) return false;
+            if (word.startsWith(val)) {
+                return patternMatch(word.substring(val.length()), pattern, index + 1, map, set);
+            } else {
+                return false;
+            }
+        }
+
+        for (int i = 1; i <= word.length(); i++) {
+            String pre = word.substring(0, i);
+            if (set.contains(pre)) continue;
+            map.put(c, pre);
+            set.add(pre);
+            if (patternMatch(word.substring(i), pattern, index + 1, map, set)) {
+                return true;
+            } else {
+                map.remove(c);
+                set.remove(pre);
+            }
+        }
+
+        return false;
+
+    }
+
+
+    /**
      * https://leetcode.com/problems/verifying-an-alien-dictionary/
+     *
      * @param words
      * @param order
      * @return
