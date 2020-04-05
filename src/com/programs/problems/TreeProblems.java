@@ -13,13 +13,29 @@ public class TreeProblems {
 
 
     public static void main(String args[]) throws Exception {
-        TreeProblems tp = new TreeProblems();
-        //create BST
-        TreeNode node = new TreeNode(0);
-        node.left = new TreeNode(3);
-        node.left.left = new TreeNode(3);
-        node.left.right = new TreeNode(4);
-        System.out.println(pathSumAll(node, 3));
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/convert-given-binary-tree-doubly-linked-list-set-3/
+     *
+     * @param root
+     * @return
+     */
+    TreeNode convertToDLL(TreeNode root) {
+        TreeNode[] head = new TreeNode[1];
+        convertToDLL(root, head);
+        return head[0];
+    }
+
+    void convertToDLL(TreeNode root, TreeNode[] head) {
+        if (root == null) return;
+        convertToDLL(root.right, head);
+        root.right = head[0];
+        if (head[0] != null) {
+            head[0].left = root;
+        }
+        head[0] = root;
+        convertToDLL(root.left, head);
     }
 
     /**
