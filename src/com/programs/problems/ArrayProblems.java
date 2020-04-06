@@ -10,39 +10,113 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {5,1,3};
-        System.out.print(ap.searchInRotatedArray(arr, 3));
+        System.out.println(ap.binarySearch(new int[]{1, 3, 3, 4}, 2));
+    }
+
+    /**
+     * Given two sorted array find lasted array by merging suffix from 1st array and prefix from 2nd.
+     * Output array should also be sorted and largest
+     * Fo ex if first = [1,2,3], second = [4,5,9] - > Output should be [1,2,3,4,5,9]
+     * if first [1,2,3,5,6,] , second = [4,5,8,9] - > output can be [1,2,3,4,5,8,9] or [1,2,3,5,5,8,9]
+     * return size of sorted longest array which can be formed
+     *
+     * @param first
+     * @param second
+     * @return
+     */
+    public int merge(int[] first, int[] second) {
+
+        int currentSize = 0;
+        int pos = 0;
+        int i = first.length - 1;
+        for (; i >= 0; i--) {
+            int k = binarySearch(second, first[i]);
+            int size = second.length - k;
+            if (i + 1 + size > currentSize) {
+                currentSize = i + 1 + size;
+                pos = k;
+            }
+            if (k == 0) {
+                break;
+            }
+        }
+
+        return currentSize;
+    }
+
+    /**
+     * Binary Search to find first index of element or index of first greater element
+     * Scenario handled: If item is duplicated then it return first position Ex For input [1,2,3,3,3,4,5], target 3. Output would be 2
+     * If item is not present it return index of next greater element for input [1,3,3,4,6], target 2 o/p would be 1
+     * If no greater element is present then return -1 for input [1,2,3,4] and target 6 , output would be -1
+     *
+     * @param arr    sorted array
+     * @param target
+     * @return
+     */
+    private int binarySearch(int[] arr, int target) {
+        if (target < arr[0]) return 0;
+        int low = 0;
+        int high = arr.length - 1;
+        // 1 2 3 4, 5, 7  8
+        int mid = (low + high) / 2;
+        while (low <= high) {
+            mid = (low + high) / 2;
+
+            if (arr[mid] == target) {
+                if (mid == low || (mid - 1 >= low && arr[mid - 1] < target)) {
+                    return mid;
+                } else {
+                    high = mid - 1;
+                }
+            } else if (target < arr[mid]) {
+
+                if (mid - 1 >= low && arr[mid - 1] < target) {
+                    return mid;
+                } else {
+                    high = mid - 1;
+                }
+            } else {
+                if (mid + 1 <= high && target < arr[mid + 1]) {
+                    return mid + 1;
+                } else {
+                    low = mid + 1;
+                }
+
+            }
+        }
+
+        return -1;
+
     }
 
     /**
      * https://leetcode.com/problems/search-in-rotated-sorted-array/
+     *
      * @param nums
      * @param target
      * @return
      */
     public int searchInRotatedArray(int[] nums, int target) {
         int start = 0;
-        int end = nums.length-1;
+        int end = nums.length - 1;
         int mid = start;
-        while(start<=end){
-            mid = (start+end)/2;
-            if(nums[mid]==target){
+        while (start <= end) {
+            mid = (start + end) / 2;
+            if (nums[mid] == target) {
                 return mid;
             }
-            if(nums[start]<=nums[mid]){
-                if(target>=nums[start] && target <=nums[mid]){
-                    end = mid-1;
+            if (nums[start] <= nums[mid]) {
+                if (target >= nums[start] && target <= nums[mid]) {
+                    end = mid - 1;
+                } else {
+                    start = mid + 1;
                 }
-                else{
-                    start = mid+1;
-                }
-            }
-            else{
-                if(target>=nums[mid] && target <=nums[end]){
-                    start = mid+1;
-                }
-                else{
-                    end = mid-1;
+            } else {
+                if (target >= nums[mid] && target <= nums[end]) {
+                    start = mid + 1;
+                } else {
+                    end = mid - 1;
                 }
 
             }
@@ -53,6 +127,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/container-with-most-water/
+     *
      * @param arr
      * @return
      */
@@ -72,6 +147,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/maximum-product-subarray/
+     *
      * @param nums
      * @return
      */
@@ -80,20 +156,20 @@ public class ArrayProblems {
         int prod = 1;
         int result = Integer.MIN_VALUE;
 
-        for(int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < nums.length; i++) {
             prod = prod * nums[i];
             result = Math.max(prod, result);
-            if(prod == 0) {
+            if (prod == 0) {
                 prod = 1;
             }
         }
         prod = 1;
 
-        for(int i = nums.length - 1; i >= 0; i--) {
+        for (int i = nums.length - 1; i >= 0; i--) {
 
             prod = prod * nums[i];
             result = Math.max(prod, result);
-            if(prod == 0) {
+            if (prod == 0) {
                 prod = 1;
             }
         }
@@ -104,16 +180,17 @@ public class ArrayProblems {
     /**
      * https://algorithm-notes-allinone.blogspot.com/2019/08/leetcode-1167-minimum-cost-to-connect.html
      * Leet code 1167
+     *
      * @param arr
      * @return
      */
-    public int minimum_cost_to_stick(int [] arr){
+    public int minimum_cost_to_stick(int[] arr) {
         MinHeap minHeap = new MinHeap(arr);
         int cost = 0;
-        while(minHeap.size>1){
+        while (minHeap.size > 1) {
             int f = minHeap.extractMin();
             int v = minHeap.extractMin();
-            int curr_cost = f+v;
+            int curr_cost = f + v;
             cost += curr_cost;
             minHeap.insert(curr_cost);
         }
@@ -123,40 +200,41 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/last-stone-weight/
+     *
      * @return
      */
-    public int lastStoneWeight(int[] arr){
+    public int lastStoneWeight(int[] arr) {
         MaxHeap maxHeap = new MaxHeap(arr);
-        while(maxHeap.size>1){
+        while (maxHeap.size > 1) {
             int f = maxHeap.extractMax();
             int v = maxHeap.extractMax();
-            int p = Math.abs(f-v);
-            if(p>0){
+            int p = Math.abs(f - v);
+            if (p > 0) {
                 maxHeap.insert(p);
             }
         }
-        return maxHeap.size>=1 ? maxHeap.extractMax():0;
+        return maxHeap.size >= 1 ? maxHeap.extractMax() : 0;
     }
 
     /**
      * https://leetcode.com/problems/remove-element/
+     *
      * @param arr
      * @param val
      * @return
      */
     public int removeElement(int[] arr, int val) {
         int i = 0;
-        int j = arr.length-1;
-        while(i<=j){
-            if(arr[i]== val){
-                swap(arr,i,j);
+        int j = arr.length - 1;
+        while (i <= j) {
+            if (arr[i] == val) {
+                swap(arr, i, j);
                 j--;
-            }
-            else{
+            } else {
                 i++;
             }
         }
-        return j+1;
+        return j + 1;
     }
 
     /**
