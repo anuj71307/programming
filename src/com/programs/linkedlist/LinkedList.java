@@ -47,5 +47,6 @@ public class LinkedList<T> {
             temp = temp.next;
         }
         temp.next = new LinkedList<>(data);
+        temp.next.prev = temp;
     }
 }
