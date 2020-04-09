@@ -10,7 +10,29 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        System.out.println(ap.binarySearch(new int[]{1, 3, 3, 4}, 2));
+        System.out.println(ap.isHappy(19));
+    }
+
+    /**
+     * https://leetcode.com/problems/happy-number/
+     * @param n
+     * @return
+     */
+    public boolean isHappy(int n) {
+        HashSet<Integer> set = new HashSet<>();
+        while(n!=1){
+            if(set.contains(n)) break;
+            set.add(n);
+            int j =0;
+            while(n!=0){
+                int k =  n%10;
+                k*=k;
+                j+=k;
+                n/=10;
+            }
+            n=j;
+        }
+        return(n==1);
     }
 
     /**
