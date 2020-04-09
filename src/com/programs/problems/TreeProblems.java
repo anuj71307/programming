@@ -20,7 +20,7 @@ public class TreeProblems {
         node.right = new TreeNode(3);
         int[] arr = tp.findFrequentTreeSum(node);
         for (int i : arr) {
-            System.out.print(i + " ");
+            System.out.print(i + " -> ");
         }
     }
 
