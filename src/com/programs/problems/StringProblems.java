@@ -2311,59 +2311,38 @@ public class StringProblems {
     }
 
     /**
-     * group anagrams
+     * https://leetcode.com/problems/group-anagrams/
+     */
+    public List<List<String>> groupAnagram(String[] strs) {
+        if (strs == null || strs.length == 0) return new ArrayList<>();
+        HashMap<String, List<String>> map = new HashMap<>();
+        for (String str : strs) {
+            String encodedString = encode(str);
+            List<String> list = map.getOrDefault(encodedString, new ArrayList<>());
+            list.add(str);
+            map.put(encodedString, list);
+        }
+        return new ArrayList(map.values());
+    }
+
+    /**
+     * Only for small case character
      *
      * @param str
+     * @return
      */
-    public static void groupAnagram(List<String> str) {
-
-        TreeMap<String, List<String>> map = new TreeMap<>();
-
-        // loop over all words
-        for (int i = 0; i < str.size(); i++) {
-
-            // convert to char array, sort and
-            // then re-convert to string
-            String word = str.get(i);
-            String temp = word.replaceAll(" ", "");
-            char[] letters = temp.toCharArray();
-            Arrays.sort(letters);
-            String newWord = new String(letters);
-
-            // calculate hashcode of string
-            // after sorting
-            if (map.containsKey(newWord)) {
-
-                // Here, we already have
-                // a word for the hashcode
-                List<String> words = map.get(newWord);
-                words.add(word);
-                map.put(newWord, words);
-            } else {
-
-                // This is the first time we are
-                // adding a word for a specific
-                // hashcode
-                List<String> words = new ArrayList<>();
-                words.add(word);
-                map.put(newWord, words);
-            }
+    private String encode(String str) {
+        if (str == null || str.isEmpty()) return "";
+        int[] arr = new int[26];
+        for (int i = 0; i < str.length(); i++) {
+            arr[str.charAt(i) - 'a']++;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i : arr) {
+            sb.append(i).append("$");
         }
 
-        // print all the values where size is > 1
-        // If you want to print non-anagrams,
-        // just print the values having size = 1
-        for (String i : map.keySet()) {
-            List<String> values = map.get(i);
-            Collections.sort(values);
-            for (int k = 0; k < values.size(); k++) {
-                if (k == values.size() - 1) {
-                    System.out.print(values.get(k));
-                } else System.out.print(values.get(k) + ",");
-            }
-            System.out.println();
-        }
-
+        return sb.toString();
     }
 
 
