@@ -10,29 +10,56 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        System.out.println(ap.isHappy(19));
+        System.out.println(ap.countElements(new int[]{1, 1, 2}));
+    }
+
+    /**
+     * https://leetcode.com/explore/challenge/card/30-day-leetcoding-challenge/528/week-1/3289/
+     * Given an integer array arr, count element x such that x + 1 is also in arr.
+     * If there're duplicates in arr, count them seperately.
+     *
+     * @param arr
+     * @return
+     */
+    public int countElements(int[] arr) {
+        if (arr == null || arr.length == 0) return 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int total = 0;
+        for (int i : arr) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int count = entry.getValue();
+            int next = map.getOrDefault(entry.getKey() + 1, 0);
+            if (next > 0) {
+                total += count;
+            }
+        }
+        return total;
+
     }
 
     /**
      * https://leetcode.com/problems/happy-number/
+     *
      * @param n
      * @return
      */
     public boolean isHappy(int n) {
         HashSet<Integer> set = new HashSet<>();
-        while(n!=1){
-            if(set.contains(n)) break;
+        while (n != 1) {
+            if (set.contains(n)) break;
             set.add(n);
-            int j =0;
-            while(n!=0){
-                int k =  n%10;
-                k*=k;
-                j+=k;
-                n/=10;
+            int j = 0;
+            while (n != 0) {
+                int k = n % 10;
+                k *= k;
+                j += k;
+                n /= 10;
             }
-            n=j;
+            n = j;
         }
-        return(n==1);
+        return (n == 1);
     }
 
     /**
