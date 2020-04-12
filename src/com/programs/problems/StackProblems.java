@@ -1,26 +1,19 @@
 package com.programs.problems;
 
+import com.programs.stack.MinStack;
+
 import java.util.Stack;
 
 public class StackProblems {
 
     public static void main(String[] args){
-        Stack<Integer> stack = new Stack<>();
-        stack.push(3);
-        stack.push(6);
-        stack.push(4);
-        stack.push(9);
-        stack.push(3);
-        stack.push(1);
-        stack.push(2);
-        stack.push(11);
-        stack.push(8);
-
-        sortStack(stack);
-
-        while (!stack.isEmpty()){
-            System.out.print(stack.pop()+" ");
-        }
+        MinStack<Integer> minStack = new MinStack();
+        minStack.push(0);
+        minStack.push(1);
+        minStack.push(0);
+        System.out.println(minStack.getMin());
+        System.out.println(minStack.pop());
+        System.out.println(minStack.getMin());
 
     }
 

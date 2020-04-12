@@ -30,7 +30,7 @@ public class Stack<T> implements IStack<T> {
     public void push(T data) {
         if (isStackFull()) {
             System.out.println("Stack Oveflow, Push failed, Stack Full");
-            return;
+            throw new StackOverflowError();
         }
         mStackArr[++top] = data;
     }
