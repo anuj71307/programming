@@ -8,7 +8,62 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.patternMatch("catcatgo", "aab"));
+        System.out.println(sp.backspaceCompare("a#c", "b"));
+    }
+
+    /**
+     * https://leetcode.com/problems/backspace-string-compare/
+     * @param first
+     * @param second
+     * @return
+     */
+    public boolean backspaceCompare(String first, String second) {
+        String fSb = getStringUsingStringBuilder(first);
+        String sSb = getStringUsingStringBuilder(second);
+        System.out.println("first is " + fSb+" second is "+sSb);
+        return fSb.equals(sSb);
+    }
+
+    /**
+     * Using string builder. For stack implementation check [getStringUsingStack]
+     * @param first
+     * @return
+     */
+    private String getStringUsingStringBuilder(String first) {
+        if(first==null || first.isEmpty()) return "";
+        StringBuilder builder = new StringBuilder();
+        for(int i =0; i< first.length(); i++){
+            if(first.charAt(i)!='#'){
+                builder.append(first.charAt(i));
+            }
+            else{
+                if(builder.length()>0){
+                    builder = builder.deleteCharAt(builder.length()-1);
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Using string builder. For stack implementation check [getStringUsingStringBuilder]
+     * @param first
+     * @return
+     */
+    private String getStringUsingStack(String first) {
+        if(first==null || first.isEmpty()) return "";
+        Stack<Character> st = new Stack<>();
+        for(int i =0; i< first.length(); i++){
+            if(first.charAt(i)!='#'){
+                st.push(first.charAt(i));
+            }
+            else{
+                if(!st.isEmpty()){
+                    st.pop();
+                }
+            }
+        }
+        return String.valueOf(st);
     }
 
     /**
