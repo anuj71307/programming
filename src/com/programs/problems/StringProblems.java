@@ -8,11 +8,91 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.backspaceCompare("a#c", "b"));
+        System.out.println(sp.parenthesis(3));
+    }
+
+    public List<String> parenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        if (n < 1) {
+            res.add("");
+            return res;
+        }
+        generateParenthesis(new char[n * 2], res, n, n, 0);
+        return res;
+    }
+
+    /**
+     * For non optimized code check below method
+     * This method is a recursive approach
+     *
+     * @param arr
+     * @param res
+     * @param opening
+     * @param closure
+     * @param pos
+     */
+    private void generateParenthesis(char[] arr, List<String> res, int opening, int closure, int pos) {
+        if (closure < 1) { //
+            res.add(new String(arr));
+            return;
+        }
+        if (opening == closure) { // if opening and closure size is same it means its already balanced so we
+            // can not insert closing brace, we can only insert an opening brace
+            arr[pos] = '(';
+            generateParenthesis(arr, res, opening - 1, closure, pos + 1);
+        } else if (opening > 0) { // if opening braces still left to insert we can insert either opening or
+            // close brace at current position
+            arr[pos] = '(';
+            generateParenthesis(arr, res, opening - 1, closure, pos + 1);
+            arr[pos] = ')';
+            generateParenthesis(arr, res, opening, closure - 1, pos + 1);
+        } else { // if no opening brace left we can only insert closure brace
+            arr[pos] = ')';
+            generateParenthesis(arr, res, opening, closure - 1, pos + 1);
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/generate-parentheses/
+     * Always insert a balanced parenthesis () at the start and after every occurence of opening brack ie '('
+     * For optimized version check above method
+     *
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        if (n < 1) {
+            res.add("");
+            return res;
+        }
+        HashSet<String> result = new HashSet<>();
+        String str = "()";
+        result.add(str);
+        n--;
+        HashSet<String> temp = new HashSet<>();
+        while (n > 0) {
+            temp.addAll(result);
+            result.clear();
+            for (String brace : temp) {
+                result.add(str + brace);
+                for (int i = 0; i < brace.length(); i++) {
+                    if (brace.charAt(i) == '(') {
+                        String pre = brace.substring(0, i + 1) + str + brace.substring(i + 1);
+                        result.add(pre);
+                    }
+                }
+            }
+            temp.clear();
+            n--;
+        }
+        res.addAll(result);
+        return res;
     }
 
     /**
      * https://leetcode.com/problems/backspace-string-compare/
+     *
      * @param first
      * @param second
      * @return
@@ -20,25 +100,25 @@ public class StringProblems {
     public boolean backspaceCompare(String first, String second) {
         String fSb = getStringUsingStringBuilder(first);
         String sSb = getStringUsingStringBuilder(second);
-        System.out.println("first is " + fSb+" second is "+sSb);
+        System.out.println("first is " + fSb + " second is " + sSb);
         return fSb.equals(sSb);
     }
 
     /**
      * Using string builder. For stack implementation check [getStringUsingStack]
+     *
      * @param first
      * @return
      */
     private String getStringUsingStringBuilder(String first) {
-        if(first==null || first.isEmpty()) return "";
+        if (first == null || first.isEmpty()) return "";
         StringBuilder builder = new StringBuilder();
-        for(int i =0; i< first.length(); i++){
-            if(first.charAt(i)!='#'){
+        for (int i = 0; i < first.length(); i++) {
+            if (first.charAt(i) != '#') {
                 builder.append(first.charAt(i));
-            }
-            else{
-                if(builder.length()>0){
-                    builder = builder.deleteCharAt(builder.length()-1);
+            } else {
+                if (builder.length() > 0) {
+                    builder = builder.deleteCharAt(builder.length() - 1);
                 }
             }
         }
@@ -47,18 +127,18 @@ public class StringProblems {
 
     /**
      * Using string builder. For stack implementation check [getStringUsingStringBuilder]
+     *
      * @param first
      * @return
      */
     private String getStringUsingStack(String first) {
-        if(first==null || first.isEmpty()) return "";
+        if (first == null || first.isEmpty()) return "";
         Stack<Character> st = new Stack<>();
-        for(int i =0; i< first.length(); i++){
-            if(first.charAt(i)!='#'){
+        for (int i = 0; i < first.length(); i++) {
+            if (first.charAt(i) != '#') {
                 st.push(first.charAt(i));
-            }
-            else{
-                if(!st.isEmpty()){
+            } else {
+                if (!st.isEmpty()) {
                     st.pop();
                 }
             }
@@ -1845,33 +1925,6 @@ public class StringProblems {
             }
         }
         return res;
-    }
-
-    /**
-     * https://leetcode.com/problems/generate-parentheses/
-     *
-     * @param n
-     * @return
-     */
-    public static List<String> generateParenthesis(int n) {
-        List<String> res = new ArrayList<>();
-        generateParenthesis("", 0, 0, n, res);
-        return res;
-    }
-
-
-    private static void generateParenthesis(String str, int start, int end, int max, List<String> res) {
-        if (str.length() >= max * 2) {
-            res.add(str);
-            return;
-        }
-
-        if (start < max) {
-            generateParenthesis(str + "(", start + 1, end, max, res);
-        }
-        if (end < start) {
-            generateParenthesis(str + ")", start, end + 1, max, res);
-        }
     }
 
 
