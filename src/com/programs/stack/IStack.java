@@ -10,7 +10,7 @@ public interface IStack<T> {
 
     T pop();
 
-    T top();
+    T peek();
 
     boolean isStackFull();
 

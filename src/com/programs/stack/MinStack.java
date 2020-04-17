@@ -28,7 +28,7 @@ public class MinStack<T extends Comparable> implements IStack<T> {
         }
         stack.push(data);
 
-        if(minStack.isEmpty() || data.compareTo(minStack.top())<=0){
+        if(minStack.isEmpty() || data.compareTo(minStack.peek())<=0){
             minStack.push(data);
         }
     }
@@ -40,18 +40,18 @@ public class MinStack<T extends Comparable> implements IStack<T> {
         }
 
         T d =  stack.pop();
-        if(d.compareTo(minStack.top())==0){
+        if(d.compareTo(minStack.peek())==0){
             minStack.pop();
         }
         return d;
     }
 
     @Override
-    public T top() {
+    public T peek() {
         if (stack.isEmpty()) {
             throw new EmptyStackException();
         }
-        return stack.top();
+        return stack.peek();
     }
 
 
@@ -69,6 +69,6 @@ public class MinStack<T extends Comparable> implements IStack<T> {
         if (stack.isEmpty()) {
             throw new EmptyStackException();
         }
-        return minStack.top();
+        return minStack.peek();
     }
 }
