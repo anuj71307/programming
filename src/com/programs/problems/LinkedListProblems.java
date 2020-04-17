@@ -48,9 +48,9 @@ public class LinkedListProblems<T> {
             temp=temp.next;
         }
         ListNode node = head;//2
-        while(node!=st.top() && node!=null){
+        while(node!=st.peek() && node!=null){
             ListNode n = st.pop();//3
-            st.top().next=null;
+            st.peek().next=null;
             ListNode next = node.next;//2
             node.next=n;
             n.next=next;

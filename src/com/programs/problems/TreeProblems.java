@@ -721,11 +721,11 @@ public class TreeProblems {
                 stack.push(node);
                 node = node.getLeftNode();
             }
-            ITree<T> temp = stack.top().getRightNode();
+            ITree<T> temp = stack.peek().getRightNode();
             if (temp == null) {
                 temp = stack.pop();
                 System.out.print(temp.getData() + " ");
-                while (!stack.isEmpty() && temp == stack.top().getRightNode()) {
+                while (!stack.isEmpty() && temp == stack.peek().getRightNode()) {
                     temp = stack.pop();
                     System.out.print(temp.getData() + " ");
                 }

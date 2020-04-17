@@ -63,7 +63,7 @@ public class Stack<T> implements IStack<T> {
         top = -1;
     }
 
-    public T top() {
+    public T peek() {
         if (top == -1) {
             System.out.println("top - No record");
             throw new EmptyStackException();

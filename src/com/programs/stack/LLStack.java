@@ -34,7 +34,7 @@ public class LLStack<T> implements IStack<T> {
     }
 
     @Override
-    public T top() {
+    public T peek() {
         if (isEmpty()) {
             throw new EmptyStackException();
         } else {
