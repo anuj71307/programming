@@ -9,7 +9,53 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.parenthesis(3));
+        List<String> list = new ArrayList<String>();
+        list.add("cha");
+        list.add("r");
+        list.add("act");
+        list.add("ers");
+        System.out.println(sp.maxLength(list));
+    }
+
+    /**
+     * https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
+     * @param arr
+     * @return
+     */
+    public int maxLength(List<String> arr) {
+        int max[] = new int[1];
+        max[0] = arr.get(0).length();
+        maxLength(arr, max, 0, "");
+        return max[0];
+    }
+
+    private void maxLength(List<String> arr, int[] max, int index, String str) {
+       for (int i = index; i<arr.size();i++){
+           if(isUnique(str, arr.get(i))){
+               max[0] = Math.max(max[0], str.length()+arr.get(i).length());
+               maxLength(arr, max, i+1, str+arr.get(i));
+           }
+       }
+    }
+
+    private boolean isUnique(String first, String second){
+        int [] total = new int[26];
+        int i = 0;
+        int j = 0;
+        while(i<first.length() || j< second.length()){
+             if(i<first.length()){
+                 total[first.charAt(i)-'a']+=1;
+                 if(total[first.charAt(i)-'a']>1) return false;
+             }
+            if(j<second.length()){
+                total[second.charAt(j)-'a']+=1;
+                if(total[second.charAt(j)-'a']>1) return false;
+            }
+            i++;
+            j++;
+        }
+
+        return true;
     }
 
     public List<String> parenthesis(int n) {
