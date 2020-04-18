@@ -10,13 +10,65 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        System.out.println(ap.countElements(new int[]{1, 1, 2}));
+        int value[] =  {0,6,7,5,7};
+        int labels[] = {2,0,2,0,2};
+        int numwanted = 3;
+        int limit = 4;
+        System.out.println(ap.largestValsFromLabels(value, labels, numwanted, limit));
+    }
+
+    /**
+     * https://leetcode.com/problems/largest-values-from-labels/
+     * @param values
+     * @param labels
+     * @param num_wanted
+     * @param use_limit
+     * Time complexity O(N+NLogN+N)
+     * @return
+     */
+    public int largestValsFromLabels(int[] values, int[] labels, int num_wanted, int use_limit) {
+        List<ValueToLabel> list = new ArrayList<>();
+        int result =0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i =0; i< labels.length;i++){
+            list.add(new ValueToLabel(values[i], labels[i]));
+        }
+        Collections.sort(list, Collections.reverseOrder());
+
+        for(ValueToLabel valueToLabel:list){
+            if(num_wanted<=0) break;
+            int count = map.getOrDefault(valueToLabel.label, 0);
+            if(count==use_limit) continue;
+            map.put(valueToLabel.label, count+1);
+            result+=valueToLabel.val;
+            num_wanted--;
+        }
+        return result;
+    }
+
+    /**
+     * Used in [largestValsFromLabels]
+     */
+    class ValueToLabel implements Comparable {
+
+        Integer val;
+        int label;
+        public  ValueToLabel(int value , int l){
+            val = value;
+            label = l;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            ValueToLabel valueToLabel = (ValueToLabel) o;
+            return this.val.compareTo(valueToLabel.val);
+        }
     }
 
     /**
      * https://leetcode.com/explore/challenge/card/30-day-leetcoding-challenge/528/week-1/3289/
      * Given an integer array arr, count element x such that x + 1 is also in arr.
-     * If there're duplicates in arr, count them seperately.
+     * If there're duplicates in arr, count them separately.
      *
      * @param arr
      * @return
