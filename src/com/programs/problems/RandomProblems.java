@@ -1,5 +1,8 @@
 package com.programs.problems;
 
+import com.programs.cache.LruCache;
+import org.omg.CORBA.INTERNAL;
+
 import java.util.*;
 
 /**
@@ -40,7 +43,17 @@ public class RandomProblems {
     }
 
     public static void main(String[] args) {
-       generateBinary(4);
+        LruCache<Integer, Integer> cache = new LruCache<>(2);
+        cache.put(1, 1);
+        cache.put(2, 2);
+        System.out.println(cache.get(1)); // [1,2]
+        cache.put(3,3);// [3,1,2]
+        System.out.println(cache.get(2)); //[2,3,1]
+        cache.put(4,4);//[4,2,3,1]
+        cache.put(3,5); //[3,4,2,1,]
+        System.out.println(cache.get(1)); //[1,3,4,2]
+        System.out.println(cache.get(3)); //[3,1,4,2]
+        System.out.println(cache.get(4));//[4,3,1,2]
     }
 
     /**
