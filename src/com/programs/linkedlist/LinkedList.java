@@ -10,6 +10,10 @@ public class LinkedList<T> {
         this.data = data;
     }
 
+    public LinkedList() {
+    }
+
+
     public T getData() {
         return data;
     }
