@@ -1,11 +1,40 @@
 package com.programs.problems
 
 import kotlin.math.abs
+import kotlin.math.min
 
 
 fun main() {
+    print(getMinSwap(intArrayOf(2,-1,4,5,6,-1,7,8,9,-1,-2), 5))
 }
 
+/**
+ * https://www.geeksforgeeks.org/minimum-swaps-required-bring-elements-less-equal-k-together/
+ */
+fun getMinSwap(array:IntArray, k:Int ):Int{
+     var swap = 0
+     var count = 0
+     array.forEach {
+         if (it <= k) {
+             count++
+         }
+     }
+
+    for(i in 0 until count){
+        if(array[i]>k) swap++
+    }
+
+    var ans = swap
+    var i = 0
+    for(j in count until array.size){
+         if(array[i]>k) ans--
+         if(array[j]>k)ans++
+         i++
+        swap = min(swap, ans)
+    }
+
+    return swap
+}
 /**
  * https://www.geeksforgeeks.org/smallest-difference-pair-values-two-unsorted-arrays/
  * Sort both array and increase pointer of array which element is smaller
