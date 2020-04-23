@@ -10,7 +10,37 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        System.out.println(ap.solveNQueens(4));
+        System.out.println(ap.subsetsWithDup(new int[]{1,2,2,3}));
+    }
+
+    /**
+     * https://leetcode.com/problems/subsets-ii/
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> result = new ArrayList();
+        Arrays.sort(nums);
+        backtrack(nums, 0, new ArrayList(), result);
+        return result;
+    }
+
+    private void backtrack(int[] nums, int index, List<Integer> list , List<List<Integer>> result ){
+
+        result.add(new ArrayList(list));
+        if(index>=nums.length){
+            return;
+        }
+        for(int i = index; i<nums.length;){
+            list.add(nums[i]);
+            backtrack(nums,i+1, list, result);
+            list.remove(list.size()-1);
+            i++;
+            while(i<nums.length && i >0){
+                if(nums[i]==nums[i-1])i++;
+                else break;
+            }
+        }
     }
 
     /**
