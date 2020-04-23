@@ -10,11 +10,63 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int value[] =  {0,6,7,5,7};
-        int labels[] = {2,0,2,0,2};
-        int numwanted = 3;
-        int limit = 4;
-        System.out.println(ap.largestValsFromLabels(value, labels, numwanted, limit));
+        System.out.println(ap.solveNQueens(4));
+    }
+
+    /**
+     * https://leetcode.com/problems/n-queens/
+     * @param n
+     * @return
+     */
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> result = new ArrayList<>();
+         char arr[][] = new char[n][n];
+         for(char a[]: arr){
+             Arrays.fill(a, '.');
+         }
+
+        solveNQueens(result, n, 0, arr);
+        return result;
+    }
+
+    private void solveNQueens(List<List<String>> result, int n, int row, char[][] arr) {
+        if(row>=n){
+            populateAdd(result, arr);
+            return;
+        }
+
+        for(int i = 0; i< n;i++){
+
+            if(canSolve(arr, row, i)){
+                arr[row][i] = 'Q';
+                solveNQueens(result, n, row+1, arr);
+                arr[row][i] = '.';
+            }
+        }
+    }
+
+    private boolean canSolve(char[][] arr, int row, int col) {
+        int size = arr.length;
+        for(int i =0; i< size;i++){
+           //  if(arr[row][i]==1) return false;
+            if(arr[i][col]=='Q') return false;
+        }
+        for(int i = row-1,j = col-1; i>=0 && j >=0; i--,j--){
+            if(arr[i][j]=='Q') return false;
+        }
+        for(int i = row-1,j = col+1; i>=0 && j <size; i--,j++){
+            if(arr[i][j]=='Q') return false;
+        }
+
+        return true;
+    }
+
+    private void populateAdd(List<List<String>> result, char[][] arrs) {
+        List<String> list = new ArrayList<>();
+        for(char[] arr:arrs){
+            list.add(new String(arr));
+        }
+        result.add(list);
     }
 
     /**
