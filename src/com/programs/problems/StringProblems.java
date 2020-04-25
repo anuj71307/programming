@@ -2,6 +2,7 @@ package com.programs.problems;
 
 
 import com.programs.stack.Stack;
+
 import java.util.*;
 
 public class StringProblems {
@@ -9,16 +10,38 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        List<String> list = new ArrayList<String>();
-        list.add("cha");
-        list.add("r");
-        list.add("act");
-        list.add("ers");
-        System.out.println(sp.maxLength(list));
+        System.out.println(sp.stringShift("yisxjwry", new int[][]{{1, 2}}));
+    }
+
+    /**
+     * https://leetcode.com/explore/challenge/card/30-day-leetcoding-challenge/529/week-2/3299/
+     *
+     * @param s
+     * @param shifts
+     * @return
+     */
+    public String stringShift(String s, int[][] shifts) {
+
+        for (int i = 0; i < shifts.length; i++) {
+            int dir = shifts[i][0];
+            int move = shifts[i][1];
+            String sub;
+            String pre;
+            if (dir == 1) {
+                sub = s.substring(0, s.length() - move);
+                pre = s.substring(s.length() - move);
+            } else {
+                sub = s.substring(0, move);
+                pre = s.substring(move);
+            }
+            s = pre + sub;
+        }
+        return s;
     }
 
     /**
      * https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
+     *
      * @param arr
      * @return
      */
@@ -30,26 +53,26 @@ public class StringProblems {
     }
 
     private void maxLength(List<String> arr, int[] max, int index, String str) {
-       for (int i = index; i<arr.size();i++){
-           if(isUnique(str, arr.get(i))){
-               max[0] = Math.max(max[0], str.length()+arr.get(i).length());
-               maxLength(arr, max, i+1, str+arr.get(i));
-           }
-       }
+        for (int i = index; i < arr.size(); i++) {
+            if (isUnique(str, arr.get(i))) {
+                max[0] = Math.max(max[0], str.length() + arr.get(i).length());
+                maxLength(arr, max, i + 1, str + arr.get(i));
+            }
+        }
     }
 
-    private boolean isUnique(String first, String second){
-        int [] total = new int[26];
+    private boolean isUnique(String first, String second) {
+        int[] total = new int[26];
         int i = 0;
         int j = 0;
-        while(i<first.length() || j< second.length()){
-             if(i<first.length()){
-                 total[first.charAt(i)-'a']+=1;
-                 if(total[first.charAt(i)-'a']>1) return false;
-             }
-            if(j<second.length()){
-                total[second.charAt(j)-'a']+=1;
-                if(total[second.charAt(j)-'a']>1) return false;
+        while (i < first.length() || j < second.length()) {
+            if (i < first.length()) {
+                total[first.charAt(i) - 'a'] += 1;
+                if (total[first.charAt(i) - 'a'] > 1) return false;
+            }
+            if (j < second.length()) {
+                total[second.charAt(j) - 'a'] += 1;
+                if (total[second.charAt(j) - 'a'] > 1) return false;
             }
             i++;
             j++;
