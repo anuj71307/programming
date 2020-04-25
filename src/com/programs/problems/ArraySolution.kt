@@ -1,11 +1,32 @@
 package com.programs.problems
 
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.min
+import kotlin.math.max
 
 
 fun main() {
-    print(getMinSwap(intArrayOf(2,-1,4,5,6,-1,7,8,9,-1,-2), 5))
+    print(findMaxLength(intArrayOf(0,0,1,0,0,0,1,1)))
+}
+
+/**
+ * https://leetcode.com/problems/contiguous-array/
+ */
+fun findMaxLength(nums: IntArray): Int {
+    val map = hashMapOf<Int, Int>()
+    var count = 0
+    var max = 0
+    map[0] = -1
+    for (i in nums.indices) {
+        if (nums[i] === 0) count-- else count++
+        if (map.containsKey(count)) {
+            max = max(max, i - map[count]!!)
+        } else {
+            map[count] = i
+        }
+    }
+    return max
 }
 
 /**
