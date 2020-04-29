@@ -7,7 +7,37 @@ import kotlin.math.max
 
 
 fun main() {
-    print(findMaxLength(intArrayOf(0,0,1,0,0,0,1,1)))
+    print(minSwapToSortAyyar(intArrayOf(4,3,2,1)))
+}
+
+/**
+ * Minimum swap required to sort an array of N elements
+ * https://www.geeksforgeeks.org/minimum-number-swaps-required-sort-array/
+ */
+fun minSwapToSortAyyar(arr:IntArray):Int{
+    var swap = 0
+    val visited = BooleanArray(arr.size)
+
+    for(i in arr.indices){
+        if(arr[i]==i-1 || visited[i]) {
+            visited[i] = true
+            continue
+        }
+        var cycle = 0
+        var j = i
+        while( !visited[j]){
+            visited[j] = true
+            j = arr[j]-1
+            cycle++
+        }
+        if(cycle!=0){
+            swap += cycle-1
+        }
+
+    }
+
+
+    return swap
 }
 
 /**
