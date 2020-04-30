@@ -14,6 +14,42 @@ public class ArrayProblems {
     }
 
     /**
+     * Given an array return an array containing unique elements only
+     *
+     * @param arr
+     * @return
+     */
+    public static int[] getUnique(int[] arr) {
+        Arrays.sort(arr);
+        int i = 0;
+        int count = 0;
+        while (i < arr.length) {
+            count++;
+            int j = i + 1;
+            while (j < arr.length && arr[j] == arr[i]) {
+                j++;
+            }
+            i = j;
+        }
+
+
+        int output[] = new int[count];
+        count = 0;
+        i = 0;
+        while (i < arr.length) {
+            output[count] = arr[i];
+            count++;
+            int j = i + 1;
+            while (j < arr.length && arr[j] == arr[i]) {
+                j++;
+            }
+            i = j;
+        }
+
+        return output;
+    }
+
+    /**
      * https://leetcode.com/problems/subsets-ii/
      * @param nums
      * @return
