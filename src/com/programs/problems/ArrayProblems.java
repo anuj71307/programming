@@ -10,7 +10,47 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        System.out.println(ap.subsetsWithDup(new int[]{1,2,2,3}));
+        List<List<Integer>> hats = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        hats.add(new ArrayList<>(list));
+        list.clear();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        hats.add(new ArrayList<>(list));
+        System.out.println(ap.numberWays(hats));
+    }
+
+    /**
+     * https://leetcode.com/contest/biweekly-contest-25/problems/number-of-ways-to-wear-different-hats-to-each-other/
+     * Recursive, Backtrack approach
+     * @param hats
+     * @return total number of ways
+     */
+    public int numberWays(List<List<Integer>> hats) {
+        int[] res = new int[1];
+        numberWays(hats, 0, new HashSet(), res);
+        return res[0];
+    }
+
+    private void numberWays(List<List<Integer>> hats, int index, HashSet set, int[] res) {
+        if(index>=hats.size()){
+            res[0]+=1;
+            return;
+        }
+        List<Integer> hat = hats.get(index);
+        for(int i:hat){
+            if(set.contains(i)) continue;
+            set.add(i);
+            numberWays(hats, index+1, set, res);
+            set.remove(i);
+        }
+
     }
 
     /**
