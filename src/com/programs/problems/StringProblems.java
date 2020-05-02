@@ -10,7 +10,107 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.stringShift("yisxjwry", new int[][]{{1, 2}}));
+        sp.canBreak("szy", "cid");
+        //System.out.println(sp.print("abe", "acd"));
+    }
+
+
+    /**
+     * Given two string check any permutation of string one can break any permutation of string 2 or vice versa
+     * @param one
+     * @param two
+     * @return
+     */
+    private boolean canBreak(String one, String two) {
+        return canBreak(populate(one), populate(two)) || canBreak(populate(two), populate(one));
+    }
+
+    private boolean canBreak(int[] first, int[] sec) {
+
+        int i =first.length-1;
+        int j = sec.length-1;
+        while(i>=0 && j >=0){
+
+            if(sec[j]==0){
+                j--;
+                continue;
+            }
+
+            if(first[i]==0){
+                i--;
+                continue;
+            }
+
+            if(i<j) {
+                return false;
+            }
+            int fc = first[i];
+            int sc = sec[j];
+            if (fc < sc) {
+                sc = sc - fc;
+                fc = 0;
+            } else {
+                fc = fc - sc;
+                sc = 0;
+            }
+
+            first[i] = fc;
+            sec[j]=sc;
+            if(fc==0) i--;
+            if(sc==0) j--;
+        }
+
+      if(j<0) return true;
+
+        return false;
+    }
+
+    int[] populate(String str){
+
+        int[]  arr = new int[26];
+        for(int i =0; i< str.length();i++){
+            arr[str.charAt(i)-'a']+=1;
+        }
+        return arr;
+    }
+
+    /**
+     * generate all unique permutation of a string
+     *
+     * @param input
+     * @param res
+     */
+    private static boolean printPermt(String input, String res, HashSet<Character> set, String other) {
+        if (input.length() == 0) {
+            if(isGreater(res, other)){
+                return true;
+            }
+           return false;
+        }
+
+        set = new HashSet<>();
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (set.contains(c)) continue;
+            set.add(c);
+            String prefix = input.substring(0, i);
+            String suffix = input.substring(i + 1, input.length());
+            if(printPermt(prefix + suffix, res + c, set, other)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isGreater(String res, String other) {
+        for(int i=0;i< res.length();i++){
+            if(res.charAt(i)<other.charAt(i)){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
