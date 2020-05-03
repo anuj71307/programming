@@ -6,3 +6,4 @@ For most of the questions the problem link is given to understand the problem mo
 # Top Questions
 * # Tree
   * Diamter of Binary Tree # [https://leetcode.com/problems/diameter-of-binary-tree/]
+    * Solution # [https://github.com/anuj-github/Programming/pull/172/files]
