@@ -23,8 +23,8 @@ For most of the questions the problem link is given to understand the problem mo
 - \\[x]        # '\[x]'
 - .
 - [[ ]]        # ''
-- [[x]]        # [link]
-- [[o]]        # [link]
+- [[x]]        # [https://twitter.com/search?q=%23RIP_BankerUdayKamath&src=trend_click]
+- [[o]]        # [https://twitter.com/search?q=%23RIP_BankerUdayKamath&src=trend_click]
 - .
 - ][ ]         # '][ ]'
 - ][x]         # '][x]'
