@@ -4,6 +4,9 @@ Here I am going to write solution for various programming and ds related questio
 For most of the questions the problem link is given to understand the problem more. 
 
 # Top Questions
+* # Array
+  * Min swap to sort an array of N elements # [https://www.geeksforgeeks.org/minimum-number-swaps-required-sort-array/]
+    * Solution # [https://github.com/anuj-github/Programming/pull/193/files]
 * # String
   * String pattern match # [https://leetcode.com/problems/word-pattern-ii/]
     * Solution # [https://github.com/anuj-github/Programming/pull/173/files]
