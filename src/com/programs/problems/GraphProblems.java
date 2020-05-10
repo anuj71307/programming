@@ -1,6 +1,8 @@
 package com.programs.problems;
 
+import com.programs.graph.GenericGraph;
 import com.programs.graph.Graph;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -10,6 +12,11 @@ import java.util.List;
 public class GraphProblems {
 
 
+    /**
+     * Create graph dynamically
+     * @param args
+     * @throws Exception
+     */
     public static void dynamic(String[] args) throws Exception {
         //code
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -37,9 +44,40 @@ public class GraphProblems {
     public static void main(String[] args) {
 
         GraphProblems gp = new GraphProblems();
-        gp.shortestPath();
+        // gp.shortestPath();
+        String sentence1[] = {"A", "B", "C"};
+        String sentence2[] = {"D", "E", "F"};
+        String pairs[][] = {{"A", "G"}, {"D", "G"}, {"B", "E"}, {"C", "F"}};
+
+        System.out.print(new GraphProblems().areSentenceSimilar(sentence1, sentence2, pairs));
 
     }
+
+    /**
+     * https://medium.com/@rebeccahezhang/leetcode-737-sentence-similarity-ii-2ca213f10115
+     *
+     * We create graph for each string, we traverse pair and add edge between them in our graph class.
+     * once graph is constructed we just traverse sentence1 and sentence2 and take the param at respoective index and just check if
+     * ther eis a path in graoh from word in sentence1 to word in sentence2 at same index
+     *
+     * @param sentence1
+     * @param sentence2
+     * @param synonyms
+     * @return
+     */
+    public boolean areSentenceSimilar(String sentence1[], String sentence2[], String[][] synonyms){
+        if (sentence1 == null && sentence2 == null) return true;
+        if (sentence1 == null || sentence2 == null) return false;
+        if (sentence1.length != sentence2.length) return false;
+        GenericGraph<String> gp = new GenericGraph();
+        gp.addAllEdges(synonyms);
+        for (int i = 0; i < sentence1.length; i++) {
+            if (sentence1[i].equals(sentence2[i])) continue;
+            if (!gp.traverseDfs(sentence1[i], sentence2[i])) return false;
+        }
+        return true;
+    }
+
 
     public void shortestPath() {
         Graph gp = new Graph(7, true);
