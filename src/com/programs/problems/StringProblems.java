@@ -10,8 +10,41 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        sp.canBreak("szy", "cid");
-        //System.out.println(sp.print("abe", "acd"));
+        System.out.println(sp.palindromeIndex("aaa"));
+    }
+
+    /**
+     * https://www.hackerrank.com/challenges/palindrome-index/problem
+     * @param s
+     * @return
+     */
+    int palindromeIndex(String s) {
+        int i = 0;
+        int j = s.length()-1;
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) {
+                int index = j;
+                if (isPalin(s, i, j - 1)) {
+                    return j;
+                } else if (isPalin(s, i + 1, j)) {
+                    return i;
+                } else {
+                    return -1;
+                }
+            }
+            i++;
+            j--;
+        }
+        return -1;
+    }
+
+    private static boolean isPalin(String s, int i, int j) {
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) return false;
+            i++;
+            j--;
+        }
+        return true;
     }
 
 
