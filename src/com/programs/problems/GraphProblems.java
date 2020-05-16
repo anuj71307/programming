@@ -1,13 +1,11 @@
 package com.programs.problems;
 
 import com.programs.graph.GenericGraph;
-import com.programs.graph.Graph;
+import com.programs.graph.GenericGraphNode;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class GraphProblems {
 
@@ -42,15 +40,56 @@ public class GraphProblems {
 
 
     public static void main(String[] args) {
-
         GraphProblems gp = new GraphProblems();
-        // gp.shortestPath();
-        String sentence1[] = {"A", "B", "C"};
-        String sentence2[] = {"D", "E", "F"};
-        String pairs[][] = {{"A", "G"}, {"D", "G"}, {"B", "E"}, {"C", "F"}};
+        int n = 6;
+        int edges[][] = {{0,3}, {1,3}, {2,3}, {4,3}, {5,4}};
+        System.out.print(new GraphProblems().findMinHeightTrees(n, edges));
+    }
 
-        System.out.print(new GraphProblems().areSentenceSimilar(sentence1, sentence2, pairs));
 
+    /**
+     * https://leetcode.com/problems/minimum-height-trees/
+     * This seems like a tree problem where a tree can have multiple nodes as its child. We need to find out tree from
+     * which this graph will result into min height.
+     * Idea is we first traverse all the leaf nodes and remove their reference from other vertices. We keep on doing so.
+     * Its like removing layer until we are at inner most leavel.
+     * We can not have more than 2 nodes as a solution.
+     * @param n
+     * @param edges
+     * @return
+     */
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        GenericGraph<Integer> gp = new GenericGraph();
+        for(int i = 0; i < n; i++){
+            gp.addVertices(i);
+        }
+        for(int edge[]:edges){
+            gp.addEdge(edge[0], edge[1]);
+        }
+
+        List<Integer> leaves = new ArrayList<>();
+        HashMap<Integer, GenericGraphNode> map = gp.map;
+        for (Map.Entry<Integer, GenericGraphNode> entry : map.entrySet()) {
+            if (entry.getValue().getChildren().size() < 2) {
+                leaves.add(entry.getKey());
+                entry.getValue().setVisited(true);
+            }
+        }
+
+        while(n>2){
+            n = n - leaves.size();
+            List<Integer> list = new ArrayList<>();
+            for(Integer leave : leaves){
+                List<GenericGraphNode> child = map.get(leave).getChildren();
+                child.get(0).getChildren().remove(map.get(leave));
+                if(child.get(0).getChildren().size()<2 && !child.get(0).isVisited()){
+                    child.get(0).setVisited(true);
+                    list.add((Integer) child.get(0).getKey());
+                }
+            }
+            leaves = list;
+        }
+        return leaves;
     }
 
     /**
@@ -76,96 +115,6 @@ public class GraphProblems {
             if (!gp.traverseDfs(sentence1[i], sentence2[i])) return false;
         }
         return true;
-    }
-
-
-    public void shortestPath() {
-        Graph gp = new Graph(7, true);
-        gp.addEdge(0, 1);
-        gp.addEdge(0, 2);
-        gp.addEdge(1, 6);
-        gp.addEdge(2, 3);
-        gp.addEdge(3, 4);
-        gp.addEdge(3, 5);
-        gp.shortestPath(2, 0);
-
-    }
-
-    /**
-     * https://leetcode.com/problems/minimum-height-trees/
-     * implementation  is a idea of https://leetcode.com/problems/minimum-height-trees/discuss/76055/Share-some-thoughts
-     *
-     * @param n
-     * @param edges
-     * @return
-     */
-    public List<Integer> findMinHeightTrees_optimized(int n, int[][] edges) {
-
-        Graph graph = new Graph(n, false);
-        for (int[] edge : edges) {
-            graph.addEdge(edge[0], edge[1]);
-        }
-        List<Integer> set = new ArrayList<>();
-        for (int i = 0; i < graph.adjacencyList.length; i++) {
-
-            if (graph.adjacencyList[i].size() == 1) {
-                set.add(i);
-            }
-        }
-
-        while (n > 2) {
-            n = n - set.size();
-            List<Integer> list = new ArrayList<>();
-            for (Integer i : set) {
-                int k = graph.adjacencyList[i].getFirst();
-                graph.adjacencyList[k].remove(i);
-                if (graph.adjacencyList[k].size() == 1) {
-                    list.add(k);
-                }
-            }
-            set = list;
-        }
-
-        return set;
-
-    }
-
-
-    /**
-     * https://leetcode.com/problems/minimum-height-trees/
-     * @param n
-     * @param edges
-     * @return
-     */
-    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
-
-        Graph graph = new Graph(n, false);
-        for (int[] edge : edges) {
-            graph.addEdge(edge[0], edge[1]);
-        }
-        List<Integer> set = new ArrayList<>();
-        int res[] = new int[1];
-        int min = Integer.MAX_VALUE;
-        for (int i = 0; i < graph.adjacencyList.length; i++) {
-            boolean visited[] = new boolean[n];
-            List<Integer> list = graph.adjacencyList[i];
-            if (list != null && !visited[i]) {
-                res[0] = 0;
-                dfs(i, graph.adjacencyList, 1, res, visited);
-                if (res[0] < min) {
-                    min = res[0];
-                    set.clear();
-                    set.add(i);
-                } else if (res[0] == min) {
-                    set.add(i);
-                }
-
-
-            }
-        }
-
-        return set;
-
     }
 
     private void dfs(int index, LinkedList<Integer>[] adjacencyList, int depth, int[] res, boolean[] visited) {
