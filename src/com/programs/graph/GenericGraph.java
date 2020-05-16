@@ -7,7 +7,7 @@ import java.util.List;
 public class GenericGraph<T> {
 
     int vertices;
-    HashMap<T, GenericGraphNode> map;
+    public HashMap<T, GenericGraphNode> map;
     boolean isDirected;
 
     public GenericGraph(){
@@ -36,13 +36,22 @@ public class GenericGraph<T> {
         }
     }
 
-    public void addEdge(T[] edge) {
-        if (edge == null || edge.length < 2) return;
-        GenericGraphNode source = getOrCreate(edge[0]);
-        GenericGraphNode dest = getOrCreate(edge[1]);
+    /**
+     * Add edge between source and destination
+     * @param s source vertices
+     * @param d dest vertices
+     */
+    public void addEdge(T s, T d) {
+        GenericGraphNode source = getOrCreate(s);
+        GenericGraphNode dest = getOrCreate(d);
         source.addChild(dest);
         if (isDirected) return;
         dest.addChild(source);
+    }
+
+    public void addEdge(T[] edge) {
+        if (edge == null || edge.length < 2) return;
+        addEdge(edge[0], edge[1]);
     }
 
     public void addAllVertices(T[] listOfVertices) {
@@ -71,27 +80,11 @@ public class GenericGraph<T> {
     }
 
     private boolean doesPathExistDfs(GenericGraphNode<T> sourceNode, T destNode) {
-        sourceNode.isVisited = true;
-        for (GenericGraphNode<T> child : sourceNode.children) {
-            if (child.key.equals(destNode)) return true;
-            if (!child.isVisited && doesPathExistDfs(child, destNode)) return true;
+        sourceNode.setVisited(true);
+        for (GenericGraphNode<T> child : sourceNode.getChildren()) {
+            if (child.getKey().equals(destNode)) return true;
+            if (!child.isVisited() && doesPathExistDfs(child, destNode)) return true;
         }
         return false;
-    }
-}
-
-class GenericGraphNode<T> {
-
-    boolean isVisited;
-    List<GenericGraphNode<T>> children;
-    T key;
-
-    public GenericGraphNode(T key) {
-        this.key = key;
-        children = new LinkedList<>();
-    }
-
-    public void addChild(GenericGraphNode<T> child) {
-        children.add(child);
     }
 }
