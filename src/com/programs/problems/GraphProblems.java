@@ -42,9 +42,11 @@ public class GraphProblems {
     public static void main(String[] args) {
         GraphProblems gp = new GraphProblems();
         int n = 6;
-        int edges[][] = {{0,3}, {1,3}, {2,3}, {4,3}, {5,4}};
+        int edges[][] = {{0,3}, {1,3}, {2,3}, {4,3}, {5,4}, {3,5}, {0,5}};
         GenericGraph<Integer> graph = gp.createGraph(n, edges);
-        System.out.println(graph.shortestDistanceBfs(graph.map.get(3), graph.map.get(5)));
+       // System.out.println(graph.shortestDistanceBfs(graph.map.get(3), graph.map.get(5)));
+        System.out.println("Using Dfs");
+        System.out.println(graph.shortestDistanceDfs(graph.map.get(0), graph.map.get(5)));
     }
 
     public GenericGraph<Integer> createGraph(int n, int[][] edges){

@@ -116,4 +116,29 @@ public class GenericGraph<T> {
         }
         return -1;
     }
+
+    /**
+     * Find shortest distance between two nodes using dfs. For solution using bfs refer [shortestDistanceBfs]
+     * @param start
+     * @param end
+     * @return
+     */
+    public int shortestDistanceDfs(GenericGraphNode<T> start, GenericGraphNode<T> end){
+        int[] res = {Integer.MAX_VALUE};
+        shortestDistanceDfs(start, end, 0, res);
+        return res[0];
+    }
+
+    private void shortestDistanceDfs(GenericGraphNode<T> start, GenericGraphNode<T> end, int depth, int[] arr) {
+        if(start==null || start.isVisited()) return;
+        if(depth > arr[0]) return;
+        if(start==end){
+            arr[0] = Math.min(arr[0], depth);
+            return;
+        }
+        start.setVisited(true);
+        for(GenericGraphNode<T> child: start.getChildren()){
+            shortestDistanceDfs(child, end, depth+1, arr);
+        }
+    }
 }
