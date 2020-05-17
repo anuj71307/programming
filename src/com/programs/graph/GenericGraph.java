@@ -1,28 +1,24 @@
 package com.programs.graph;
 
+import com.sun.tools.javac.util.Pair;
+
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
 
 public class GenericGraph<T> {
 
-    int vertices;
     public HashMap<T, GenericGraphNode> map;
     boolean isDirected;
 
     public GenericGraph(){
-        this(0);
+        this(false);
     }
-    public GenericGraph(int vertices) {
-        this(vertices, false);
-    }
-
-    public GenericGraph(int vertices, boolean isDirected) {
+    public GenericGraph(boolean isDirected) {
         this(null, null, isDirected);
     }
 
     public GenericGraph(T[] listOfVertices, T[][] edges, boolean directed) {
-        this.vertices = listOfVertices== null?0:listOfVertices.length;
         this.isDirected = directed;
         this.map = new HashMap<>();
         addAllVertices(listOfVertices);
@@ -71,6 +67,12 @@ public class GenericGraph<T> {
         return map.get(source);
     }
 
+    /**
+     * Given a source vertices and destination vertices check if there is a path from source to destination
+     * @param source
+     * @param dest
+     * @return
+     */
     public boolean traverseDfs(T source, T dest) {
         GenericGraphNode sourceNode = map.getOrDefault(source, null);
         GenericGraphNode  destNode = map.getOrDefault(dest, null);
@@ -86,5 +88,32 @@ public class GenericGraph<T> {
             if (!child.isVisited() && doesPathExistDfs(child, destNode)) return true;
         }
         return false;
+    }
+
+    /**
+     * Breadth first search to find shortest distance from start node to end node.
+     * This method works in unweighted graph. We start from start node and check all it child
+     * If ot found we move to next level and so on. We keep it in pair so that we can know how far current node
+     * from start node. We can also do this without pair by using a count variable and keep creating new
+     * Queue/List at each level
+     * @param start
+     * @param end
+     * @return
+     */
+    public int shortestDistanceBfs(GenericGraphNode<T> start, GenericGraphNode<T> end){
+        if(start==null || start.getChildren().isEmpty()) return -1;
+        Queue<Pair<GenericGraphNode<T>, Integer>> queue = new LinkedList<>();
+        queue.add(new Pair<>(start, 0));
+        while(!queue.isEmpty()){
+            Pair<GenericGraphNode<T>, Integer> pair = queue.poll();
+            if(pair.fst == end) return pair.snd;
+            pair.fst.setVisited(true);
+            for(GenericGraphNode<T> child: pair.fst.getChildren()){
+                if(!child.isVisited()){
+                    queue.add(new Pair<>(child, pair.snd+1));
+                }
+            }
+        }
+        return -1;
     }
 }
