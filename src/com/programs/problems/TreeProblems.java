@@ -15,13 +15,54 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        TreeNode node = new TreeNode(2);
-        node.left = new TreeNode(3);
-        node.right = new TreeNode(3);
-        int[] arr = tp.findFrequentTreeSum(node);
-        for (int i : arr) {
-            System.out.print(i + " -> ");
+        TreeNode node = new TreeNode(1);
+        node.left = new TreeNode(2);
+        node.left.left = new TreeNode(3);
+        node.right = new TreeNode(2);
+        node.right.left = new TreeNode(3);
+        node.right.right = new TreeNode(5);
+        node.right.right.right = new TreeNode(6);
+        node.right.right.right.right = new TreeNode(7);
+        node.right.right.right.right.right = new TreeNode(8);
+       System.out.println(tp.longestSubsequence(node));
+    }
+
+    /**
+     * https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/
+     * Bottom Up Approach
+     * @param node
+     * @return
+     */
+    int longestSubsequence(TreeNode node){
+        int res[] = new int[1];
+        longestSubsequence(node, res);
+        return res[0];
+    }
+
+    /**
+     * https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/
+     * @param node
+     * @param res
+     * @return
+     */
+    private int longestSubsequence(TreeNode node, int[] res) {
+        if(node==null) return 0;
+        int retValue = 1;
+        if(node.left!=null){
+            int left = longestSubsequence(node.left, res);
+            if(node.left.value-node.value==1){
+                retValue = Math.max(retValue, left+1);
+            }
         }
+        if(node.right!=null){
+            int right = longestSubsequence(node.right, res);
+            if(node.right.value-node.value==1){
+                retValue = Math.max(retValue, right+1);
+            }
+        }
+        res[0] = Math.max(res[0], retValue);
+
+        return retValue;
     }
 
     /**
