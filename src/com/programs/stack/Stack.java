@@ -55,6 +55,11 @@ public class Stack<T> implements IStack<T> {
         return (top == -1);
     }
 
+    @Override
+    public int size() {
+        return top+1;
+    }
+
     public boolean isStackFull() {
         return top == (mCapacity - 1);
     }
