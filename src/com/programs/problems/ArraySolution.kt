@@ -7,7 +7,38 @@ import kotlin.math.max
 
 
 fun main() {
-    print(minSwapToSortAyyar(intArrayOf(4,3,2,1)))
+    print(asteroidCollision(intArrayOf(5, 10, -5)).contentToString())
+}
+
+/**
+ * https://leetcode.com/problems/asteroid-collision/
+ */
+fun asteroidCollision(asteroids: IntArray): IntArray {
+    val st = Stack<Int>()
+
+    for(i in asteroids){
+        if(i>0){
+            st.push(i)
+            continue
+        }
+
+        while(!st.isEmpty() && st.peek()>0 && st.peek()< abs(i)){
+            st.pop();
+        }
+        if(st.isEmpty() || st.peek()<0){
+            st.push(i)
+        }
+        if(st.peek()== -i){
+            st.pop()
+        }
+    }
+
+    var arr = IntArray(st.size)
+    var i = arr.size-1
+    while(!st.isEmpty()){
+        arr[i--] = st.pop()
+    }
+    return arr
 }
 
 /**
