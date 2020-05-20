@@ -7,7 +7,26 @@ import kotlin.math.max
 
 
 fun main() {
-    print(asteroidCollision(intArrayOf(5, 10, -5)).contentToString())
+    print(lengthOfLongestSubstring(" "))
+}
+
+/**
+ * https://leetcode.com/problems/longest-substring-without-repeating-characters/
+ */
+fun lengthOfLongestSubstring(s: String): Int {
+    val map = hashMapOf<Char,Int>()
+    var i = 0
+    var j =0
+    var max = 0;
+    s.forEach{
+
+        if(map.containsKey(it)){
+            j = max(j,map[it]!!)
+        }
+        map[it] = ++i
+        max = max(max, i-j)
+    }
+    return max
 }
 
 /**
