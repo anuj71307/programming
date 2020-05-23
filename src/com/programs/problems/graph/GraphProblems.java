@@ -1,4 +1,4 @@
-package com.programs.problems;
+package com.programs.problems.graph;
 
 import com.programs.graph.GenericGraph;
 import com.programs.graph.GenericGraphNode;
