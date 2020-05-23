@@ -4,33 +4,87 @@ package com.programs.problems;
 import com.programs.linkedlist.LinkedList;
 import com.programs.stack.Stack;
 
+import java.util.ArrayList;
+
 public class LinkedListProblems<T> {
 
     public static void main(String[] args) {
 
         LinkedListProblems lp = new LinkedListProblems();
         ListNode node = new ListNode(1);
-        ListNode prev = node;
-        for(int i =2;i<9;i++){
-            prev.next = new ListNode(i);
-            prev = prev.next;
+        node.next = new ListNode(2);
+        node.next.next = new ListNode(3);
+        node.next.next.next = new ListNode(4);
+        ListNode[] arr = lp.splitListToParts(node,3 );
+        for(ListNode n:arr){
+            ListNode temp = n;
+            if(temp!=null) {
+                while (temp != null) {
+                    System.out.print(temp.val + " ");
+                    temp = temp.next;
+                }
+            }
+            else{
+                System.out.print("null");
+            }
+            System.out.println("");
         }
-        ListNode t = node;
-        while(t!=null){
-            System.out.print(t.val+" -> ");
-            t=t.next;
-        }
-        lp.reorderList(node);
-        ListNode tu = node;
-        System.out.println();
 
-        System.out.println();
-        while(tu!=null){
-            System.out.print(tu.val+" -> ");
-            tu=tu.next;
-        }
 
         //lp.sortList();
+    }
+
+    /**
+     * https://leetcode.com/problems/split-linked-list-in-parts/
+     * for a given linkedlist we get the size lets say given linked list has 10 node and if we have to split it in 4
+     * groups. then our  minimum size for each splited list is 2 which is (10/4) and remaining (10%4) ie 2 .
+     * the remaining node we need add 1(cause different in size should not be more than 1 ) in each of our splited nodes starting from 0th.
+     * @param root
+     * @param k
+     * @return
+     */
+    public ListNode[] splitListToParts(ListNode root, int k) {
+
+        int size  = getSize(root);
+        ListNode[] result = new ListNode[k];
+        if(k==1) {
+            result[0] = root;
+            return result;
+        }
+        if(size == 0) return result;
+        // check what should be minimum size of each list
+        int count = size/k;
+        int rem = size%k; // get remainder so we keep adding one extra node to each of splited node list as long as there is some remaining node
+        int cc;
+        ListNode temp ;
+        int i = 0;
+        while(k>0) {
+            temp = root;
+            cc = count+(rem>0?1:0); // if there are more nodes left we need to add one extra to current list
+            rem-=1;
+            while (cc > 1 && temp!=null) {
+                temp = temp.next;
+                cc--;
+            }
+            result[i++] = root;
+            root = temp != null ? temp.next : null;
+            if(temp!=null){
+                temp.next=null;
+            }
+            k--; // decrement the node split size
+        }
+
+        return result;
+    }
+
+    int getSize(ListNode root){
+        int size =0;
+        ListNode temp = root;
+        while(temp!=null){
+            size++;
+            temp = temp.next;
+        }
+        return size;
     }
 
     /**
