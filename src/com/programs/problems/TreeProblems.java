@@ -15,16 +15,73 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        TreeNode node = new TreeNode(1);
-        node.left = new TreeNode(2);
-        node.left.left = new TreeNode(3);
-        node.right = new TreeNode(2);
-        node.right.left = new TreeNode(3);
-        node.right.right = new TreeNode(5);
-        node.right.right.right = new TreeNode(6);
-        node.right.right.right.right = new TreeNode(7);
-        node.right.right.right.right.right = new TreeNode(8);
-       System.out.println(tp.longestSubsequence(node));
+        Node node = new Node(1);
+        node.left = new Node(2);
+        node.right = new Node(3);
+        node.left.left = new Node(4);
+        node.right.left = new Node(5);
+
+        Node n = tp.connect(node);
+    }
+    /**
+     * https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
+     *
+     */
+    private Node connectIterative(Node root){
+
+        for(Node temp = root;temp!=null;){
+
+            Node head = new Node(0);
+            Node tail = head;
+            for(Node node = temp; node!=null; node = node.next){
+
+                if(node.left!=null){
+                    tail.next = node.left;
+                    tail = tail.next;
+                }
+                if(node.right!=null){
+                    tail.next = node.right;
+                    tail = tail.next;
+                }
+            }
+            temp = head.next;
+
+        }
+
+        return root;
+    }
+
+    /**
+     * https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
+     * Using Queue
+     * @param root
+     * @return
+     */
+    public Node connect(Node root) {
+        if(root==null) return root;
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            int size = q.size();
+            for(int i = 0;i<size;i++){
+
+                // if(i==size-1) break;
+                Node node = q.poll();
+                if(i<size-1) {
+                    node.next = q.peek() != null ? q.peek() : null;
+                }
+                if(node.left!=null){
+                    q.add(node.left);
+                }
+                if(node.right!=null){
+                    q.add(node.right);
+
+                }
+            }
+        }
+
+        return root;
+
     }
 
     /**
@@ -1296,11 +1353,20 @@ class Node {
     int data;
     Node left;
     Node right;
+    Node next;
 
     Node(int x) {
         data = x;
         left = null;
         right = null;
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "data=" + data +
+                " next = "+ (next!=null?next.data:null)+
+                '}';
     }
 }
 
