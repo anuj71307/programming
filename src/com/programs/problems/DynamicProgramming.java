@@ -18,6 +18,36 @@ public class DynamicProgramming {
     }
 
     /**
+     * https://leetcode.com/problems/maximum-length-of-pair-chain/
+     * This is similar to https://www.geeksforgeeks.org/longest-increasing-subsequence-dp-3/ only difference is we need
+     * to compare element at different index. But before that we need to sort the pairs based on their 0th value.
+     * Then is we compare two pairs then if previeous pairs elemtn at first position is smaller then next pair's element
+     * at 0 then they can form a chain. So at index if we keep the longest possible chain then it becomes easy to solve this.
+     *
+     * @param pairs
+     * @return
+     */
+    public int findLongestChain(int[][] pairs) {
+
+        Arrays.sort(pairs,(a,b)->a[0]-b[0]);
+        int[] dp = new int[pairs.length];
+
+        Arrays.fill(dp,1);
+        for(int i=1;i<pairs.length;i++){
+            for(int j =0;j<i;j++){
+                if(pairs[j][1]<pairs[i][0]){
+                    dp[i] = Math.max(dp[i], dp[j]+1);
+                }
+            }
+        }
+        int ans = 0;
+        for(int i :dp){
+            ans = Math.max(ans,i);
+        }
+        return ans;
+    }
+
+    /**
      * https://leetcode.com/problems/divisor-game/
      * Cache the result
      *
