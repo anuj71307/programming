@@ -10,17 +10,96 @@ public class StringProblems {
 
     public static void main(String[] args) {
         StringProblems sp = new StringProblems();
-        System.out.println(sp.palindromeIndex("aaa"));
+    }
+
+    public ArrayList<String> topNCompetitors(int numCompetitors,
+                                             int topNCompetitors,
+                                             List<String> competitors,
+                                             int numReviews,
+                                             List<String> reviews) {
+
+        // map to keep count of each competitor
+        HashMap<String, Integer> countMap = new HashMap<>();
+        HashSet<String> uniqueWords;
+        for (int i = 0; i < reviews.size(); i++) {
+            uniqueWords = getUniqueWordsFromReview(reviews.get(i).toLowerCase(), competitors);
+            updateCountMap(countMap, uniqueWords);
+        }
+
+        return getTopNCompetitors(getSortedValue(countMap.entrySet()), topNCompetitors);
+    }
+
+    /**
+     * Given a sorted entry set return topNCompetitors
+     * if [topNCompetitors] is less than size of entry then all item will be returned.
+     *
+     * @return
+     */
+    private ArrayList<String> getTopNCompetitors(List<Map.Entry<String, Integer>> sortedEntry, int topNCompetitors) {
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = sortedEntry.size() - 1; i >= 0; i--) {
+            if (topNCompetitors < 1) {
+                break;
+            }
+            result.add(sortedEntry.get(i).getKey());
+            topNCompetitors--;
+        }
+        return result;
+    }
+
+    private List<Map.Entry<String, Integer>> getSortedValue(Set<Map.Entry<String, Integer>> entrySet) {
+        Comparator<Map.Entry<String, Integer>> comparator = new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+                int e1Count = e1.getValue();
+                int e2Count = e2.getValue();
+                if (e1Count != e2Count) {
+                    return e1Count - e2Count;
+                } else {
+                    return e2.getKey().compareTo(e1.getKey());
+                }
+            }
+        };
+
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(entrySet);
+        Collections.sort(list, comparator);
+        return list;
+    }
+
+
+    /**
+     * Given a set of words update it count in hashmap
+     */
+    private void updateCountMap(HashMap<String, Integer> countMap, HashSet<String> uniqueWords) {
+        for (String word : uniqueWords) {
+            countMap.put(word, countMap.getOrDefault(word, 0) + 1);
+        }
+    }
+
+    /**
+     * For each review split it into separate words then check if its matching a competitor title,
+     * if yes add it to set, using hash set cause we do n0t want to count only once if a title is present twice in a review
+     */
+    private HashSet<String> getUniqueWordsFromReview(String review, List<String> competitors) {
+        HashSet<String> uniqueWords = new HashSet<>();
+        for (String competitor : competitors) {
+            competitor = competitor.toLowerCase();
+            if (review.contains(competitor)) {
+                uniqueWords.add(competitor);
+            }
+        }
+        return uniqueWords;
     }
 
     /**
      * https://www.hackerrank.com/challenges/palindrome-index/problem
+     *
      * @param s
      * @return
      */
     int palindromeIndex(String s) {
         int i = 0;
-        int j = s.length()-1;
+        int j = s.length() - 1;
         while (i < j) {
             if (s.charAt(i) != s.charAt(j)) {
                 int index = j;
@@ -50,6 +129,7 @@ public class StringProblems {
 
     /**
      * Given two string check any permutation of string one can break any permutation of string 2 or vice versa
+     *
      * @param one
      * @param two
      * @return
@@ -60,21 +140,21 @@ public class StringProblems {
 
     private boolean canBreak(int[] first, int[] sec) {
 
-        int i =first.length-1;
-        int j = sec.length-1;
-        while(i>=0 && j >=0){
+        int i = first.length - 1;
+        int j = sec.length - 1;
+        while (i >= 0 && j >= 0) {
 
-            if(sec[j]==0){
+            if (sec[j] == 0) {
                 j--;
                 continue;
             }
 
-            if(first[i]==0){
+            if (first[i] == 0) {
                 i--;
                 continue;
             }
 
-            if(i<j) {
+            if (i < j) {
                 return false;
             }
             int fc = first[i];
@@ -88,21 +168,21 @@ public class StringProblems {
             }
 
             first[i] = fc;
-            sec[j]=sc;
-            if(fc==0) i--;
-            if(sc==0) j--;
+            sec[j] = sc;
+            if (fc == 0) i--;
+            if (sc == 0) j--;
         }
 
-      if(j<0) return true;
+        if (j < 0) return true;
 
         return false;
     }
 
-    int[] populate(String str){
+    int[] populate(String str) {
 
-        int[]  arr = new int[26];
-        for(int i =0; i< str.length();i++){
-            arr[str.charAt(i)-'a']+=1;
+        int[] arr = new int[26];
+        for (int i = 0; i < str.length(); i++) {
+            arr[str.charAt(i) - 'a'] += 1;
         }
         return arr;
     }
@@ -115,10 +195,10 @@ public class StringProblems {
      */
     private static boolean printPermt(String input, String res, HashSet<Character> set, String other) {
         if (input.length() == 0) {
-            if(isGreater(res, other)){
+            if (isGreater(res, other)) {
                 return true;
             }
-           return false;
+            return false;
         }
 
         set = new HashSet<>();
@@ -128,7 +208,7 @@ public class StringProblems {
             set.add(c);
             String prefix = input.substring(0, i);
             String suffix = input.substring(i + 1, input.length());
-            if(printPermt(prefix + suffix, res + c, set, other)){
+            if (printPermt(prefix + suffix, res + c, set, other)) {
                 return true;
             }
         }
@@ -137,8 +217,8 @@ public class StringProblems {
     }
 
     private static boolean isGreater(String res, String other) {
-        for(int i=0;i< res.length();i++){
-            if(res.charAt(i)<other.charAt(i)){
+        for (int i = 0; i < res.length(); i++) {
+            if (res.charAt(i) < other.charAt(i)) {
                 return false;
             }
         }

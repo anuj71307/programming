@@ -10,133 +10,74 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int numCompetitors = 6;
-        int topNCompetitors = 5;
-        List<String> competitors = new ArrayList<>();
-        competitors.add("Newshop");
-        competitors.add("shopnow");
-        competitors.add("afshion");
-        competitors.add("fashionbeats");
-        competitors.add("mymarket");
-        competitors.add("tcellular");
-        int numReviews = 6;
-        List<String> reviews = new ArrayList<>();
-        reviews.add("newshop good service, use newshop");
-        reviews.add("best good service, by Newshop");
-        reviews.add("fashionbeats good service");
-        reviews.add("proud to have fashionbeats");
-        reviews.add("mymarket to have fashionbeats");
-        reviews.add("Newshop is nice");
-        System.out.print(ap.topNCompetitors(numCompetitors, topNCompetitors, competitors, numReviews, reviews));
-    }
-
-    public ArrayList<String> topNCompetitors(int numCompetitors,
-                                             int topNCompetitors,
-                                             List<String> competitors,
-                                             int numReviews,
-                                             List<String> reviews)
-    {
-
-        // map to keep count of each competitor
-        HashMap<String,Integer> countMap = new HashMap<>();
-        HashSet<String> uniqueWords;
-        for(int i = 0;i < reviews.size();i++){
-           uniqueWords = getUniqueWordsFromReview(reviews.get(i).toLowerCase(), competitors);
-           updateCountMap(countMap, uniqueWords);
-        }
-
-        return getTopNCompetitors(getSortedValue(countMap.entrySet()), topNCompetitors);
     }
 
     /**
-     * Given a sorted entry set return topNCompetitors
-     * if [topNCompetitors] is less than size of entry then all item will be returned.
-     * @return
+     * https://leetcode.com/discuss/interview-question/651682/Split-array-into-Groups-of-chars-according-to-the-same-start-and-end-elements
      */
-    private ArrayList<String> getTopNCompetitors(List<Map.Entry<String, Integer>> sortedEntry, int topNCompetitors) {
-        ArrayList<String> result = new ArrayList<>();
-        for (int i = sortedEntry.size() - 1; i >= 0; i--) {
-            if (topNCompetitors < 1) {
-                break;
-            }
-            result.add(sortedEntry.get(i).getKey());
-            topNCompetitors--;
+    List<Integer> lengthEachScene(List<Character> inputList) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < inputList.size(); ) {
+            int k = getLength(i, inputList);
+            result.add(k - i + 1);
+            i = k + 1;
         }
+
         return result;
     }
 
-    private List<Map.Entry<String, Integer>> getSortedValue(Set<Map.Entry<String, Integer>> entrySet) {
-        Comparator<Map.Entry<String, Integer>> comparator = new Comparator<Map.Entry<String,Integer>>() {
-            @Override public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-                    int e1Count = e1.getValue();
-                    int e2Count = e2.getValue();
-                    if(e1Count!=e2Count) {
-                        return e1Count - e2Count;
-                    }
-                    else{
-                        return e2.getKey().compareTo(e1.getKey());
-                    }
-            }
-        };
-
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(entrySet);
-        Collections.sort(list,comparator );
-        return list;
-    }
-
-
     /**
-     * Given a set of words update it count in hashmap
+     * Iterate from character at given postion and  check it's last occurence,
+     * then we iterate over for each character in that range and check last occurence of each character,
+     * if last occurence is more then current positon then update k to new value
      */
-    private void updateCountMap(HashMap<String, Integer> countMap, HashSet<String> uniqueWords) {
-        for(String word:uniqueWords){
-            countMap.put(word, countMap.getOrDefault(word, 0)+1);
+    private int getLength(int pos, List<Character> inputList) {
+
+        Character c = inputList.get(pos);
+        int k = getLastOccurence(inputList, c, pos);
+        for (int i = pos; i < k; i++) {
+            k = getLastOccurence(inputList, inputList.get(i), k);
         }
+        return k;
     }
 
     /**
-     * For each review split it into separate words then check if its matching a competitor title,
-     * if yes add it to set, using hash set cause we do n0t want to count only once if a title is present twice in a review
+     * for each character gets its first occurence from last,
+     * if last occurence is not found before last-position provided then return  last position
      */
-    private HashSet<String> getUniqueWordsFromReview(String review, List<String> competitors){
-        HashSet<String> uniqueWords = new HashSet<>();
-        for(String competitor:competitors){
-            competitor = competitor.toLowerCase();
-            if(review.contains(competitor)){
-                uniqueWords.add(competitor);
-            }
+    private int getLastOccurence(List<Character> inputList, Character c, int lastPos) {
+        for (int i = inputList.size() - 1; i >= lastPos; i--) {
+            if (inputList.get(i) == c) return i;
         }
-        return uniqueWords;
+        return lastPos;
     }
 
     // METHOD SIGNATURE BEGINS, THIS METHOD IS REQUIRED
-    public List<Integer> cellCompete(int[] states, int days)
-    {
+    public List<Integer> cellCompete(int[] states, int days) {
         // WRITE YOUR CODE HERE
         //0 inactive
         // 1  active
         // 1 0 0 0 0 1 0 0
         boolean[] temp = new boolean[states.length];
-        for(int i =0; i< states.length;i++){
-            temp[i] = states[i]==1?true:false;
+        for (int i = 0; i < states.length; i++) {
+            temp[i] = states[i] == 1 ? true : false;
         }
 
-        while(days>0){
+        while (days > 0) {
 
-            temp[0] = false^(states[1]==1?true:false);
-            temp[temp.length-1] = false^(states[states.length-2]==1?true:false);
+            temp[0] = false ^ (states[1] == 1 ? true : false);
+            temp[temp.length - 1] = false ^ (states[states.length - 2] == 1 ? true : false);
 
-            for(int i =1; i<temp.length-1;i++){
-                if(states[i-1]==states[i+1]){
+            for (int i = 1; i < temp.length - 1; i++) {
+                if (states[i - 1] == states[i + 1]) {
                     temp[i] = false;
-                }
-                else{
+                } else {
                     temp[i] = true;
                 }
 
             }
-            for(int i =0; i< temp.length;i++){
-                states[i] = temp[i]?1:0;
+            for (int i = 0; i < temp.length; i++) {
+                states[i] = temp[i] ? 1 : 0;
             }
 
             days--;
@@ -144,7 +85,7 @@ public class ArrayProblems {
 
         //return Arrays.asList(states);
         List<Integer> list = new ArrayList();
-        for(int i : states){
+        for (int i : states) {
             list.add(i);
         }
         return list;
@@ -154,6 +95,7 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/contest/biweekly-contest-25/problems/number-of-ways-to-wear-different-hats-to-each-other/
      * Recursive, Backtrack approach
+     *
      * @param hats
      * @return total number of ways
      */
@@ -164,15 +106,15 @@ public class ArrayProblems {
     }
 
     private void numberWays(List<List<Integer>> hats, int index, HashSet set, int[] res) {
-        if(index>=hats.size()){
-            res[0]+=1;
+        if (index >= hats.size()) {
+            res[0] += 1;
             return;
         }
         List<Integer> hat = hats.get(index);
-        for(int i:hat){
-            if(set.contains(i)) continue;
+        for (int i : hat) {
+            if (set.contains(i)) continue;
             set.add(i);
-            numberWays(hats, index+1, set, res);
+            numberWays(hats, index + 1, set, res);
             set.remove(i);
         }
 
@@ -216,6 +158,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/subsets-ii/
+     *
      * @param nums
      * @return
      */
@@ -226,19 +169,19 @@ public class ArrayProblems {
         return result;
     }
 
-    private void backtrack(int[] nums, int index, List<Integer> list , List<List<Integer>> result ){
+    private void backtrack(int[] nums, int index, List<Integer> list, List<List<Integer>> result) {
 
         result.add(new ArrayList(list));
-        if(index>=nums.length){
+        if (index >= nums.length) {
             return;
         }
-        for(int i = index; i<nums.length;){
+        for (int i = index; i < nums.length; ) {
             list.add(nums[i]);
-            backtrack(nums,i+1, list, result);
-            list.remove(list.size()-1);
+            backtrack(nums, i + 1, list, result);
+            list.remove(list.size() - 1);
             i++;
-            while(i<nums.length && i >0){
-                if(nums[i]==nums[i-1])i++;
+            while (i < nums.length && i > 0) {
+                if (nums[i] == nums[i - 1]) i++;
                 else break;
             }
         }
@@ -246,31 +189,32 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/n-queens/
+     *
      * @param n
      * @return
      */
     public List<List<String>> solveNQueens(int n) {
         List<List<String>> result = new ArrayList<>();
-         char arr[][] = new char[n][n];
-         for(char a[]: arr){
-             Arrays.fill(a, '.');
-         }
+        char arr[][] = new char[n][n];
+        for (char a[] : arr) {
+            Arrays.fill(a, '.');
+        }
 
         solveNQueens(result, n, 0, arr);
         return result;
     }
 
     private void solveNQueens(List<List<String>> result, int n, int row, char[][] arr) {
-        if(row>=n){
+        if (row >= n) {
             populateAdd(result, arr);
             return;
         }
 
-        for(int i = 0; i< n;i++){
+        for (int i = 0; i < n; i++) {
 
-            if(canSolve(arr, row, i)){
+            if (canSolve(arr, row, i)) {
                 arr[row][i] = 'Q';
-                solveNQueens(result, n, row+1, arr);
+                solveNQueens(result, n, row + 1, arr);
                 arr[row][i] = '.';
             }
         }
@@ -278,15 +222,15 @@ public class ArrayProblems {
 
     private boolean canSolve(char[][] arr, int row, int col) {
         int size = arr.length;
-        for(int i =0; i< size;i++){
-           //  if(arr[row][i]==1) return false;
-            if(arr[i][col]=='Q') return false;
+        for (int i = 0; i < size; i++) {
+            //  if(arr[row][i]==1) return false;
+            if (arr[i][col] == 'Q') return false;
         }
-        for(int i = row-1,j = col-1; i>=0 && j >=0; i--,j--){
-            if(arr[i][j]=='Q') return false;
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if (arr[i][j] == 'Q') return false;
         }
-        for(int i = row-1,j = col+1; i>=0 && j <size; i--,j++){
-            if(arr[i][j]=='Q') return false;
+        for (int i = row - 1, j = col + 1; i >= 0 && j < size; i--, j++) {
+            if (arr[i][j] == 'Q') return false;
         }
 
         return true;
@@ -294,7 +238,7 @@ public class ArrayProblems {
 
     private void populateAdd(List<List<String>> result, char[][] arrs) {
         List<String> list = new ArrayList<>();
-        for(char[] arr:arrs){
+        for (char[] arr : arrs) {
             list.add(new String(arr));
         }
         result.add(list);
@@ -302,28 +246,28 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/largest-values-from-labels/
+     *
      * @param values
      * @param labels
      * @param num_wanted
-     * @param use_limit
-     * Time complexity O(N+NLogN+N)
+     * @param use_limit  Time complexity O(N+NLogN+N)
      * @return
      */
     public int largestValsFromLabels(int[] values, int[] labels, int num_wanted, int use_limit) {
         List<ValueToLabel> list = new ArrayList<>();
-        int result =0;
+        int result = 0;
         HashMap<Integer, Integer> map = new HashMap<>();
-        for(int i =0; i< labels.length;i++){
+        for (int i = 0; i < labels.length; i++) {
             list.add(new ValueToLabel(values[i], labels[i]));
         }
         Collections.sort(list, Collections.reverseOrder());
 
-        for(ValueToLabel valueToLabel:list){
-            if(num_wanted<=0) break;
+        for (ValueToLabel valueToLabel : list) {
+            if (num_wanted <= 0) break;
             int count = map.getOrDefault(valueToLabel.label, 0);
-            if(count==use_limit) continue;
-            map.put(valueToLabel.label, count+1);
-            result+=valueToLabel.val;
+            if (count == use_limit) continue;
+            map.put(valueToLabel.label, count + 1);
+            result += valueToLabel.val;
             num_wanted--;
         }
         return result;
@@ -336,7 +280,8 @@ public class ArrayProblems {
 
         Integer val;
         int label;
-        public  ValueToLabel(int value , int l){
+
+        public ValueToLabel(int value, int l) {
             val = value;
             label = l;
         }
