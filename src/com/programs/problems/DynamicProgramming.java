@@ -14,8 +14,43 @@ public class DynamicProgramming {
         DynamicProgramming dp = new DynamicProgramming();
         // System.out.println(dp.editDistDP("horse", "ros"));
         System.out.println(dp.isMatch_dp("aa", "a*"));
+        int cardPoints[] = {1,79,80,1,1,1,200,1};
+        int k = 3;
+        System.out.print(dp.maxScore(cardPoints, k));
 
     }
+
+    /**
+     * https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+     * This is a typical sliding window problem where we first find sum of first k number.
+     * then we iterate for k number from end, in each step we are going to decrease our sum by number at k-1 index
+     * from start and we are going to add number from end.
+     * @param cardPoints
+     * @param k
+     * @return
+     */
+    public int maxScore(int[] cardPoints, int k) {
+        int sum = 0;
+        // find sum of first k number
+        for(int i = 0; i< k;i++){
+            sum+= cardPoints[i];
+        }
+        // if k is == length of array then return sum
+        if(k==cardPoints.length) return sum;
+        int maxSum = sum;
+        int end = cardPoints.length-1;
+        // Now this is sliging window problem, we will iterate for k number from end
+        // each time we add a number from end we also remove the kth element from start ie from our sum
+        // then we just compare the max value
+        while(k>0){
+            sum+=cardPoints[end--];
+            sum-=cardPoints[k-1];
+            k--;
+            maxSum = Math.max(maxSum, sum);
+        }
+        return maxSum;
+    }
+
 
     /**
      * https://leetcode.com/problems/maximum-length-of-pair-chain/
