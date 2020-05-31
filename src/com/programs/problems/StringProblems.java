@@ -9,7 +9,99 @@ public class StringProblems {
 
 
     public static void main(String[] args) {
+
         StringProblems sp = new StringProblems();
+        String beginWord = "a";
+        String endWord = "c";
+        List<String> wordList = new ArrayList<>();
+        wordList.add("a");
+        wordList.add("b");
+        wordList.add("c");
+
+       /*wordList.add("hot");
+        wordList.add("dot");
+        wordList.add("dog");
+        wordList.add("lot");
+        wordList.add("log");*/
+        // wordList.add("cog");
+        System.out.print(sp.ladderLength(beginWord, endWord, wordList));
+    }
+
+    class Pair {
+        int distance;
+        String word;
+
+        public Pair(int distance, String word) {
+            this.distance = distance;
+            this.word = word;
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/word-ladder/
+     * Bidirectional - BFS, Idea is to do two way search
+     * we add beginWord to its que and end word to its own que.
+     * We maintain map for each traversal which contain each word's distance from source, We do BFS.
+     * if while traversing a word is already found in another map ie it is already traversed then we return
+     * sum of current traversal and already traversed path
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+
+        // boolean fFound = true;
+        boolean found = false;
+        for (String word : wordList) {
+            // if (word.equals(beginWord)) fFound = true;
+            if (word.equals(endWord)) found = true;
+            if (found) break;
+        }
+        if (!found) return 0;
+        Queue<Pair> que = new LinkedList<>();
+        que.offer(new Pair(1, beginWord));
+        Map<String, Integer> map = new HashMap();
+        map.put(beginWord, 1);
+        Queue<Pair> otherQ = new LinkedList<>();
+        otherQ.offer(new Pair(1, endWord));
+        Map<String, Integer> otherMap = new HashMap();
+
+        while (!que.isEmpty() && !otherQ.isEmpty()) {
+            int v = check(que, wordList, map, otherMap, endWord);
+            if (v != -1) return v;
+            int k = check(otherQ, wordList, otherMap, map, beginWord);
+            if (k != -1) return k;
+        }
+
+        return 0;
+    }
+
+    int check(Queue<Pair> que, List<String> wordList, Map<String, Integer> map, Map<String, Integer> otherMap,
+              String target) {
+        Pair pair = que.poll();
+        for (String word : wordList) {
+            if (!map.containsKey(word) && isOneDistanceAway(pair.word, word)) {
+                if (word.equals(target)) return pair.distance + 1;
+                que.offer(new Pair(pair.distance + 1, word));
+                map.put(word, pair.distance + 1);
+
+                if (otherMap.containsKey(word)) {
+                    return pair.distance + otherMap.get(word);
+                }
+            }
+        }
+        return -1;
+    }
+
+    boolean isOneDistanceAway(String first, String second) {
+        int count = 0;
+        for (int i = 0; i < first.length(); i++) {
+            if (first.charAt(i) != second.charAt(i)) count++;
+            if (count > 1) return false;
+        }
+
+        return count == 1;
     }
 
     public ArrayList<String> topNCompetitors(int numCompetitors,
@@ -850,7 +942,7 @@ public class StringProblems {
 
             int len2 = expand(str, i, i + 1);
             int len = Math.max(len1, len2);
-            if (len > end - start) {
+            if (len > end - start + 1) {
                 start = i - (len - 1) / 2;
                 end = i + len / 2;
             }
