@@ -4,6 +4,7 @@ package com.programs.problems;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Dynamic Programming problems
@@ -17,7 +18,50 @@ public class DynamicProgramming {
         int cardPoints[] = {1,79,80,1,1,1,200,1};
         int k = 3;
         System.out.print(dp.maxScore(cardPoints, k));
+    }
 
+
+    /**
+     * https://leetcode.com/problems/longest-happy-string/
+     * create a array of size where 0th index will represent count and 1st index will char
+     * we use this array to store it in priority que and sortit descending array
+     * then each time we fetch value with max count and if its not similar to last char then append it.
+     * If count has reached 2 re take next char with max value.
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
+    public String longestDiverseString(int a, int b, int c) {
+        StringBuilder sb = new StringBuilder();
+        PriorityQueue<int []> pq = new PriorityQueue<>((arr1, arr2) -> arr2[0] - arr1[0]);
+        if(a>0) pq.offer(new int[]{a,0});
+        if(b>0) pq.offer(new int[]{b,1});
+        if(c>0) pq.offer(new int[]{c,2});
+        int last[] = new int[]{0,0};
+        while(!pq.isEmpty()){
+            int[] curr = pq.poll();
+            // if this character is already consider twice we can not append it again so need to
+            // get next char with max count left
+            if(curr[1]==last[1] && last[0]==2){
+                if(pq.isEmpty()) break; // if queue is empty then break the loop
+                int[] temp = pq.poll();
+                pq.offer(curr); // add the previous polled item back
+                curr = temp;
+            }
+
+            sb.append((char)(curr[1]+'a'));
+            if(last[1]!=curr[1]){ // if last char is not same as currently added char then update last
+                last[1] = curr[1];
+                last[0] = 0;
+            }
+            last[0]+=1;// increment count ie number of times this char added
+            curr[0]-=1;
+            if(curr[0]>0) pq.offer(curr);
+        }
+
+
+        return sb.toString();
     }
 
     /**
