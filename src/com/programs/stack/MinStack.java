@@ -65,6 +65,11 @@ public class MinStack<T extends Comparable> implements IStack<T> {
         return stack.isEmpty();
     }
 
+    @Override
+    public int size() {
+        return stack.size();
+    }
+
     public T getMin() {
         if (stack.isEmpty()) {
             throw new EmptyStackException();
