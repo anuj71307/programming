@@ -11,20 +11,34 @@ public class StringProblems {
     public static void main(String[] args) {
 
         StringProblems sp = new StringProblems();
-        String beginWord = "a";
-        String endWord = "c";
-        List<String> wordList = new ArrayList<>();
-        wordList.add("a");
-        wordList.add("b");
-        wordList.add("c");
+        System.out.print(sp.repeatedSubstringPattern("ab"));
+    }
 
-       /*wordList.add("hot");
-        wordList.add("dot");
-        wordList.add("dog");
-        wordList.add("lot");
-        wordList.add("log");*/
-        // wordList.add("cog");
-        System.out.print(sp.ladderLength(beginWord, endWord, wordList));
+    /**
+     * https://leetcode.com/problems/repeated-substring-pattern/
+     * Another solution: https://leetcode.com/problems/repeated-substring-pattern/discuss/541860/One-liner-with-explaination
+     * @param s
+     * @return
+     */
+    public boolean repeatedSubstringPattern(String s) {
+
+        int length = s.length();
+        if(length<2) return false;
+        for(int i=(length/2);i>0;i--){
+            StringBuilder str = new StringBuilder(s.substring(0,i));
+            StringBuilder temp = new StringBuilder(str);
+            while(str.length()<s.length()){
+                str.append(temp);
+            }
+            if(str.toString().equals(s)){
+                return true;
+            }
+        }
+
+        /*String ss = s+s;
+        int idx = ss.indexOf(s, 1);
+        return idx<s.length();*/
+        return false;
     }
 
     class Pair {
