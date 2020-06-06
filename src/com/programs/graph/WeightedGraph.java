@@ -49,12 +49,7 @@ public class WeightedGraph {
         Stack<Integer> st = new Stack<>();
         boolean[] visited = new boolean[vertices];
 
-        topologicalSort(src, visited, st);
-        for(int i =0; i< vertices;i++){
-            if(!visited[i]){
-              //  topologicalSort(i, visited, st);
-            }
-        }
+        dfsTraversal(src, visited, st);
         int def = Integer.MAX_VALUE;
         int [] dist = new int[vertices];
         Arrays.fill(dist, def);
@@ -63,7 +58,6 @@ public class WeightedGraph {
         while(!st.isEmpty()){
             int k = st.pop();
             if(dist[k]!=def){
-
                 for(GraphNode n: nodes[k]){
                     if(dist[n.v]>dist[k]+n.weight){
                         dist[n.v] = dist[k]+n.weight;
@@ -86,12 +80,12 @@ public class WeightedGraph {
 
     }
 
-    private void topologicalSort(int src, boolean[] visited, Stack<Integer> st) {
+    private void dfsTraversal(int src, boolean[] visited, Stack<Integer> st) {
 
         visited[src] = true;
         for(GraphNode i: nodes[src]){
             if(!visited[i.v]){
-                topologicalSort(i.v, visited, st);
+                dfsTraversal(i.v, visited, st);
             }
         }
         st.push(src);
