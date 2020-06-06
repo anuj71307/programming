@@ -1,6 +1,9 @@
 package com.programs.problems;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -8,12 +11,68 @@ import java.util.*;
  */
 public class DynamicProgramming {
 
-    public static void main(String[] args) {
+    /**
+     // System.out.println(dp.editDistDP("horse", "ros"));
+     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+     int test = Integer.parseInt(reader.readLine());
+     for(int i = 0 ; i<test;i++){
+     int k = Integer.parseInt(reader.readLine());
+     String str = reader.readLine();
+     String [] ar = str.split(",");
+     int arr[] = new int[ar.length];
+     for(int m = 0; m < arr.length;m++){
+     arr[m] = Integer.parseInt(ar[m].trim());
+     }
+     System.out.println(dp.longestZigZag(arr));
+     }
+
+     reader.close();
+     */
+
+    public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
         // System.out.println(dp.editDistDP("horse", "ros"));
-        int cardPoints[] = {1,2,5};
-        int amount = 11;
-        System.out.print(dp.coinChangesBottomUP(cardPoints, amount));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int test = Integer.parseInt(reader.readLine());
+        for(int i = 0 ; i<test;i++){
+            int k = Integer.parseInt(reader.readLine());
+            String str = reader.readLine();
+            String [] ar = str.split(",");
+            int arr[] = new int[ar.length];
+            for(int m = 0; m < arr.length;m++){
+                arr[m] = Integer.parseInt(ar[m].trim());
+            }
+            System.out.println(dp.longestZigZag(arr));
+        }
+
+        reader.close();
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/longest-zig-zag-subsequence/
+     * @param arr
+     * @return
+     */
+    public int longestZigZag(int [] arr){
+
+        int[] greater = new int[arr.length];
+        Arrays.fill(greater,1);
+        int smaller[] = new int[arr.length];
+        Arrays.fill(smaller,1);
+        int max = 1;
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (arr[i] > arr[j]) {
+                    greater[i] = Math.max(smaller[j] + 1, greater[i]);
+                    max = Math.max(greater[i], max);
+                }
+                if (arr[i] < arr[j]) {
+                    smaller[i] = Math.max(greater[j] + 1, smaller[i]);
+                    max = Math.max(smaller[i], max);
+                }
+            }
+        }
+        return max;
     }
 
 
