@@ -1,10 +1,7 @@
 package com.programs.problems;
 
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Dynamic Programming problems
@@ -14,10 +11,9 @@ public class DynamicProgramming {
     public static void main(String[] args) {
         DynamicProgramming dp = new DynamicProgramming();
         // System.out.println(dp.editDistDP("horse", "ros"));
-        System.out.println(dp.isMatch_dp("aa", "a*"));
-        int cardPoints[] = {1,79,80,1,1,1,200,1};
-        int k = 3;
-        System.out.print(dp.maxScore(cardPoints, k));
+        int cardPoints[] = {1,2,5};
+        int amount = 11;
+        System.out.print(dp.coinChangesBottomUP(cardPoints, amount));
     }
 
 
@@ -27,6 +23,7 @@ public class DynamicProgramming {
      * we use this array to store it in priority que and sortit descending array
      * then each time we fetch value with max count and if its not similar to last char then append it.
      * If count has reached 2 re take next char with max value.
+     *
      * @param a
      * @param b
      * @param c
@@ -34,30 +31,30 @@ public class DynamicProgramming {
      */
     public String longestDiverseString(int a, int b, int c) {
         StringBuilder sb = new StringBuilder();
-        PriorityQueue<int []> pq = new PriorityQueue<>((arr1, arr2) -> arr2[0] - arr1[0]);
-        if(a>0) pq.offer(new int[]{a,0});
-        if(b>0) pq.offer(new int[]{b,1});
-        if(c>0) pq.offer(new int[]{c,2});
-        int last[] = new int[]{0,0};
-        while(!pq.isEmpty()){
+        PriorityQueue<int[]> pq = new PriorityQueue<>((arr1, arr2) -> arr2[0] - arr1[0]);
+        if (a > 0) pq.offer(new int[]{a, 0});
+        if (b > 0) pq.offer(new int[]{b, 1});
+        if (c > 0) pq.offer(new int[]{c, 2});
+        int last[] = new int[]{0, 0};
+        while (!pq.isEmpty()) {
             int[] curr = pq.poll();
             // if this character is already consider twice we can not append it again so need to
             // get next char with max count left
-            if(curr[1]==last[1] && last[0]==2){
-                if(pq.isEmpty()) break; // if queue is empty then break the loop
+            if (curr[1] == last[1] && last[0] == 2) {
+                if (pq.isEmpty()) break; // if queue is empty then break the loop
                 int[] temp = pq.poll();
                 pq.offer(curr); // add the previous polled item back
                 curr = temp;
             }
 
-            sb.append((char)(curr[1]+'a'));
-            if(last[1]!=curr[1]){ // if last char is not same as currently added char then update last
+            sb.append((char) (curr[1] + 'a'));
+            if (last[1] != curr[1]) { // if last char is not same as currently added char then update last
                 last[1] = curr[1];
                 last[0] = 0;
             }
-            last[0]+=1;// increment count ie number of times this char added
-            curr[0]-=1;
-            if(curr[0]>0) pq.offer(curr);
+            last[0] += 1;// increment count ie number of times this char added
+            curr[0] -= 1;
+            if (curr[0] > 0) pq.offer(curr);
         }
 
 
@@ -69,6 +66,7 @@ public class DynamicProgramming {
      * This is a typical sliding window problem where we first find sum of first k number.
      * then we iterate for k number from end, in each step we are going to decrease our sum by number at k-1 index
      * from start and we are going to add number from end.
+     *
      * @param cardPoints
      * @param k
      * @return
@@ -76,19 +74,19 @@ public class DynamicProgramming {
     public int maxScore(int[] cardPoints, int k) {
         int sum = 0;
         // find sum of first k number
-        for(int i = 0; i< k;i++){
-            sum+= cardPoints[i];
+        for (int i = 0; i < k; i++) {
+            sum += cardPoints[i];
         }
         // if k is == length of array then return sum
-        if(k==cardPoints.length) return sum;
+        if (k == cardPoints.length) return sum;
         int maxSum = sum;
-        int end = cardPoints.length-1;
+        int end = cardPoints.length - 1;
         // Now this is sliging window problem, we will iterate for k number from end
         // each time we add a number from end we also remove the kth element from start ie from our sum
         // then we just compare the max value
-        while(k>0){
-            sum+=cardPoints[end--];
-            sum-=cardPoints[k-1];
+        while (k > 0) {
+            sum += cardPoints[end--];
+            sum -= cardPoints[k - 1];
             k--;
             maxSum = Math.max(maxSum, sum);
         }
@@ -108,20 +106,20 @@ public class DynamicProgramming {
      */
     public int findLongestChain(int[][] pairs) {
 
-        Arrays.sort(pairs,(a,b)->a[0]-b[0]);
+        Arrays.sort(pairs, (a, b) -> a[0] - b[0]);
         int[] dp = new int[pairs.length];
 
-        Arrays.fill(dp,1);
-        for(int i=1;i<pairs.length;i++){
-            for(int j =0;j<i;j++){
-                if(pairs[j][1]<pairs[i][0]){
-                    dp[i] = Math.max(dp[i], dp[j]+1);
+        Arrays.fill(dp, 1);
+        for (int i = 1; i < pairs.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (pairs[j][1] < pairs[i][0]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
             }
         }
         int ans = 0;
-        for(int i :dp){
-            ans = Math.max(ans,i);
+        for (int i : dp) {
+            ans = Math.max(ans, i);
         }
         return ans;
     }
@@ -658,7 +656,7 @@ public class DynamicProgramming {
 
     /**
      * https://leetcode.com/problems/coin-change/
-     *
+     * LeetCode 322
      * @param coins
      * @param amount
      * @return
@@ -685,6 +683,27 @@ public class DynamicProgramming {
         count[amount - 1] = min == Integer.MAX_VALUE ? -1 : min;
         return count[amount - 1];
 
+    }
+
+    /**
+     * https://leetcode.com/problems/coin-change/
+     * LeetCode 322,
+     * Find minimum coin required for each value less then amount
+     */
+    public int coinChangesBottomUP(int[] coins, int amount) {
+        int[] amounts = new int[amount + 1];
+        Arrays.fill(amounts, amount + 1);
+        amounts[0] = 0;
+        // 1 2 5
+        for (int i = 1; i <= amount; i++) {
+            for (int j = 0; j < coins.length; j++) {
+                if (coins[j] > i) continue;
+                if (amounts[i - coins[j]] < amount) {
+                    amounts[i] = Math.min(amounts[i], amounts[i - coins[j]] + 1);
+                }
+            }
+        }
+        return amounts[amount] > amount ? -1 : amounts[amount];
     }
 
     /**
