@@ -16,6 +16,29 @@ fun main() {
 }
 
 /**
+ *  LeetCode - 1448
+ * https://leetcode.com/problems/count-good-nodes-in-binary-tree/
+ */
+fun goodNodes(root: TreeNode?): Int {
+    if (root == null) return 0
+    val res = IntArray(1)
+    getNodes(root, root.value, res)
+    return res[0]
+}
+
+fun getNodes(root: TreeNode?, max: Int, res: IntArray) {
+    var max = max
+    if (root == null) return
+    if (root.value >= max) {
+        res[0] += 1
+        max = root.value
+    }
+    getNodes(root.left, max, res)
+    getNodes(root.right, max, res)
+}
+
+/**
+ * LeetCode - 543
  * https://leetcode.com/problems/diameter-of-binary-tree/
  */
 fun longestPath(root: TreeNode?): Int {
@@ -36,7 +59,7 @@ fun height(root: TreeNode?, res: IntArray): Int {
     return max(lh, rh) + 1
 }
 
-    /**
+/**
  * https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
  */
 fun lowestCommonAncestor(root: BinarySearchTree<Int>?, p: BinarySearchTree<Int>?, q: BinarySearchTree<Int>?): BinarySearchTree<Int>? {
@@ -81,9 +104,9 @@ fun maxDepth(root: NAryTree?): Int {
     return max + 1
 }
 
-data class TreeNode constructor(@JvmField var value: Int, @JvmField  var left: TreeNode? = null,
-                    @JvmField var right: TreeNode? = null) {
-    constructor(value: Int) : this(value, null ,null) {
+data class TreeNode constructor(@JvmField var value: Int, @JvmField var left: TreeNode? = null,
+                                @JvmField var right: TreeNode? = null) {
+    constructor(value: Int) : this(value, null, null) {
 
     }
 }
