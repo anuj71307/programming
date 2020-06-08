@@ -5,14 +5,35 @@ import com.programs.trees.NAryTree
 import kotlin.math.max
 
 fun main() {
-    println("Hello World!")
+}
 
-    val root = BinarySearchTree<Int>(6)
-    val left = BinarySearchTree<Int>(2)
-    val right = BinarySearchTree<Int>(9)
-    root.setLeftNode(left)
-    root.setRightNode(right)
-    print("LCA is ${lowestCommonAncestor(root, root, right)?.data}")
+/**
+ * LeetCode 1339
+ * https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/
+ */
+fun maxProduct(root: TreeNode): Int {
+    val total = sum(root)
+    val res = LongArray(1)
+    res[0] = root.value.toLong()
+    check(root, total, res)
+    return (res[0] % 1000000007).toInt()
+}
+
+
+fun check(root: TreeNode?, total: Long, res: LongArray): Long {
+    if (root == null) return 0
+    val left = check(root.left, total, res)
+    val right = check(root.right, total, res)
+    val t: Long = left + right + root.value
+    res[0] = Math.max(res[0], (total - t) * t)
+    return t
+}
+
+/**
+ * Find sum of all nodes in binary tree
+ */
+fun sum(root: TreeNode?): Long {
+    return if (root == null) 0L else root.value + sum(root.left) + sum(root.right)
 }
 
 /**
