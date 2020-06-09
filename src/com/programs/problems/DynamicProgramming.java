@@ -1,6 +1,8 @@
 package com.programs.problems;
 
 
+import org.omg.CORBA.INTERNAL;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,21 +33,43 @@ public class DynamicProgramming {
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        // System.out.println(dp.editDistDP("horse", "ros"));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int test = Integer.parseInt(reader.readLine());
-        for(int i = 0 ; i<test;i++){
-            int k = Integer.parseInt(reader.readLine());
-            String str = reader.readLine();
-            String [] ar = str.split(",");
-            int arr[] = new int[ar.length];
-            for(int m = 0; m < arr.length;m++){
-                arr[m] = Integer.parseInt(ar[m].trim());
-            }
-            System.out.println(dp.longestZigZag(arr));
-        }
+        int[][] timings = new int[][]{{1,11}, {5,6}, {7,8}, {9,12}};
+        // int[][] timings = new int[][]{{1,5}, {2,6}, {5,7}};
+        long time = System.currentTimeMillis();
+        System.out.println(dp.max_booking(timings));
+        System.out.println(System.currentTimeMillis()-time);
+    }
 
-        reader.close();
+    /**
+     * Given a booking timing for a room return max number of books that can be booked
+     * All the bookings will have endtime>startTime
+     * Booking are sorted based on start time
+     * @param timings
+     * @return
+     */
+    private int max_booking(int[][] timings){
+        int dp[] = new int[timings.length];
+        int[] res = new int[1];
+        max_booking(timings, dp, res, 0, Integer.MIN_VALUE);
+        return res[0];
+    }
+
+    private int max_booking(int[][] timings, int[] dp, int[] res, int index, int endTime) {
+        if (index >= timings.length) {
+            return 0;
+        }
+        if(dp[index]!=0){
+            return dp[index];
+        }
+        System.out.println("Check for " + index);
+        if (timings[index][0] < endTime) {
+            return max_booking(timings, dp, res, index + 1, endTime);
+        }
+        int choose = 1 + max_booking(timings, dp, res, index + 1, timings[index][1]);
+        int not = max_booking(timings, dp, res, index + 1, endTime);
+        dp[index] = Math.max(choose, not);
+        res[0] = Math.max(res[0], dp[index]);
+        return Math.max(choose, not);
     }
 
     /**
