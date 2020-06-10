@@ -33,12 +33,36 @@ public class DynamicProgramming {
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        int[][] timings = new int[][]{{1,11}, {5,6}, {7,8}, {9,12}};
-        // int[][] timings = new int[][]{{1,5}, {2,6}, {5,7}};
-        long time = System.currentTimeMillis();
-        System.out.println(dp.max_booking(timings));
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(dp.steps(30));
     }
+
+    /**
+     * https://www.geeksforgeeks.org/minimum-steps-minimize-n-per-given-condition/
+     * Problem Statement: On a positive integer, you can perform any one of the following 3 steps.
+     * 1.) Subtract 1 from it. ( n = n - 1 )  ,
+     * 2.) If its divisible by 2, divide by 2. ( if n % 2 == 0 , then n = n / 2  )  ,
+     * 3.) If its divisible by 3, divide by 3. ( if n % 3 == 0 , then n = n / 3  ).
+     * Now the question is, given a positive integer n, find the minimum number of steps that takes n to 1
+     * Bottom up approach, Tiem complexity O(N). where N is the given number, space complexity -> O(N)
+     * @param n
+     * @return
+     */
+    private int steps(int n) {
+        if (n < 2) return 0;
+        if (n < 4) return 1;
+        int[] arr = new int[n + 1];
+        arr[0] = 0;
+        arr[1] = 0;
+        arr[2] = 1;
+        arr[3] = 1;
+        for (int i = 4; i <= n; i++) {
+            arr[i] = 1 + arr[i-1];
+            if (i % 2 == 0) arr[i] = Math.min(arr[i], arr[i/2]+1);
+            if (i % 3 == 0) arr[i] =  Math.min(arr[i], arr[i/3]+1);
+        }
+        return arr[n];
+    }
+
 
     /**
      * Given a booking timing for a room return max number of books that can be booked
