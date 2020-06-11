@@ -1,48 +1,41 @@
 package com.programs.sorting;
 
-import java.util.Arrays;
-import java.util.Scanner;
-
 public class Sorting {
 
     /**
      * bubble sort
-     * time complexity O(n^2), space complexity O(1)
+     * Time complexity O(n^2), space complexity O(1)
+     * Best case time complexity - O(n)
      *
      * @param arr input array
-     * @return sorted array
      */
-    static int[] bubbleSort(int arr[]) {
-        int unSortedLength = arr.length - 1;
-        boolean isSorted = false;
-        while (!isSorted) {
-            isSorted = true;
-            for (int i = 0; i < unSortedLength; i++) {
-                if (arr[i] > arr[i + 1]) {
-                    int temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
-                    isSorted = false;
+    private void bubbleSort(int[] arr) {
+        if (arr == null || arr.length < 2) return;
+        for (int i = 0, lastIndex = arr.length; i < arr.length - 1; i++, lastIndex--) {
+            boolean swapped = false;
+            for (int j = 0; j < lastIndex - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swap(arr, j, j + 1);
+                    swapped = true;
                 }
-
             }
-            unSortedLength--;
+            if (!swapped) break;
         }
-
-        return arr;
     }
 
     public static void main(String[] args) {
-        int arr2[] = new int[]{3,2,3,1,2,4,5,5,6};
-        //quickSort(arr2, 0, arr2.length-1);
-        System.out.println(Arrays.toString(arr2));
-       int k =  kthLargest(arr2, 4);
-       System.out.println(k);
+        Sorting sort = new Sorting();
+        int arr2[] = new int[]{1, 1, 2, 3, 3, 4, 5, 6, 6};
+        sort.insertionSort(arr2);
+        for (int i : arr2) {
+            System.out.print(i + " ");
+        }
 
     }
 
     /**
      * https://leetcode.com/problems/kth-largest-element-in-an-array/
+     *
      * @param arr
      * @param k
      * @return
@@ -63,8 +56,8 @@ public class Sorting {
             }
         }
         swap(arr, index, end);
-        if (arr.length-index==k) return arr[index];
-        if (arr.length-index > k) {
+        if (arr.length - index == k) return arr[index];
+        if (arr.length - index > k) {
             return kthLargest(arr, index + 1, end, k);
         }
         return kthLargest(arr, start, index - 1, k);
@@ -140,54 +133,26 @@ public class Sorting {
 
     }
 
-    public static int[] bubbleForSort(int[] arr) {
-        if (arr == null || arr.length == 0) {
-            return arr;
-        }
-
-        for (int i = 0; i < arr.length; i++) {
-
-            boolean isSorted = true;
-            for (int j = 0; j < arr.length - i - 1; j++) {
-
-                if (arr[j] > arr[j + 1]) {
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                    isSorted = false;
-                }
-            }
-
-            if (isSorted) {
-                break;
-            }
-        }
-
-
-        return arr;
-    }
-
-
     /**
      * insertion sort
+     *
      * @param arr arr to sort
      */
-    public static  void insertionSort(int[] arr){
-        if(arr==null || arr.length==0) return;
+    public static void insertionSort(int[] arr) {
+        if (arr == null || arr.length < 2) return;
 
-        for(int i =1; i<arr.length;i++){
-            int elem = arr[i];
-            int j = i-1;
-            for( ; j>=0;j--){
-                if(arr[j]>elem){
-                    arr[j+1] = arr[j];
+        for (int i = 1; i < arr.length; i++) {
+            int val = arr[i];
+            int j = i - 1;
+            if (arr[i - 1] > arr[i]) {
+                while (j >= 0 && arr[j] > val) {
+                    swap(arr, j, j + 1);
+                    j--;
                 }
-                else{
-                    break;
-                }
+                arr[++j] = val;
             }
-            arr[j+1] = elem;
         }
+
     }
 
     /**
