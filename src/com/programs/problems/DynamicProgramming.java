@@ -34,7 +34,43 @@ public class DynamicProgramming {
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
         System.out.println(dp.steps(30));
+        String first = "";
+        String second = "";
+        System.out.println(dp.longestCommonSequence(first, second));
     }
+
+    /**
+     * https://www.geeksforgeeks.org/longest-common-subsequence-dp-4/
+     * https://leetcode.com/problems/longest-common-subsequence/
+     * Leet code - 1143
+     * Find longest common subsequence in two string
+     *
+     * @param first  string
+     * @param second string
+     *               Time complexity - O(N*M), N is length of first string and M is length of second string
+     *               Space complexity - O(N*M)
+     */
+    private int longestCommonSequence(String first, String second) {
+        if (first == null || first.length() == 0 || second == null || second.length() == 0) return 0;
+
+        int fLength = first.length();
+        int sLength = second.length();
+        int[][] arr = new int[fLength+1][sLength+1];
+        int max = 0;
+        for (int i = 1; i <= fLength; i++) {
+            for (int j = 1; j <= sLength; j++) {
+                if (first.charAt(i - 1) == second.charAt(j - 1)) {
+                    arr[i][j] = 1 + arr[i - 1][j - 1];
+                } else {
+                    arr[i][j] = Math.max(arr[i - 1][j], arr[i][j - 1]);
+                }
+                max = Math.max(max, arr[i][j]);
+
+            }
+        }
+        return max;
+    }
+
 
     /**
      * https://www.geeksforgeeks.org/minimum-steps-minimize-n-per-given-condition/
