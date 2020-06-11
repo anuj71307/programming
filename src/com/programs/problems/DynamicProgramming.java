@@ -14,21 +14,21 @@ import java.util.*;
 public class DynamicProgramming {
 
     /**
-     // System.out.println(dp.editDistDP("horse", "ros"));
-     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-     int test = Integer.parseInt(reader.readLine());
-     for(int i = 0 ; i<test;i++){
-     int k = Integer.parseInt(reader.readLine());
-     String str = reader.readLine();
-     String [] ar = str.split(",");
-     int arr[] = new int[ar.length];
-     for(int m = 0; m < arr.length;m++){
-     arr[m] = Integer.parseInt(ar[m].trim());
-     }
-     System.out.println(dp.longestZigZag(arr));
-     }
-
-     reader.close();
+     * // System.out.println(dp.editDistDP("horse", "ros"));
+     * BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+     * int test = Integer.parseInt(reader.readLine());
+     * for(int i = 0 ; i<test;i++){
+     * int k = Integer.parseInt(reader.readLine());
+     * String str = reader.readLine();
+     * String [] ar = str.split(",");
+     * int arr[] = new int[ar.length];
+     * for(int m = 0; m < arr.length;m++){
+     * arr[m] = Integer.parseInt(ar[m].trim());
+     * }
+     * System.out.println(dp.longestZigZag(arr));
+     * }
+     * <p>
+     * reader.close();
      */
 
     public static void main(String[] args) throws IOException {
@@ -37,6 +37,33 @@ public class DynamicProgramming {
         String first = "";
         String second = "";
         System.out.println(dp.longestCommonSequence(first, second));
+    }
+
+    /**
+     * https://leetcode.com/problems/longest-palindromic-subsequence/
+     * LeetCode 516
+     *
+     * @param s
+     * @return
+     */
+    public int longestPalindromeSubseq(String s) {
+        if (s == null || s.isEmpty()) return 0;
+        int dp[][] = new int[s.length()][s.length()];
+        return subSeq(s, 0, s.length() - 1, dp);
+    }
+
+    private int subSeq(String arr, int i, int j, int[][] dp) {
+        if (i > j || i < 0 || j >= arr.length()) return 0;
+        if (dp[i][j] != 0) return dp[i][j];
+        if (i == j) return 1;
+        int len = 0;
+        if (arr.charAt(i) == arr.charAt(j)) {
+            return 2 + subSeq(arr, i + 1, j - 1, dp);
+        }
+        len = Math.max(len, subSeq(arr, i + 1, j, dp));
+        len = Math.max(len, subSeq(arr, i, j - 1, dp));
+        dp[i][j] = len;
+        return len;
     }
 
     /**
@@ -55,7 +82,7 @@ public class DynamicProgramming {
 
         int fLength = first.length();
         int sLength = second.length();
-        int[][] arr = new int[fLength+1][sLength+1];
+        int[][] arr = new int[fLength + 1][sLength + 1];
         int max = 0;
         for (int i = 1; i <= fLength; i++) {
             for (int j = 1; j <= sLength; j++) {
@@ -80,6 +107,7 @@ public class DynamicProgramming {
      * 3.) If its divisible by 3, divide by 3. ( if n % 3 == 0 , then n = n / 3  ).
      * Now the question is, given a positive integer n, find the minimum number of steps that takes n to 1
      * Bottom up approach, Tiem complexity O(N). where N is the given number, space complexity -> O(N)
+     *
      * @param n
      * @return
      */
@@ -92,9 +120,9 @@ public class DynamicProgramming {
         arr[2] = 1;
         arr[3] = 1;
         for (int i = 4; i <= n; i++) {
-            arr[i] = 1 + arr[i-1];
-            if (i % 2 == 0) arr[i] = Math.min(arr[i], arr[i/2]+1);
-            if (i % 3 == 0) arr[i] =  Math.min(arr[i], arr[i/3]+1);
+            arr[i] = 1 + arr[i - 1];
+            if (i % 2 == 0) arr[i] = Math.min(arr[i], arr[i / 2] + 1);
+            if (i % 3 == 0) arr[i] = Math.min(arr[i], arr[i / 3] + 1);
         }
         return arr[n];
     }
@@ -104,10 +132,11 @@ public class DynamicProgramming {
      * Given a booking timing for a room return max number of books that can be booked
      * All the bookings will have endtime>startTime
      * Booking are sorted based on start time
+     *
      * @param timings
      * @return
      */
-    private int max_booking(int[][] timings){
+    private int max_booking(int[][] timings) {
         int dp[] = new int[timings.length];
         int[] res = new int[1];
         max_booking(timings, dp, res, 0, Integer.MIN_VALUE);
@@ -118,7 +147,7 @@ public class DynamicProgramming {
         if (index >= timings.length) {
             return 0;
         }
-        if(dp[index]!=0){
+        if (dp[index] != 0) {
             return dp[index];
         }
         System.out.println("Check for " + index);
@@ -134,15 +163,16 @@ public class DynamicProgramming {
 
     /**
      * https://www.geeksforgeeks.org/longest-zig-zag-subsequence/
+     *
      * @param arr
      * @return
      */
-    public int longestZigZag(int [] arr){
+    public int longestZigZag(int[] arr) {
 
         int[] greater = new int[arr.length];
-        Arrays.fill(greater,1);
+        Arrays.fill(greater, 1);
         int smaller[] = new int[arr.length];
-        Arrays.fill(smaller,1);
+        Arrays.fill(smaller, 1);
         int max = 1;
         for (int i = 1; i < arr.length; i++) {
             for (int j = 0; j < i; j++) {
@@ -800,6 +830,7 @@ public class DynamicProgramming {
     /**
      * https://leetcode.com/problems/coin-change/
      * LeetCode 322
+     *
      * @param coins
      * @param amount
      * @return
