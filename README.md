@@ -7,6 +7,8 @@ For most of the questions the problem link is given to understand the problem mo
 * # Array
   * Min swap to sort an array of N elements # [https://www.geeksforgeeks.org/minimum-number-swaps-required-sort-array/]
     * Solution # [https://github.com/anuj-github/Programming/pull/193/files]
+  * Complete the circuit # [https://leetcode.com/problems/gas-station/]
+    * Solution # [https://github.com/anuj-github/Programming/pull/226]
 * # String
   * String pattern match # [https://leetcode.com/problems/word-pattern-ii/]
     * Solution # [https://github.com/anuj-github/Programming/pull/173/files]
