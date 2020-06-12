@@ -10,6 +10,62 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
+        int gas[] = {4};
+        int cost[] = {6};
+        int v = ap.canCompleteGasCircuit(gas, cost);
+        System.out.print(v);
+    }
+
+    /**
+     * https://leetcode.com/problems/gas-station/
+     * LeetCode 134
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public int canCompleteGasCircuit(int[] gas, int[] cost) {
+
+        int start = 0;
+        int currPetrol = gas[0]-cost[0];
+        int length = gas.length;
+        int end = (start+1)%length;
+        if(length==1 && gas[0]-cost[0]<0) return -1;
+        while(end!=start || currPetrol<0){
+            while (currPetrol < 0 && start!=end) {
+                currPetrol -= gas[start] - cost[start];
+                start = (start+1)%length;
+                if(start==0) return -1;
+            }
+            currPetrol+= gas[end]-cost[end];
+            end = (end+1)%length;
+        }
+        return start;
+    }
+
+    /**
+     * https://leetcode.com/problems/gas-station/
+     * LeetCode 134
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public int canCompleteGasCircuitAlternate(int[] gas, int[] cost) {
+
+      int tank = 0;
+      int totalGas = 0;
+      int totalCost  = 0;
+      int start = 0;
+        for (int i = 0; i < gas.length; i++) {
+            totalGas += gas[i];
+            totalCost += cost[i];
+            tank += gas[i] - cost[i];
+            if (tank < 0) {
+                tank = 0;
+                start = i + 1;
+            }
+        }
+        if (totalGas < totalCost) return -1;
+        return start;
     }
 
     /**
@@ -773,36 +829,6 @@ public class ArrayProblems {
         }
 
         return k;
-    }
-
-    /**
-     * https://leetcode.com/problems/gas-station/
-     *
-     * @param gas
-     * @param cost
-     * @return
-     */
-    public int canCompleteCircuit(int[] gas, int[] cost) {
-        int len = gas.length;
-        if (len == 1 && gas[0] - cost[0] < 0) return -1; //edge case
-        int start = 0;
-        int end = (start + 1) % len;
-        int petrol = gas[start] - cost[start];
-
-        while (end != start || petrol < 0) {
-
-            while (petrol < 0 && start != end) {
-
-                petrol -= gas[start] - cost[start];
-                start = (start + 1) % len;
-                if (start == 0) return -1;
-            }
-
-            petrol += gas[end] - cost[end];
-            end = (end + 1) % len;
-        }
-
-        return start;
     }
 
     /**
