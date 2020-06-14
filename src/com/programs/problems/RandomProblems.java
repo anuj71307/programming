@@ -13,7 +13,7 @@ public class RandomProblems {
 
     public static void main(String[] args) {
      RandomProblems rp = new RandomProblems();
-     System.out.print(rp.generatePascal(7));
+     rp.generatePascal(7);
     }
 
     public int diffPossible(final List<Integer> a, int b) {
@@ -148,28 +148,31 @@ public class RandomProblems {
     /*
     generate pascal triangle
      */
-    public List<List<Integer>> generatePascal(int numRows) {
+    public int[][] generatePascal(int numRows) {
         if (numRows <= 0) return null;
-        List<List<Integer>> list = new ArrayList<List<Integer>>();
-        List<Integer> sublist = new ArrayList<>();
-        sublist.add(1);
-        list.add(sublist);
+        int[][] list = new int[numRows][];
+        int[] sublist = new int[1];
+        sublist[0]=1;
+        list[0] = sublist;
         for (int i = 1; i < numRows; i++) {
             sublist = getSubList(sublist);
-            list.add(sublist);
+            list[i] = sublist;
+        }
+        for(int k: list[numRows-1]){
+            System.out.print(k+" ");
         }
         return list;
     }
 
-    public List<Integer> getSubList(List<Integer> list) {
-        List<Integer> sublist = new ArrayList<>();
-        for (int i = 0; i < list.size()+1; i++) {
-            if (i == 0 || i == list.size()) {
+    public int[] getSubList(int[] list) {
+        int[]sublist = new int[list.length+1];
+        for (int i = 0; i < sublist.length; i++) {
+            if (i == 0 || i == list.length) {
                 //first and last element will always be 1
-                sublist.add(1);
+                sublist[i]=1;
                 continue;
             }
-            sublist.add(list.get(i) + list.get(i - 1));
+            sublist[i]= list[i] + list[i-1];
         }
         return sublist;
     }
