@@ -10,10 +10,67 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int gas[] = {4};
-        int cost[] = {6};
-        int v = ap.canCompleteGasCircuit(gas, cost);
-        System.out.print(v);
+        int[] arr = {5,4,3,2,1};
+        int res [] = ap.nextGreater(arr);
+        for(int i : res){
+            System.out.print(i+" ");
+        }
+        int res2 [] = ap.nextGreaterInCirularArray(arr);
+        System.out.println();
+
+        for(int i : res2){
+            System.out.print(i+" ");
+        }
+    }
+
+    /**
+     * Next greater element of array
+     * https://www.geeksforgeeks.org/next-greater-element/
+     *
+     * @param arr
+     */
+    int[] nextGreater(int[] arr) {
+        if (arr == null || arr.length == 0) return arr;
+        int res[] = new int[arr.length];
+        Stack<Integer> st = new Stack();
+        for (int i = 0; i < arr.length; i++) {
+            while (!st.isEmpty() && arr[st.peek()] < arr[i]) {
+                res[st.pop()] = arr[i];
+            }
+            st.push(i);
+        }
+        while (!st.isEmpty()) {
+            res[st.pop()] = -1;
+        }
+        return res;
+    }
+
+
+    /**
+     * https://leetcode.com/problems/next-greater-element-ii/
+     * LeetCode 503
+     * Next greater element in circular array,
+     * We iterate through array twice and do the same thing which we do for non-circular array, but since we do not
+     * want to re-populate the result we check if its not already populate.
+     *
+     * @param arr
+     * @return
+     */
+    int[] nextGreaterInCirularArray(int[] arr) {
+        if (arr == null || arr.length == 0) return arr;
+        int[] res = new int[arr.length];
+        Arrays.fill(res, -1);
+        Stack<Integer> st = new Stack();
+        for (int i = 0; i < arr.length * 2; i++) {
+            while (!st.isEmpty() && arr[st.peek()] < arr[i % arr.length]) {
+                int k = st.pop() % arr.length;
+                if (res[k] == -1) {
+                    res[k] = arr[i % arr.length];
+                }
+            }
+            st.push(i % arr.length);
+        }
+        return res;
     }
 
     /**

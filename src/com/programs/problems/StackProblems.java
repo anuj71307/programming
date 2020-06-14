@@ -6,15 +6,39 @@ import java.util.Stack;
 
 public class StackProblems {
 
-    public static void main(String[] args){
-        MinStack<Integer> minStack = new MinStack();
-        minStack.push(0);
-        minStack.push(1);
-        minStack.push(0);
-        System.out.println(minStack.getMin());
-        System.out.println(minStack.pop());
-        System.out.println(minStack.getMin());
+    public static void main(String[] args) throws Exception{
+        StackProblems sp = new StackProblems();
+        Stack<Integer> st = new Stack<>();
+        st.push(0);
+        st.push(1);
+        st.push(2);
+        sp.reverse(st);
+        // 1 2 3 4 
+        while(!st.isEmpty()){
+            System.out.print(st.pop()+" ");
+        }
 
+    }
+
+    /**
+     * Reverse stack using recursion
+     * @param st
+     */
+    void reverse(Stack<Integer> st) {
+        if (st.isEmpty()) return;
+        int k = st.pop();
+        reverse(st);
+        insert(st, k);
+    }
+
+    void insert(Stack<Integer> st, int item){
+        if(st.isEmpty()) {
+            st.push(item);
+            return;
+        }
+        int p = st.pop();
+        insert(st, item);
+        st.push(p);
     }
 
     /**
