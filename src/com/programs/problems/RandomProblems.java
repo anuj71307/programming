@@ -1,8 +1,5 @@
 package com.programs.problems;
 
-import com.programs.cache.LruCache;
-import org.omg.CORBA.INTERNAL;
-
 import java.util.*;
 
 /**
@@ -14,10 +11,15 @@ import java.util.*;
 public class RandomProblems {
 
 
+    public static void main(String[] args) {
+     RandomProblems rp = new RandomProblems();
+     System.out.print(rp.generatePascal(7));
+    }
+
     public int diffPossible(final List<Integer> a, int b) {
         HashSet<Integer> hash = new HashSet<>();
 
-        // 1 3 5 2 
+        // 1 3 5 2
         for (Integer k : a) {
             Integer diff = Math.abs(k - b);
             if (hash.contains(diff)) return 1;
@@ -42,27 +44,14 @@ public class RandomProblems {
         return type;
     }
 
-    public static void main(String[] args) {
-        LruCache<Integer, Integer> cache = new LruCache<>(2);
-        cache.put(1, 1);
-        cache.put(2, 2);
-        System.out.println(cache.get(1)); // [1,2]
-        cache.put(3,3);// [3,1,2]
-        System.out.println(cache.get(2)); //[2,3,1]
-        cache.put(4,4);//[4,2,3,1]
-        cache.put(3,5); //[3,4,2,1,]
-        System.out.println(cache.get(1)); //[1,3,4,2]
-        System.out.println(cache.get(3)); //[3,1,4,2]
-        System.out.println(cache.get(4));//[4,3,1,2]
-    }
-
     /**
      * generate all biary number of a given length
      * https://www.geeksforgeeks.org/generate-binary-strings-without-consecutive-1s/
+     *
      * @param len
      */
-    private static void generateBinary(int len){
-        if(len<=0) return;
+    private static void generateBinary(int len) {
+        if (len <= 0) return;
         char[] arr = new char[len];
         arr[0] = '0';
         generateBinary(len, arr, 1);
@@ -71,20 +60,19 @@ public class RandomProblems {
     }
 
     private static void generateBinary(int len, char[] arr, int i) {
-        if(i==len){
+        if (i == len) {
             System.out.println(new String(arr));
             return;
         }
 
-        if(arr[i-1]=='0'){
+        if (arr[i - 1] == '0') {
             arr[i] = '0';
-            generateBinary(len, arr, i+1);
+            generateBinary(len, arr, i + 1);
             arr[i] = '1';
-            generateBinary(len, arr, i+1);
-        }
-        else if(arr[i-1]=='1'){
+            generateBinary(len, arr, i + 1);
+        } else if (arr[i - 1] == '1') {
             arr[i] = '0';
-            generateBinary(len, arr, i+1);
+            generateBinary(len, arr, i + 1);
         }
 
     }
@@ -92,27 +80,27 @@ public class RandomProblems {
     /**
      * Given a list return first two item which is present only once
      * if given list is {1,3,3,56,7,56,1,56,2} then return {7,2}
+     *
      * @param list
      * @return
      */
     public static List<Integer> getFirstTwoItemsWithoutPair(List<Integer> list) {
-         if(list==null || list.isEmpty()) return list;
-         HashSet<Integer> set = new HashSet<>();
-         List<Integer> res = new ArrayList<>();
-         for(Integer num: list){
-             if(set.add(num)){
-                 res.add(num);
-             }
-             else{
-                 res.remove(num);
-             }
-         }
+        if (list == null || list.isEmpty()) return list;
+        HashSet<Integer> set = new HashSet<>();
+        List<Integer> res = new ArrayList<>();
+        for (Integer num : list) {
+            if (set.add(num)) {
+                res.add(num);
+            } else {
+                res.remove(num);
+            }
+        }
 
-         List<Integer> result  = new ArrayList<>();
-         for(int i = 0; i< res.size() && i < 2;i++){
-             result.add(res.get(i));
-         }
-         return  result;
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < res.size() && i < 2; i++) {
+            result.add(res.get(i));
+        }
+        return result;
     }
 
     /**
@@ -160,34 +148,29 @@ public class RandomProblems {
     /*
     generate pascal triangle
      */
-    public static List<List<Integer>> generate(int numRows) {
+    public List<List<Integer>> generatePascal(int numRows) {
         if (numRows <= 0) return null;
         List<List<Integer>> list = new ArrayList<List<Integer>>();
         List<Integer> sublist = new ArrayList<>();
         sublist.add(1);
         list.add(sublist);
         for (int i = 1; i < numRows; i++) {
-
-            sublist = getSubList(list.get(i - 1), i + 1);
+            sublist = getSubList(sublist);
             list.add(sublist);
         }
         return list;
     }
 
-    public static List<Integer> getSubList(List<Integer> list, int num) {
+    public List<Integer> getSubList(List<Integer> list) {
         List<Integer> sublist = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            if (i - 1 >= 0) {
-                if (i >= list.size()) {
-                    sublist.add(list.get(i - 1));
-                } else {
-                    sublist.add(list.get(i) + list.get(i - 1));
-                }
-            } else {
-                sublist.add(list.get(i));
+        for (int i = 0; i < list.size()+1; i++) {
+            if (i == 0 || i == list.size()) {
+                //first and last element will always be 1
+                sublist.add(1);
+                continue;
             }
+            sublist.add(list.get(i) + list.get(i - 1));
         }
-
         return sublist;
     }
 

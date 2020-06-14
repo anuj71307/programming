@@ -730,7 +730,8 @@ public class StringProblems {
     }
 
     /**
-     * Given a string which might contain Invalid parenthesis. Return a string which has balanced parenthesis. Parenthesis can only be removed
+     * Given a string which might contain Invalid parenthesis. Return a string which has balanced parenthesis.
+     * Parenthesis can only be removed
      * ie remove invalid parenthesis. If there are multiple solution return any balanced solution.
      * For ex if given string is (v)())()
      * return either (v)()() or  (v())()
