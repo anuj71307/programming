@@ -10,17 +10,64 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {5,4,3,2,1};
-        int res [] = ap.nextGreater(arr);
-        for(int i : res){
-            System.out.print(i+" ");
-        }
-        int res2 [] = ap.nextGreaterInCirularArray(arr);
-        System.out.println();
+        int[] arr = {481, 138, 781, 203, 987, 12, 341, 23, 87, 321, 23, 41};
+        System.out.print(ap.maximumGap(arr));
+    }
 
-        for(int i : res2){
-            System.out.print(i+" ");
+    /**
+     * https://www.interviewbit.com/problems/max-distance/
+     * Given an array A of integers, find the maximum of j - i subjected to the constraint of A[i] <= A[j].
+     * <p>
+     * If there is no solution possible, return 0.
+     * A : [3 5 4 2]
+     * Output : 2
+     * for the pair (3, 4)
+     *
+     * @param A
+     * @return
+     */
+    public int maximumGap(final int[] A) {
+        if (A.length <= 1) return 0;
+        int diff = 0;
+        List<Integer> list = new ArrayList<>();
+        list.add(0);
+        for (int i = 1; i < A.length; i++) {
+            if (A[i] > A[list.get(list.size() - 1)]) {
+                int k = binarySearch(list, A, A[i]);
+                diff = Math.max(diff, i - k);
+                continue;
+            }
+            if (A[i] == A[list.get(list.size() - 1)]) {
+                diff = Math.max(diff, i - list.get(list.size() - 1));
+                continue;
+            }
+            {
+                list.add(i);
+            }
+
         }
+        return diff;
+    }
+
+    int binarySearch(List<Integer> list, int[] arr, int elem) {
+
+        int low = 0;
+        int high = list.size() - 1;
+        while (low <= high) {
+
+            int mid = (low + high) / 2;
+            if (arr[list.get(mid)] == elem) return list.get(mid);
+            if (arr[list.get(mid)] < elem) {
+                if (mid == 0 || (mid - 1 > 0 && arr[list.get(mid - 1)] > elem)) return list.get(mid);
+                else high = mid - 1;
+            } else {
+                if (mid + 1 < list.size() && arr[list.get(mid + 1)] <= elem) return list.get(mid + 1);
+                else low = mid + 1;
+            }
+
+        }
+
+        return list.get(list.size() - 1);
     }
 
     /**
@@ -76,6 +123,7 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/gas-station/
      * LeetCode 134
+     *
      * @param gas
      * @param cost
      * @return
@@ -83,18 +131,18 @@ public class ArrayProblems {
     public int canCompleteGasCircuit(int[] gas, int[] cost) {
 
         int start = 0;
-        int currPetrol = gas[0]-cost[0];
+        int currPetrol = gas[0] - cost[0];
         int length = gas.length;
-        int end = (start+1)%length;
-        if(length==1 && gas[0]-cost[0]<0) return -1;
-        while(end!=start || currPetrol<0){
-            while (currPetrol < 0 && start!=end) {
+        int end = (start + 1) % length;
+        if (length == 1 && gas[0] - cost[0] < 0) return -1;
+        while (end != start || currPetrol < 0) {
+            while (currPetrol < 0 && start != end) {
                 currPetrol -= gas[start] - cost[start];
-                start = (start+1)%length;
-                if(start==0) return -1;
+                start = (start + 1) % length;
+                if (start == 0) return -1;
             }
-            currPetrol+= gas[end]-cost[end];
-            end = (end+1)%length;
+            currPetrol += gas[end] - cost[end];
+            end = (end + 1) % length;
         }
         return start;
     }
@@ -102,16 +150,17 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/gas-station/
      * LeetCode 134
+     *
      * @param gas
      * @param cost
      * @return
      */
     public int canCompleteGasCircuitAlternate(int[] gas, int[] cost) {
 
-      int tank = 0;
-      int totalGas = 0;
-      int totalCost  = 0;
-      int start = 0;
+        int tank = 0;
+        int totalGas = 0;
+        int totalCost = 0;
+        int start = 0;
         for (int i = 0; i < gas.length; i++) {
             totalGas += gas[i];
             totalCost += cost[i];
