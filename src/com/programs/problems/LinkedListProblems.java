@@ -12,26 +12,53 @@ public class LinkedListProblems<T> {
 
         LinkedListProblems lp = new LinkedListProblems();
         ListNode node = new ListNode(1);
-        node.next = new ListNode(2);
-        node.next.next = new ListNode(3);
-        node.next.next.next = new ListNode(4);
-        ListNode[] arr = lp.splitListToParts(node,3 );
-        for(ListNode n:arr){
-            ListNode temp = n;
-            if(temp!=null) {
-                while (temp != null) {
-                    System.out.print(temp.val + " ");
-                    temp = temp.next;
-                }
-            }
-            else{
-                System.out.print("null");
-            }
-            System.out.println("");
+        node.next = new ListNode(3);
+        node.next.next = new ListNode(8);
+        node.next.next.next = new ListNode(1);
+        node.next.next.next.next = new ListNode(4);
+        ListNode arr = lp.insertionSortList(node );
+        while(arr!=null){
+            System.out.print(arr.val+" ");
+            arr= arr.next;
         }
 
 
+
         //lp.sortList();
+    }
+
+    // 1  3 4 2 1
+    public ListNode insertionSortList(ListNode node) {
+        if(node==null || node.next==null) return node;
+        ListNode head = node;// 1
+        ListNode next = node.next; //2
+        head.next = null;
+        while(next!=null){
+             ListNode temp = next.next;
+             next.next = null;
+             head = insert(head, next);
+             next = temp;
+        }
+        return head;
+
+    }
+
+    private ListNode insert(ListNode head, ListNode next) {
+        if (next.val < head.val) {
+            next.next = head;
+            return next;
+        }
+        if (head.next == null) {
+            head.next = next;
+            return head;
+        }
+        ListNode temp = head;
+        while (temp.next!=null && temp.next.val < next.val) {
+            temp = temp.next;
+        }
+        next.next = temp.next;
+        temp.next = next;
+        return head;
     }
 
     /**
