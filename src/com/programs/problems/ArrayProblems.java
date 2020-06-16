@@ -10,9 +10,59 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {481, 138, 781, 203, 987, 12, 341, 23, 87, 321, 23, 41};
-        System.out.print(ap.maximumGap(arr));
+        int[] arr = {1,2,3,4,5};
+        arr= ap.wave(arr);
+       for(int i : arr){
+           System.out.print(i+" ");
+       }
     }
+
+    public int[] wave(int[] arr) {
+        if(arr==null || arr.length<=1) return  arr;
+        Arrays.sort(arr);
+        for(int i = 0;i<arr.length-1;i=i+2){
+            int temp =arr[i];
+            arr[i] = arr[i+1];
+            arr[i+1] = temp;
+        }
+        return arr;
+    }
+
+    /**
+     * https://www.interviewbit.com/problems/max-non-negative-subarray/
+     * @param arr
+     * @return
+     */
+    int[] max_array(int[] arr) {
+        if (arr == null || arr.length == 0) return new int[0];
+        int start = -1;
+        int end = -1;
+        int cs = 0;
+        long sum = 0;
+        long currsum = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < 0) {
+                cs = i + 1;
+                currsum = 0;
+                continue;
+            }
+            currsum += arr[i];
+            if (currsum > sum || (currsum == sum && i - cs + 1 > end - start + 1) || start == -1) {
+                start = cs;
+                end = i;
+                sum = currsum;
+            }
+        }
+        if (start == -1) return new int[0];
+
+        int[] res = new int[end - start + 1];
+        for (int i = start; i <= end; i++) {
+            res[i - start] = arr[i];
+        }
+        return res;
+    }
+
+
 
     /**
      * https://www.interviewbit.com/problems/max-distance/
