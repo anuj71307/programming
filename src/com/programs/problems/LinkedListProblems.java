@@ -4,8 +4,6 @@ package com.programs.problems;
 import com.programs.linkedlist.LinkedList;
 import com.programs.stack.Stack;
 
-import java.util.ArrayList;
-
 public class LinkedListProblems<T> {
 
     public static void main(String[] args) {
@@ -21,10 +19,6 @@ public class LinkedListProblems<T> {
             System.out.print(arr.val+" ");
             arr= arr.next;
         }
-
-
-
-        //lp.sortList();
     }
 
     // 1  3 4 2 1
@@ -408,14 +402,14 @@ public class LinkedListProblems<T> {
      * @param head
      * @return
      */
-    public LinkedList<Integer> sortList(LinkedList<Integer> head) {
+    public LinkedList<Integer> mergeSortLinkedList(LinkedList<Integer> head) {
         if (head == null || head.next == null) return head;
 
         LinkedList<Integer> left = getMid(head);
         LinkedList<Integer> right = left.next;
         left.next = null;
-        head = sortList(head);
-        right = sortList(right);
+        head = mergeSortLinkedList(head);
+        right = mergeSortLinkedList(right);
         return merge(head, right);
     }
 
