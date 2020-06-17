@@ -11,10 +11,55 @@ public class ArrayProblems {
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
         int[] arr = {1,2,3,4,5};
-        arr= ap.wave(arr);
-       for(int i : arr){
-           System.out.print(i+" ");
-       }
+       System.out.print(ap.books(arr, 7));
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/allocate-minimum-number-pages/
+     * Time complexity - Log(P)*N
+     * P - is sum of all the pages, N is length of array
+     */
+    public int books(int[] arr, int students) {
+        int totalPage = 0;
+        for(int i:arr){
+            totalPage+=i;
+        }
+
+        int low = 0;
+        int high = totalPage;
+        int result = Integer.MAX_VALUE;
+        while(low<=high){
+            int mid = (low+high)/2;
+            if(canDistribute(arr, students, mid)){
+                result = Math.min(result, mid);
+                high = mid-1;
+            }
+            else{
+                low = mid+1;
+            }
+
+        }
+
+        return result;
+    }
+
+    private boolean canDistribute(int[] arr, int students, int total) {
+
+        int studentCount = 1;
+        int runningSum = 0;
+        for(int i:arr){
+
+            if(i>total) return false;
+            if(runningSum+i>total){
+                runningSum = i;
+                studentCount++;
+                if(studentCount>students) return false;
+            }
+            else{
+                runningSum+=i;
+            }
+        }
+        return true;
     }
 
     public int[] wave(int[] arr) {
