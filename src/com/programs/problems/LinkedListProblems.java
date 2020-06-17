@@ -10,28 +10,96 @@ public class LinkedListProblems<T> {
 
         LinkedListProblems lp = new LinkedListProblems();
         ListNode node = new ListNode(1);
-        node.next = new ListNode(3);
-        node.next.next = new ListNode(8);
-        node.next.next.next = new ListNode(1);
-        node.next.next.next.next = new ListNode(4);
-        ListNode arr = lp.insertionSortList(node );
+        node.next = new ListNode(2);
+        node.next.next = new ListNode(3);
+        node.next.next.next = new ListNode(4);
+        node.next.next.next.next = new ListNode(5);
+        ListNode arr = lp.reverseBetween(node, 1, 3);
         while(arr!=null){
             System.out.print(arr.val+" ");
-            arr= arr.next;
+            arr = arr.next;
         }
+    }
+
+    /**
+     * https://leetcode.com/problems/reverse-linked-list-ii/
+     * Reverse a linked list between m to n
+     * 1 <= m <=n <= length of list
+     * Time complexity 0(n)
+     * @param head
+     * @param m
+     * @param n
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (head == null || head.next == null || m == n) return head;
+        ListNode temp = head;
+        ListNode prev = null;
+        while (m>1) {
+            prev = temp;
+            temp = temp.next;
+            n--;
+            m--;
+        }
+
+        boolean uh = false;
+        if(prev ==null ){
+            uh = true;
+            prev = new ListNode(-1);
+        }
+        ListNode tail = temp;
+        ListNode curr = tail;
+        while (n > 1 && tail.next!=null) {
+            temp = tail.next;
+            tail.next = temp.next;
+            temp.next = curr;
+            curr = temp;
+            prev.next = curr;
+            n--;
+        }
+        if(uh) return prev.next;
+        return head;
+    }
+
+        // 1 2 3 4 5 , k =2
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) return head;
+        int size = getSize(head);
+        int rotate = k % size; //2
+        if (rotate == 0) return head;
+
+        ListNode next = head;// 1
+        ListNode temp = head; // 1
+        while (rotate-- > 0) {
+            next = next.next;
+        }
+        while (next.next != null) {
+            next = next.next;
+            temp = temp.next;
+        }
+
+        next = temp.next;
+        temp.next = null;
+        ListNode t = next;
+        while (next.next != null) {
+            next = next.next;
+        }
+        next.next = head;
+        return t;
+
     }
 
     // 1  3 4 2 1
     public ListNode insertionSortList(ListNode node) {
-        if(node==null || node.next==null) return node;
+        if (node == null || node.next == null) return node;
         ListNode head = node;// 1
         ListNode next = node.next; //2
         head.next = null;
-        while(next!=null){
-             ListNode temp = next.next;
-             next.next = null;
-             head = insert(head, next);
-             next = temp;
+        while (next != null) {
+            ListNode temp = next.next;
+            next.next = null;
+            head = insert(head, next);
+            next = temp;
         }
         return head;
 
@@ -47,7 +115,7 @@ public class LinkedListProblems<T> {
             return head;
         }
         ListNode temp = head;
-        while (temp.next!=null && temp.next.val < next.val) {
+        while (temp.next != null && temp.next.val < next.val) {
             temp = temp.next;
         }
         next.next = temp.next;
@@ -60,37 +128,38 @@ public class LinkedListProblems<T> {
      * for a given linkedlist we get the size lets say given linked list has 10 node and if we have to split it in 4
      * groups. then our  minimum size for each splited list is 2 which is (10/4) and remaining (10%4) ie 2 .
      * the remaining node we need add 1(cause different in size should not be more than 1 ) in each of our splited nodes starting from 0th.
+     *
      * @param root
      * @param k
      * @return
      */
     public ListNode[] splitListToParts(ListNode root, int k) {
 
-        int size  = getSize(root);
+        int size = getSize(root);
         ListNode[] result = new ListNode[k];
-        if(k==1) {
+        if (k == 1) {
             result[0] = root;
             return result;
         }
-        if(size == 0) return result;
+        if (size == 0) return result;
         // check what should be minimum size of each list
-        int count = size/k;
-        int rem = size%k; // get remainder so we keep adding one extra node to each of splited node list as long as there is some remaining node
+        int count = size / k;
+        int rem = size % k; // get remainder so we keep adding one extra node to each of splited node list as long as there is some remaining node
         int cc;
-        ListNode temp ;
+        ListNode temp;
         int i = 0;
-        while(k>0) {
+        while (k > 0) {
             temp = root;
-            cc = count+(rem>0?1:0); // if there are more nodes left we need to add one extra to current list
-            rem-=1;
-            while (cc > 1 && temp!=null) {
+            cc = count + (rem > 0 ? 1 : 0); // if there are more nodes left we need to add one extra to current list
+            rem -= 1;
+            while (cc > 1 && temp != null) {
                 temp = temp.next;
                 cc--;
             }
             result[i++] = root;
             root = temp != null ? temp.next : null;
-            if(temp!=null){
-                temp.next=null;
+            if (temp != null) {
+                temp.next = null;
             }
             k--; // decrement the node split size
         }
@@ -98,10 +167,10 @@ public class LinkedListProblems<T> {
         return result;
     }
 
-    int getSize(ListNode root){
-        int size =0;
+    int getSize(ListNode root) {
+        int size = 0;
         ListNode temp = root;
-        while(temp!=null){
+        while (temp != null) {
             size++;
             temp = temp.next;
         }
@@ -110,28 +179,29 @@ public class LinkedListProblems<T> {
 
     /**
      * https://leetcode.com/problems/reorder-list/
+     *
      * @param head
      */
     public void reorderList(ListNode head) {
-        if(head==null || head.next==null || head.next.next==null){
+        if (head == null || head.next == null || head.next.next == null) {
             return;
         }
         Stack<ListNode> st = new Stack();
         ListNode temp = head;
-        while(temp!=null){
+        while (temp != null) {
             st.push(temp);
-            temp=temp.next;
+            temp = temp.next;
         }
         ListNode node = head;//2
-        while(node!=st.peek() && node!=null){
+        while (node != st.peek() && node != null) {
             ListNode n = st.pop();//3
-            st.peek().next=null;
+            st.peek().next = null;
             ListNode next = node.next;//2
-            node.next=n;
-            n.next=next;
-            node=next;
+            node.next = n;
+            n.next = next;
+            node = next;
         }
-        if(node!=null) {
+        if (node != null) {
             node.next = null;
         }
 
