@@ -3,15 +3,115 @@ package com.programs.problems;
 
 import com.programs.stack.Stack;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class StringProblems {
 
+    /**
+     * // System.out.println(dp.editDistDP("horse", "ros"));
+     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+     int test = Integer.parseInt(reader.readLine());
+     for(int i = 0 ; i<test;i++){
+     int k = Integer.parseInt(reader.readLine());
+     String str = reader.readLine();
+     String [] ar = str.split(",");
+     int arr[] = new int[ar.length];
+     for(int m = 0; m < arr.length;m++){
+     arr[m] = Integer.parseInt(ar[m].trim());
+     }
+     System.out.println(dp.longestZigZag(arr));
+     }
+     reader.close();
+     */
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         StringProblems sp = new StringProblems();
-        System.out.print(sp.repeatedSubstringPattern("ab"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int test = Integer.parseInt(reader.readLine());
+        for(int i = 0 ; i<test;i++){
+            String str = reader.readLine();
+            int k = Integer.parseInt(reader.readLine());
+            System.out.println(sp.kUniqueLength(str, k));
+        }
+        reader.close();
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/find-the-longest-substring-with-k-unique-characters-in-a-given-string/
+     * e keep adding count of each character in hashmap, if at any point map.size becomes more than
+     * k then we start popping element from start. until size is greater
+     * @param str
+     * @param k
+     * @return
+     */
+    private int kUniqueLengthWithMap(String str, int k) {
+        if (str == null || str.isEmpty() || k == 0) return 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        int start = 0;
+        int max = 1;
+
+        for (int index = 0; index < str.length(); index++) {
+            Character character = str.charAt(index);
+            map.put(character, map.getOrDefault(character, 0) + 1);
+            if (map.size() > k) {
+                while (map.size() > k) {
+                    character = str.charAt(start);
+                    map.put(character, map.get(character) - 1);
+                    if (map.get(character) == 0) {
+                        map.remove(character);
+                    }
+                    start++;
+                }
+            }
+            max = Math.max(max, index - start + 1);
+
+        }
+        return max;
+    }
+
+
+    /**
+     * https://www.geeksforgeeks.org/find-the-longest-substring-with-k-unique-characters-in-a-given-string/
+     * we keep adding count of each character in count array and anytime new character added we increase out count of
+     * unique character, if at any point unique character count  becomes more than k then we start popping element from
+     * start. until unqieue character count becomes equal to k
+     * @param str
+     * @param k
+     * @return
+     */
+    private int kUniqueLength(String str, int k) {
+        if (str == null || str.isEmpty() || k == 0) return 0;
+        int[] charCount = new int[26];
+        int count = 0;
+        int start = 0;
+        int max = -1;
+
+        for (int index = 0; index < str.length(); index++) {
+            char character = str.charAt(index);
+            int c =  charCount[character-'a'];
+            if(c==0){
+                count++;
+            }
+            charCount[character-'a'] = c+1;
+            while (count > k) {
+                int pos = str.charAt(start) - 'a';
+                c = charCount[pos];
+                charCount[pos] = c - 1;
+                if (c == 1) {
+                    count--;
+                }
+                start++;
+            }
+            if(count==k) {
+                max = Math.max(max, index - start + 1);
+            }
+
+        }
+        return max;
     }
 
     /**

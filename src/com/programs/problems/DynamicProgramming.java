@@ -15,20 +15,19 @@ public class DynamicProgramming {
 
     /**
      * // System.out.println(dp.editDistDP("horse", "ros"));
-     * BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-     * int test = Integer.parseInt(reader.readLine());
-     * for(int i = 0 ; i<test;i++){
-     * int k = Integer.parseInt(reader.readLine());
-     * String str = reader.readLine();
-     * String [] ar = str.split(",");
-     * int arr[] = new int[ar.length];
-     * for(int m = 0; m < arr.length;m++){
-     * arr[m] = Integer.parseInt(ar[m].trim());
-     * }
-     * System.out.println(dp.longestZigZag(arr));
-     * }
-     * <p>
-     * reader.close();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+      int test = Integer.parseInt(reader.readLine());
+      for(int i = 0 ; i<test;i++){
+      int k = Integer.parseInt(reader.readLine());
+      String str = reader.readLine();
+      String [] ar = str.split(",");
+      int arr[] = new int[ar.length];
+      for(int m = 0; m < arr.length;m++){
+      arr[m] = Integer.parseInt(ar[m].trim());
+      }
+      System.out.println(dp.longestZigZag(arr));
+      }
+      reader.close();
      */
 
     public static void main(String[] args) throws IOException {
