@@ -10,8 +10,24 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {1,2,3,4,5};
-       System.out.print(ap.books(arr, 7));
+        int[] arr = {2,4,3};
+       System.out.print(ap.canRepresentBst(arr));
+    }
+
+    // 40, 30, 35, 80, 100
+    boolean canRepresentBst(int arr[]){
+        Stack<Integer> st = new Stack<>();
+        st.push(Integer.MIN_VALUE);
+        int root = Integer.MIN_VALUE;
+        for(int i=0;i<arr.length;i++){
+            int val = arr[i];
+            if(val<root) return false;
+            while(!st.isEmpty() && st.peek()<val){
+                root = st.pop();
+            }
+            st.push(arr[i]);
+        }
+        return true;
     }
 
     /**
