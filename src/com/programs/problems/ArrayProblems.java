@@ -10,8 +10,59 @@ public class ArrayProblems {
 
     public static void main(String[] args) {
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {2,4,3};
-       System.out.print(ap.canRepresentBst(arr));
+        int[] arr = {1,4,8,11,18};
+        int temp[]= {2,5,9,12};
+       ap.printAllSortedArray(arr, temp);
+    }
+
+    /**
+     https://www.geeksforgeeks.org/generate-all-possible-sorted-arrays-from-alternate-elements-of-two-given-arrays/
+     * @param first
+     * @param second
+     */
+    void printAllSortedArray(int[] first, int[] second){
+        int temp[] = new int[first.length+second.length];
+        printAllSortedArray(first, second, 0, 0, true, temp, 0);
+    }
+
+    private void printAllSortedArray(int[] first, int[] second, int firstIndex, int secondIndex,
+                                     boolean fromFirst, int[] temp, int start) {
+        if(fromFirst){
+            printArray(temp, start);
+        }
+        if(fromFirst){
+            if(start==0){
+                for(int i = firstIndex;i<first.length;i++){
+                    temp[start] = first[i];
+                    printAllSortedArray(first, second, firstIndex+1, secondIndex, !fromFirst, temp, start+1);
+                }
+            }
+            else{
+                int elem = temp[start-1];
+                for(int i = firstIndex;i<first.length;i++){
+                    if(first[i]>elem){
+                        temp[start] = first[i];
+                        printAllSortedArray(first, second,i+1, secondIndex, !fromFirst, temp, start+1);
+                    }
+                }
+            }
+        }
+        else{
+            int elem = temp[start-1];
+            for(int i = secondIndex;i<second.length;i++){
+                if(second[i]>elem){
+                    temp[start] = second[i];
+                    printAllSortedArray(first, second,firstIndex, i+1, !fromFirst, temp, start+1);
+                }
+            }
+        }
+    }
+
+    private void printArray(int[] temp, int index) {
+        for(int i=0;i<index;i++ ){
+            System.out.print(temp[i]+" ");
+        }
+        System.out.println();
     }
 
     // 40, 30, 35, 80, 100
