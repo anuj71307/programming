@@ -4,76 +4,126 @@ import com.programs.heap.MaxHeap;
 import com.programs.heap.MinHeap;
 import com.programs.map.THashMap;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class ArrayProblems {
 
-    public static void main(String[] args) {
+    /*
+    public static void main(String[] args) throws Exception {
+        //code
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {1,4,8,11,18};
-        int temp[]= {2,5,9,12};
-       ap.printAllSortedArray(arr, temp);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int test = Integer.parseInt(reader.readLine());
+        for (int i = 0; i < test; i++) {
+            reader.readLine();
+            String str = reader.readLine();
+            String[] ar = str.split(" ");
+            int arr[] = new int[ar.length];
+            for (int m = 0; m < arr.length; m++) {
+                arr[m] = Integer.parseInt(ar[m].trim());
+            }
+            ap.wave(arr);
+            for (int p : arr) {
+                System.out.print(p + " ");
+            }
+            System.out.println();
+
+        }
+        reader.close();
+    }
+    */
+    public static void main(String[] args) throws Exception {
+        //code
+        ArrayProblems ap = new ArrayProblems();
+    }
+
+
+    /**
+     * https://www.geeksforgeeks.org/sort-array-wave-form-2/
+     *
+     * @param arr
+     */
+    public void wave(int[] arr) {
+        if (arr == null || arr.length <= 1) return;
+        boolean flag = true;
+        if (arr[1] < arr[0]) {
+            flag = !flag;
+        }
+        for (int i = 1; i < arr.length; i++) {
+            if (!flag) {
+                if (arr[i] < arr[i - 1]) {
+                    swap(arr, i, i - 1);
+                }
+            } else {
+                if (arr[i] > arr[i - 1]) {
+                    swap(arr, i, i - 1);
+                }
+            }
+
+            flag = !flag;
+        }
     }
 
     /**
-     https://www.geeksforgeeks.org/generate-all-possible-sorted-arrays-from-alternate-elements-of-two-given-arrays/
+     * https://www.geeksforgeeks.org/generate-all-possible-sorted-arrays-from-alternate-elements-of-two-given-arrays/
+     *
      * @param first
      * @param second
      */
-    void printAllSortedArray(int[] first, int[] second){
-        int temp[] = new int[first.length+second.length];
+    void printAllSortedArray(int[] first, int[] second) {
+        int temp[] = new int[first.length + second.length];
         printAllSortedArray(first, second, 0, 0, true, temp, 0);
     }
 
     private void printAllSortedArray(int[] first, int[] second, int firstIndex, int secondIndex,
                                      boolean fromFirst, int[] temp, int start) {
-        if(fromFirst){
+        if (fromFirst) {
             printArray(temp, start);
         }
-        if(fromFirst){
-            if(start==0){
-                for(int i = firstIndex;i<first.length;i++){
+        if (fromFirst) {
+            if (start == 0) {
+                for (int i = firstIndex; i < first.length; i++) {
                     temp[start] = first[i];
-                    printAllSortedArray(first, second, firstIndex+1, secondIndex, !fromFirst, temp, start+1);
+                    printAllSortedArray(first, second, firstIndex + 1, secondIndex, !fromFirst, temp, start + 1);
                 }
-            }
-            else{
-                int elem = temp[start-1];
-                for(int i = firstIndex;i<first.length;i++){
-                    if(first[i]>elem){
+            } else {
+                int elem = temp[start - 1];
+                for (int i = firstIndex; i < first.length; i++) {
+                    if (first[i] > elem) {
                         temp[start] = first[i];
-                        printAllSortedArray(first, second,i+1, secondIndex, !fromFirst, temp, start+1);
+                        printAllSortedArray(first, second, i + 1, secondIndex, !fromFirst, temp, start + 1);
                     }
                 }
             }
-        }
-        else{
-            int elem = temp[start-1];
-            for(int i = secondIndex;i<second.length;i++){
-                if(second[i]>elem){
+        } else {
+            int elem = temp[start - 1];
+            for (int i = secondIndex; i < second.length; i++) {
+                if (second[i] > elem) {
                     temp[start] = second[i];
-                    printAllSortedArray(first, second,firstIndex, i+1, !fromFirst, temp, start+1);
+                    printAllSortedArray(first, second, firstIndex, i + 1, !fromFirst, temp, start + 1);
                 }
             }
         }
     }
 
     private void printArray(int[] temp, int index) {
-        for(int i=0;i<index;i++ ){
-            System.out.print(temp[i]+" ");
+        for (int i = 0; i < index; i++) {
+            System.out.print(temp[i] + " ");
         }
         System.out.println();
     }
 
     // 40, 30, 35, 80, 100
-    boolean canRepresentBst(int arr[]){
+    boolean canRepresentBst(int arr[]) {
         Stack<Integer> st = new Stack<>();
         st.push(Integer.MIN_VALUE);
         int root = Integer.MIN_VALUE;
-        for(int i=0;i<arr.length;i++){
+        for (int i = 0; i < arr.length; i++) {
             int val = arr[i];
-            if(val<root) return false;
-            while(!st.isEmpty() && st.peek()<val){
+            if (val < root) return false;
+            while (!st.isEmpty() && st.peek() < val) {
                 root = st.pop();
             }
             st.push(arr[i]);
@@ -88,21 +138,20 @@ public class ArrayProblems {
      */
     public int books(int[] arr, int students) {
         int totalPage = 0;
-        for(int i:arr){
-            totalPage+=i;
+        for (int i : arr) {
+            totalPage += i;
         }
 
         int low = 0;
         int high = totalPage;
         int result = Integer.MAX_VALUE;
-        while(low<=high){
-            int mid = (low+high)/2;
-            if(canDistribute(arr, students, mid)){
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (canDistribute(arr, students, mid)) {
                 result = Math.min(result, mid);
-                high = mid-1;
-            }
-            else{
-                low = mid+1;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
             }
 
         }
@@ -114,34 +163,23 @@ public class ArrayProblems {
 
         int studentCount = 1;
         int runningSum = 0;
-        for(int i:arr){
+        for (int i : arr) {
 
-            if(i>total) return false;
-            if(runningSum+i>total){
+            if (i > total) return false;
+            if (runningSum + i > total) {
                 runningSum = i;
                 studentCount++;
-                if(studentCount>students) return false;
-            }
-            else{
-                runningSum+=i;
+                if (studentCount > students) return false;
+            } else {
+                runningSum += i;
             }
         }
         return true;
     }
 
-    public int[] wave(int[] arr) {
-        if(arr==null || arr.length<=1) return  arr;
-        Arrays.sort(arr);
-        for(int i = 0;i<arr.length-1;i=i+2){
-            int temp =arr[i];
-            arr[i] = arr[i+1];
-            arr[i+1] = temp;
-        }
-        return arr;
-    }
-
     /**
      * https://www.interviewbit.com/problems/max-non-negative-subarray/
+     *
      * @param arr
      * @return
      */
@@ -173,7 +211,6 @@ public class ArrayProblems {
         }
         return res;
     }
-
 
 
     /**
