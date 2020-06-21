@@ -15,31 +15,97 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        Node node = new Node(1);
-        node.left = new Node(2);
-        node.right = new Node(3);
-        node.left.left = new Node(4);
-        node.right.left = new Node(5);
+        //Node node = new Node(19);
+        Node node = new Node(7);
+        node.left = new Node(1);
+        node.right = new Node(1);
+        node.left.left = new Node(1);
+        node.left.right = new Node(1);
+        node.right.left = new Node(1);
+        node.right.right = new Node(1);
+        //node.right.right.right = new Node(33);
+        //node.right.right.left = new Node(37);
+        //node.right.left.left = new Node(11);
+        //node.right.left.left.right = new Node(15);
 
-        Node n = tp.connect(node);
+        node.left.left.left = new Node(1);
+        node.left.left.right = new Node(1);
+        // node.left.left.left.right = new Node(7);
+        tp.printPreOrder(node);
+        Node n = tp.solve(node, 10);
+        System.out.println();
+        tp.printPreOrder(n);
     }
+
+    public Node solve(Node A, int B) {
+        return solve(A, B, 0);
+    }
+
+    /**
+     * https://www.interviewbit.com/problems/remove-nodes-from-path-sum-less-than-b/
+     *
+     * @param node
+     * @param sum
+     * @param curr
+     * @return
+     */
+    public Node solve(Node node, int sum, int curr) {
+        if (node == null) return null;
+        node.left = solve(node.left, sum, node.data + curr);
+        node.right = solve(node.right, sum, node.data + curr);
+        if (node.left == null && node.right == null && curr + node.data < sum) return null;
+        return node;
+    }
+
+    void printPreOrder(Node node) {
+        if (node == null) return;
+        System.out.print(node.data + " ");
+        printPreOrder(node.left);
+        printPreOrder(node.right);
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/remove-nodes-root-leaf-paths-length-k/
+     * Using improved height calculator function to do this. each time pass curr depth
+     * and check depth+height is more than desired length or not
+     * if not we simply delete the node
+     *
+     * @param root
+     * @param length
+     * @return
+     */
+    public Node removeNodes(Node root, int length) {
+        int l = removeNode(root, length, 1);
+        if (l < length) return null;
+        return root;
+    }
+
+
+    public int removeNode(Node root, int length, int curr) {
+        if (root == null) return 0;
+        int left = removeNode(root.left, length, curr + 1);
+        int right = removeNode(root.right, length, curr + 1);
+        if (curr + left < length) root.left = null;
+        if (curr + right < length) root.right = null;
+        return Math.max(left, right) + 1;
+    }
+
     /**
      * https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
-     *
      */
-    private Node connectIterative(Node root){
+    private Node connectIterative(Node root) {
 
-        for(Node temp = root;temp!=null;){
+        for (Node temp = root; temp != null; ) {
 
             Node head = new Node(0);
             Node tail = head;
-            for(Node node = temp; node!=null; node = node.next){
+            for (Node node = temp; node != null; node = node.next) {
 
-                if(node.left!=null){
+                if (node.left != null) {
                     tail.next = node.left;
                     tail = tail.next;
                 }
-                if(node.right!=null){
+                if (node.right != null) {
                     tail.next = node.right;
                     tail = tail.next;
                 }
@@ -54,26 +120,27 @@ public class TreeProblems {
     /**
      * https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
      * Using Queue
+     *
      * @param root
      * @return
      */
     public Node connect(Node root) {
-        if(root==null) return root;
+        if (root == null) return root;
         Queue<Node> q = new LinkedList<>();
         q.add(root);
-        while(!q.isEmpty()){
+        while (!q.isEmpty()) {
             int size = q.size();
-            for(int i = 0;i<size;i++){
+            for (int i = 0; i < size; i++) {
 
                 // if(i==size-1) break;
                 Node node = q.poll();
-                if(i<size-1) {
+                if (i < size - 1) {
                     node.next = q.peek() != null ? q.peek() : null;
                 }
-                if(node.left!=null){
+                if (node.left != null) {
                     q.add(node.left);
                 }
-                if(node.right!=null){
+                if (node.right != null) {
                     q.add(node.right);
 
                 }
@@ -87,10 +154,11 @@ public class TreeProblems {
     /**
      * https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/
      * Bottom Up Approach
+     *
      * @param node
      * @return
      */
-    int longestSubsequence(TreeNode node){
+    int longestSubsequence(TreeNode node) {
         int res[] = new int[1];
         longestSubsequence(node, res);
         return res[0];
@@ -98,23 +166,24 @@ public class TreeProblems {
 
     /**
      * https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/
+     *
      * @param node
      * @param res
      * @return
      */
     private int longestSubsequence(TreeNode node, int[] res) {
-        if(node==null) return 0;
+        if (node == null) return 0;
         int retValue = 1;
-        if(node.left!=null){
+        if (node.left != null) {
             int left = longestSubsequence(node.left, res);
-            if(node.left.value-node.value==1){
-                retValue = Math.max(retValue, left+1);
+            if (node.left.value - node.value == 1) {
+                retValue = Math.max(retValue, left + 1);
             }
         }
-        if(node.right!=null){
+        if (node.right != null) {
             int right = longestSubsequence(node.right, res);
-            if(node.right.value-node.value==1){
-                retValue = Math.max(retValue, right+1);
+            if (node.right.value - node.value == 1) {
+                retValue = Math.max(retValue, right + 1);
             }
         }
         res[0] = Math.max(res[0], retValue);
@@ -1365,7 +1434,7 @@ class Node {
     public String toString() {
         return "Node{" +
                 "data=" + data +
-                " next = "+ (next!=null?next.data:null)+
+                " next = " + (next != null ? next.data : null) +
                 '}';
     }
 }
