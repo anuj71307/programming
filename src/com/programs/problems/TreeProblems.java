@@ -5,6 +5,7 @@ import com.programs.stack.Stack;
 import com.programs.trees.BinarySearchTree;
 import com.programs.trees.BinaryTree;
 import com.programs.trees.ITree;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.*;
 
@@ -15,26 +16,67 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        //Node node = new Node(19);
-        Node node = new Node(7);
-        node.left = new Node(1);
-        node.right = new Node(1);
-        node.left.left = new Node(1);
-        node.left.right = new Node(1);
-        node.right.left = new Node(1);
-        node.right.right = new Node(1);
-        //node.right.right.right = new Node(33);
-        //node.right.right.left = new Node(37);
-        //node.right.left.left = new Node(11);
-        //node.right.left.left.right = new Node(15);
+        BinarySearchTree<Integer> tree = new BinarySearchTree(20);
+        tree.add(11);
+        tree.add(17);
+        tree.add(6);
+        tree.add(7);
+        tree.add(8);
+        tree.add(2);
+        tree.add(38);
+        tree.add(24);
+        tree.add(41);
+        tree.add(27);
+        tree.add(55);
+        tree.add(28);
+        int check = 55;
 
-        node.left.left.left = new Node(1);
-        node.left.left.right = new Node(1);
-        // node.left.left.left.right = new Node(7);
-        tp.printPreOrder(node);
-        Node n = tp.solve(node, 10);
+        iterativeInorder(tree);
         System.out.println();
-        tp.printPreOrder(n);
+        BinarySearchTree<Integer> node = tp.inOrderSuccessor(tree, check);
+        int v = node != null ? node.getData() : -1;
+        System.out.println(v);
+    }
+
+    /**
+     * Find in order successor of a node in Binary Search Tree. In node is not present or successor is not available return -1
+     * Time complexity - if Balanced BST then Log(N) where N is number of node or O(H) where H ie height of tree
+     * If tree is not balanced then time complexity is O(N) where is number of node
+     * Space complexity is also same as time complexity
+     *
+     * @param root
+     * @param data
+     * @return
+     */
+    public BinarySearchTree<Integer> inOrderSuccessor(BinarySearchTree<Integer> root, int data) {
+
+        if (root == null) return null;
+        BinarySearchTree<Integer> succ = null;
+        while (root != null) {
+            if (root.getData() == data) {
+                if (root.getRightNode() != null) {
+                    return getLeftMost((BinarySearchTree<Integer>) root.getRightNode());
+                } else {
+                    return succ;
+                }
+            }
+
+            if (root.getData() < data) {
+                root = (BinarySearchTree<Integer>) root.getRightNode();
+            } else {
+                succ = root;
+                root = (BinarySearchTree<Integer>) root.getLeftNode();
+            }
+        }
+
+        return null;
+    }
+
+    private BinarySearchTree<Integer> getLeftMost(BinarySearchTree<Integer> rightNode) {
+        while (rightNode.getLeftNode() != null) {
+            rightNode = (BinarySearchTree<Integer>) rightNode.getLeftNode();
+        }
+        return rightNode;
     }
 
     public Node solve(Node A, int B) {
