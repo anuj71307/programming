@@ -37,6 +37,50 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
+        HashSet<String> dict = new HashSet<>();
+        dict.add("geeks");
+        dict.add("for");
+        dict.add("quiz");
+        dict.add("go");
+        char[][] arr = {{'g', 'i', 'z'},
+                {'u', 'e', 'e'},
+                {'q', 'r', 'k'},
+                {'f', 'o', 's'}};
+        ap.findWords(dict, arr);
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/boggle-find-possible-words-board-characters/
+     * Time complexity O(N^2) where N is total number of character in array
+     * @param dict
+     * @param characters
+     */
+    public void findWords(HashSet<String> dict, char[][] characters) {
+        boolean visited[][] = new boolean[characters.length][characters[0].length];
+        for (int i = 0; i < characters.length; i++) {
+            for (int j = 0; j < characters[i].length; j++) {
+                checkWord(dict, characters, i, j, visited, "");
+            }
+        }
+    }
+
+    private void checkWord(HashSet<String> dict, char[][] characters, int i, int j, boolean[][] visited, String word) {
+        if (i < 0 || j < 0 || i >= characters.length || j >= characters[i].length || visited[i][j]) return;
+        word = word + characters[i][j];
+        if (dict.contains(word)) {
+            System.out.println(word);
+        }
+        visited[i][j] = true;
+
+        for (int m = -1; m <= 1; m++) {
+            for (int n = -1; n <= 1; n++) {
+                if (m == 1 && n == 1) {
+                    //System.out.println();
+                }
+                checkWord(dict, characters, i + m, j + n, visited, word);
+            }
+        }
+        visited[i][j] = false;
     }
 
 
