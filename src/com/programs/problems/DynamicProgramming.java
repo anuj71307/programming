@@ -15,27 +15,71 @@ public class DynamicProgramming {
 
     /**
      * // System.out.println(dp.editDistDP("horse", "ros"));
-      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-      int test = Integer.parseInt(reader.readLine());
-      for(int i = 0 ; i<test;i++){
-      int k = Integer.parseInt(reader.readLine());
-      String str = reader.readLine();
-      String [] ar = str.split(",");
-      int arr[] = new int[ar.length];
-      for(int m = 0; m < arr.length;m++){
-      arr[m] = Integer.parseInt(ar[m].trim());
-      }
-      System.out.println(dp.longestZigZag(arr));
-      }
-      reader.close();
+     * BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+     * int test = Integer.parseInt(reader.readLine());
+     * for(int i = 0 ; i<test;i++){
+     * int k = Integer.parseInt(reader.readLine());
+     * String str = reader.readLine();
+     * String [] ar = str.split(",");
+     * int arr[] = new int[ar.length];
+     * for(int m = 0; m < arr.length;m++){
+     * arr[m] = Integer.parseInt(ar[m].trim());
+     * }
+     * System.out.println(dp.longestZigZag(arr));
+     * }
+     * reader.close();
      */
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        System.out.println(dp.steps(30));
-        String first = "";
-        String second = "";
-        System.out.println(dp.longestCommonSequence(first, second));
+        System.out.println(dp.climbStairsTopDown(8));
+    }
+
+    /**
+     * https://leetcode.com/problems/climbing-stairs/
+     * TopDown [climbStairsTopDown]
+     *
+     * @param n
+     * @return
+     */
+    public int climbStairsBottomUp(int n) {
+        if (n <= 0) return 0;
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        int[] arr = new int[n + 1];
+        arr[1] = 1;
+        arr[2] = 2;
+        for (int i = 3; i <= n; i++) {
+            arr[i] = arr[i - 1] + arr[i - 2];
+        }
+
+        return arr[n];
+    }
+
+    public int climbStairsTopDown(int n) {
+        if (n <= 0) return 0;
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        int[] arr = new int[n + 1];
+        arr[1] = 1;
+        arr[2] = 2;
+        return climbStairsTopDown(n, arr);
+    }
+
+    public int climbStairsTopDown(int n, int[] dp) {
+        if (n <= 0) return 0;
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        if (dp[n] != 0) return dp[n];
+        dp[n] = climbStairsTopDown(n - 1, dp) + climbStairsTopDown(n - 2, dp);
+        return dp[n];
+    }
+
+    public int climbStairsRecursive(int n) {
+        if (n <= 0) return 0;
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        return climbStairsRecursive(n - 1) + climbStairsRecursive(n - 2);
     }
 
     /**
