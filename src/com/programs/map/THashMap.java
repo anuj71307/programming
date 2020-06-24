@@ -19,7 +19,7 @@ public class THashMap<K,V> {
     }
 
     private int getPos(K key){
-        return  hashing(key)%table.length;
+        return  (int)hashing(key)%table.length;
     }
 
     public V get(K key){
@@ -56,12 +56,13 @@ public class THashMap<K,V> {
         }
 
         Node<K,V> prev = node;
-        while(node!=null&& hashing(key)!=hashing(node.key)){
+        long hashKey = hashing(key);
+        while (node != null && (hashKey != hashing(node.key) && (key == node.key || !key.equals(node.key)))) {
             prev = node;
             node = node.next;
         }
-        if(node==null){
-            prev.next= new Node(key,val);
+        if (node == null) {
+            prev.next = new Node(key, val);
             size++;
             return;
         }
@@ -99,7 +100,8 @@ public class THashMap<K,V> {
 
 
         Node<K,V> prev = node;
-        while(node!=null&& (hashing(key)!=hashing(node.key) && !key.equals(node.key))){
+        long hashKey = hashing(key);
+        while(node!=null&& hashKey!=hashing(node.key) &&  !key.equals(node.key)){
             prev = node;
             node = node.next;
         }
@@ -125,7 +127,7 @@ public class THashMap<K,V> {
         return size;
     }
 
-    int hashing(K key){
+    long hashing(K key){
         if (key == null) return 0;
         int h = key.hashCode();
         if(h<0) return h >>>16;
