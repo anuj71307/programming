@@ -37,21 +37,43 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        HashSet<String> dict = new HashSet<>();
-        dict.add("geeks");
-        dict.add("for");
-        dict.add("quiz");
-        dict.add("go");
-        char[][] arr = {{'g', 'i', 'z'},
-                {'u', 'e', 'e'},
-                {'q', 'r', 'k'},
-                {'f', 'o', 's'}};
-        ap.findWords(dict, arr);
+        int[] arr = {-1, -1, 2, 0, 1, 1, 3, 1, -8, 0, 0, 5, 1};
+        int target = 5;
+        System.out.println(ap.smallestSubArray(arr, target));
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/minimum-length-subarray-sum-greater-given-value/
+     *
+     * @param arr
+     * @param target
+     * @return
+     */
+    public int smallestSubArray(int[] arr, int target) {
+        int start = 0;
+        int end = 0;
+        int sum = 0;
+        int length = Integer.MAX_VALUE;
+        while (end < arr.length) {
+            if (arr[end] > target) return 1;
+            sum += arr[end];
+            while (sum > target && start < end) {
+                length = Math.min(length, end - start + 1);
+                sum -= arr[start++];
+            }
+            if (sum < 0) {
+                sum = 0;
+                start = end + 1;
+            }
+            end++;
+        }
+        return length;
     }
 
     /**
      * https://www.geeksforgeeks.org/boggle-find-possible-words-board-characters/
      * Time complexity O(N^2) where N is total number of character in array
+     *
      * @param dict
      * @param characters
      */
