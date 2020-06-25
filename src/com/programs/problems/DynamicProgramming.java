@@ -32,7 +32,56 @@ public class DynamicProgramming {
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        System.out.println(dp.climbStairsTopDown(8));
+        // int[][] arr = {{1, 1}, {6,3}};
+        int[][] arr = {
+                {5, 2, 9},
+                {2, 1, 21},
+                {4, 41, 3}};
+        System.out.println(dp.maxIncreasingPath(arr));
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/find-the-longest-path-in-a-matrix-with-given-constraints/
+     *
+     * @param arr
+     * @return
+     */
+    public int maxIncreasingPath(int[][] arr) {
+        int[][] max = new int[arr.length][arr[0].length];
+        int[] res = new int[1];
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                int m = max[i][j];
+                if (max[i][j] == 0) {
+                    m = findMax(arr, i, j, res, max);
+                }
+                res[0] = Math.max(m, res[0]);
+
+            }
+        }
+        return res[0];
+    }
+
+    private int findMax(int[][] arr, int row, int col, int[] res, int[][] max) {
+        if (max[row][col] != 0) return max[row][col];
+        int cmax = 1;
+        int val = arr[row][col];
+        if (row - 1 >= 0 && arr[row - 1][col] == val + 1) {
+            cmax = Math.max(cmax, findMax(arr, row - 1, col, res, max) + 1);
+        }
+        if (row + 1 < arr.length && arr[row + 1][col] == val + 1) {
+            cmax = Math.max(cmax, findMax(arr, row + 1, col, res, max) + 1);
+        }
+        if (col - 1 >= 0 && arr[row][col - 1] == val + 1) {
+            cmax = Math.max(cmax, findMax(arr, row, col - 1, res, max) + 1);
+        }
+        if (col + 1 < arr[row].length && arr[row][col + 1] == val + 1) {
+            cmax = Math.max(cmax, findMax(arr, row, col + 1, res, max) + 1);
+        }
+
+        max[row][col] = cmax;
+        res[0] = Math.max(res[0], cmax);
+        return cmax;
     }
 
     /**
