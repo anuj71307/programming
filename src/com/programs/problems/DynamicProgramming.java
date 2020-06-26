@@ -32,12 +32,38 @@ public class DynamicProgramming {
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        // int[][] arr = {{1, 1}, {6,3}};
-        int[][] arr = {
-                {5, 2, 9},
-                {2, 1, 21},
-                {4, 41, 3}};
-        System.out.println(dp.maxIncreasingPath(arr));
+        int[] arr = {2, 3, 8, 4, 5, 9};
+        int target = 21;
+        System.out.println(dp.subSetSum(arr, target));
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/subset-sum-problem-dp-25/
+     * Time complexity -> Target*N, where is N is length of array
+     * Space complexity is also same
+     * @param arr
+     * @param target
+     * @return
+     */
+    public boolean subSetSum(int[] arr, int target) {
+        int dp[][] = new int[target + 1][arr.length];
+        boolean res = subSetSum(arr, target, 0, dp);
+        return res;
+    }
+
+    private boolean subSetSum(int[] arr, int target, int index, int[][] dp) {
+        if (target == 4 && index == 1)
+            if (target == 0) return true;
+        if (target < 0 || index >= arr.length) return false;
+        if (dp[target][index] != 0) return dp[target][index] == 100;
+        if (target - arr[index] == 0) {
+            dp[target][index] = 100;
+            return true;
+        }
+        boolean res = subSetSum(arr, target, index + 1, dp) || subSetSum(arr, target - arr[index], index + 1, dp);
+        ;
+        dp[target][index] = res ? 100 : 200;
+        return res;
     }
 
     /**
