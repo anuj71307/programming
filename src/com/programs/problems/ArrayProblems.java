@@ -43,6 +43,50 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/count-square-submatrices-with-all-ones/
+     *
+     * @param arr
+     * @return
+     */
+    public int countSquare(int[][] arr) {
+
+        int res = 0;
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                if (arr[i][j] == 1) {
+                    res += 1;
+                    int val = countSquare(arr, i + 1, j + 1, 2);
+                    res += val;
+                }
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * @param arr
+     * @param row
+     * @param col
+     * @param size
+     * @return
+     */
+    private int countSquare(int[][] arr, int row, int col, int size) {
+        if (row < 0 || col < 0 || row >= arr.length || col >= arr[row].length || arr[row][col] == 0) return 0;
+        int k = 1;
+        for (int i = row - 1; i >= 0 && k < size; i--, k++) {
+            if (arr[i][col] == 0) return 0;
+        }
+        k = 1;
+        for (int i = col - 1; i >= 0 && k < size; i--, k++) {
+            if (arr[row][i] == 0) return 0;
+        }
+        return countSquare(arr, row + 1, col + 1, size + 1) + 1;
+    }
+
+
+
+    /**
      * https://www.geeksforgeeks.org/minimum-length-subarray-sum-greater-given-value/
      *
      * @param arr
