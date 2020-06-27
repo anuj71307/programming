@@ -32,15 +32,60 @@ public class DynamicProgramming {
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        int[] arr = {2, 3, 8, 4, 5, 9};
-        int target = 21;
-        System.out.println(dp.subSetSum(arr, target));
+        int[] arr = {4, 4, 4};
+        int length = 4;
+        System.out.println(dp.cutLength(arr, length));
+    }
+
+    /**
+     * https://practice.geeksforgeeks.org/problems/cutted-segments/0
+     *
+     * @param arr
+     * @param length
+     * @return
+     */
+    public int cutLength(int[] arr, int length) {
+        int dp[] = new int[length + 1];
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] <= length) {
+                dp[arr[i]] = 1;
+            }
+        }
+        for (int i = 0; i <= length; i++) {
+            int max = dp[i];
+            for (int j = 0; j <= i/2; j++) {
+                if (dp[j] == 0 || dp[i - j] == 0) continue;
+                max = Math.max(max, dp[j] + dp[i - j]);
+            }
+            dp[i] = max;
+        }
+        return dp[length];
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/cutting-a-rod-dp-13/
+     * @param arr
+     * @return
+     */
+    public int cutRoad(int arr[]) {
+        int length = arr.length;
+        int dp[] = new int[length + 1];
+        for (int i = 1; i <= length; i++) {
+            int max = arr[i - 1];
+            for (int j = 0; j <= i / 2; j++) {
+                int price = dp[j] + dp[i - j];
+                max = Math.max(max, price);
+            }
+            dp[i] = max;
+        }
+        return dp[length];
     }
 
     /**
      * https://www.geeksforgeeks.org/subset-sum-problem-dp-25/
      * Time complexity -> Target*N, where is N is length of array
      * Space complexity is also same
+     *
      * @param arr
      * @param target
      * @return
