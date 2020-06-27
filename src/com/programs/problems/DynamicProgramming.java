@@ -46,18 +46,18 @@ public class DynamicProgramming {
      * @param sum
      * @return
      */
-    public int dice(int totalDice, int faces, int sum) {
+    public int findWays(int totalDice, int faces, int sum) {
         int[][] dp = new int[totalDice + 1][sum + 1];
         for (int i = 0; i <= totalDice; i++) {
             for (int j = 0; j <= sum; j++) {
                 dp[i][j] = -1;
             }
         }
-        throwDice(totalDice, faces, sum, dp);
+        findWays(totalDice, faces, sum, dp);
         return dp[totalDice][sum];
     }
 
-    public int throwDice(int totalDice, int faces, int sum, int[][] dp) {
+    public int findWays(int totalDice, int faces, int sum, int[][] dp) {
         if (sum == 0 && totalDice == 0) return 1;
         if (sum == 0 && totalDice > 0) return 0;
         if (totalDice == 0) return 0;
@@ -65,7 +65,7 @@ public class DynamicProgramming {
         int s = 0;
         for (int j = 1; j <= faces; j++) {
             if (j > sum) break;
-            int x = throwDice(totalDice - 1, faces, sum - j, dp);
+            int x = findWays(totalDice - 1, faces, sum - j, dp);
             s += x;
             //  s = (s % mod + x % mod) % mod; for mode and leet code
         }
