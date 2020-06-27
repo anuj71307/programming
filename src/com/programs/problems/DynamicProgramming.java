@@ -32,10 +32,31 @@ public class DynamicProgramming {
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        int dice = 4;
-        int face = 3;
-        int sum = 5;
-        System.out.println(dp.throwDiceRecursive(dice, face, sum));
+
+        System.out.println(dp.maxProduct(10));
+    }
+
+    /**
+     * https://leetcode.com/problems/integer-break/
+     *
+     * @param n
+     * @return
+     */
+    public int maxProduct(int n) {
+        if (n <= 2) return n;
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 1;
+        dp[3] = 2;
+        for (int i = 4; i <= n; i++) {
+            int max = 1;
+            for (int j = 1; j <= i / 2; j++) {
+                int v = Math.max(j * (i - j), j * dp[i - j]);
+                max = Math.max(max, v);
+            }
+            dp[i] = max;
+        }
+        return dp[n];
     }
 
     /**
@@ -76,6 +97,7 @@ public class DynamicProgramming {
     /**
      * https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
      * Recursive solution
+     *
      * @param totalDice
      * @param faces
      * @param sum
