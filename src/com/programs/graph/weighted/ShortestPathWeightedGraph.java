@@ -1,4 +1,4 @@
-package com.programs.graph;
+package com.programs.graph.weighted;
 
 import java.util.*;
 
