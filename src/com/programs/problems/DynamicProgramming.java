@@ -32,9 +32,89 @@ public class DynamicProgramming {
 
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
-        int[] arr = {4, 4, 4};
-        int length = 4;
-        System.out.println(dp.cutLength(arr, length));
+
+        System.out.println(dp.maxProduct(10));
+    }
+
+    /**
+     * https://leetcode.com/problems/integer-break/
+     *
+     * @param n
+     * @return
+     */
+    public int maxProduct(int n) {
+        if (n <= 2) return n;
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 1;
+        dp[3] = 2;
+        for (int i = 4; i <= n; i++) {
+            int max = 1;
+            for (int j = 1; j <= i / 2; j++) {
+                int v = Math.max(j * (i - j), j * dp[i - j]);
+                max = Math.max(max, v);
+            }
+            dp[i] = max;
+        }
+        return dp[n];
+    }
+
+    /**
+     * https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
+     *
+     * @param totalDice
+     * @param faces
+     * @param sum
+     * @return
+     */
+    public int findWays(int totalDice, int faces, int sum) {
+        int[][] dp = new int[totalDice + 1][sum + 1];
+        for (int i = 0; i <= totalDice; i++) {
+            for (int j = 0; j <= sum; j++) {
+                dp[i][j] = -1;
+            }
+        }
+        findWays(totalDice, faces, sum, dp);
+        return dp[totalDice][sum];
+    }
+
+    public int findWays(int totalDice, int faces, int sum, int[][] dp) {
+        if (sum == 0 && totalDice == 0) return 1;
+        if (sum == 0 && totalDice > 0) return 0;
+        if (totalDice == 0) return 0;
+        if (dp[totalDice][sum] != -1) return dp[totalDice][sum];
+        int s = 0;
+        for (int j = 1; j <= faces; j++) {
+            if (j > sum) break;
+            int x = findWays(totalDice - 1, faces, sum - j, dp);
+            s += x;
+            //  s = (s % mod + x % mod) % mod; for mode and leet code
+        }
+        dp[totalDice][sum] = s;
+        return s;
+    }
+
+    /**
+     * https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/
+     * Recursive solution
+     *
+     * @param totalDice
+     * @param faces
+     * @param sum
+     * @return
+     */
+    public int throwDiceRecursive(int totalDice, int faces, int sum) {
+        if (sum == 0 && totalDice == 0) return 1;
+        if (sum == 0 && totalDice > 0) return 0;
+        if (totalDice == 0) return 0;
+        int s = 0;
+        // for(int i =1; i<=totalDice;i++){
+        for (int j = 1; j <= faces; j++) {
+            if (j > sum) break;
+            s += throwDiceRecursive(totalDice - 1, faces, sum - j);
+        }
+        // }
+        return s;
     }
 
     /**
@@ -53,7 +133,7 @@ public class DynamicProgramming {
         }
         for (int i = 0; i <= length; i++) {
             int max = dp[i];
-            for (int j = 0; j <= i/2; j++) {
+            for (int j = 0; j <= i / 2; j++) {
                 if (dp[j] == 0 || dp[i - j] == 0) continue;
                 max = Math.max(max, dp[j] + dp[i - j]);
             }
@@ -64,6 +144,7 @@ public class DynamicProgramming {
 
     /**
      * https://www.geeksforgeeks.org/cutting-a-rod-dp-13/
+     *
      * @param arr
      * @return
      */
