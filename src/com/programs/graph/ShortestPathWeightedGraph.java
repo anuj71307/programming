@@ -77,8 +77,12 @@ public class ShortestPathWeightedGraph {
 
         ShortestPathWeightedGraph g = new ShortestPathWeightedGraph(9);
         g.addEdge(0, 1, 5);
+        g.addEdge(0, 6, 5);
         g.addEdge(0, 2, 3);
         g.addEdge(1, 3, 6);
+        g.addEdge(1, 8, 6);
+        g.addEdge(1, 7, 0);
+        //g.addEdge(7, 8, 0);
 
         g.addEdge(1, 2, 2);
         g.addEdge(1, 5, 9);
@@ -102,14 +106,16 @@ public class ShortestPathWeightedGraph {
                 pq.add(new GraphNode(i, Integer.MAX_VALUE));
             }
         }
+        boolean visited[] = new boolean[vertices];
         int distance[] = new int[vertices];
         Arrays.fill(distance, Integer.MAX_VALUE);
         distance[src] = 0;
         while(!pq.isEmpty()){
             GraphNode parent = pq.poll();
+            visited[parent.v] = true;
             for(GraphNode node: nodes[parent.v]){
                 GraphNode p = new GraphNode(node.v, distance[parent.v]+node.weight);
-                if(pq.contains(p) && distance[parent.v]!= Integer.MAX_VALUE && distance[node.v]>= distance[parent.v]+node.weight ){
+                if(!visited[p.v] && distance[parent.v]!= Integer.MAX_VALUE && distance[node.v]>= distance[parent.v]+node.weight ){
                     distance[node.v] = distance[parent.v]+node.weight;
                     pq.remove(p);
                     pq.offer(p);
@@ -121,7 +127,7 @@ public class ShortestPathWeightedGraph {
         // Print the calculated shortest distances
         for (int i = 0; i < vertices; i++) {
             if (distance[i] == Integer.MAX_VALUE)
-                System.out.println(i + " INF ");
+                System.out.println(i + " Not Reachable");
             else
                 System.out.println(i + " " + distance[i] + " ");
         }
