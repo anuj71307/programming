@@ -5,12 +5,12 @@ import java.util.*;
 /**
  * Represent weighted directed graph
  */
-public class WeightedGraph {
+public class ShortestPathWeightedGraph {
 
 
     public  static void main(String[] args){
 
-        WeightedGraph g = new WeightedGraph(6);
+        ShortestPathWeightedGraph g = new ShortestPathWeightedGraph(6);
         g.addEdge(0, 1, 5);
         g.addEdge(0, 2, 3);
         g.addEdge(1, 3, 6);
@@ -27,7 +27,7 @@ public class WeightedGraph {
     int vertices;
     List<GraphNode>[] nodes;
 
-    WeightedGraph(int size) {
+    ShortestPathWeightedGraph(int size) {
         vertices = size;
         nodes = new LinkedList[vertices];
         for (int i = 0; i < vertices; i++) {
