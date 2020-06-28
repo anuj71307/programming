@@ -106,11 +106,11 @@ public class ShortestPathWeightedGraph {
         Arrays.fill(distance, Integer.MAX_VALUE);
         distance[src] = 0;
         while(!pq.isEmpty()){
-            GraphNode pair = pq.poll();
-            for(GraphNode node: nodes[pair.v]){
-                GraphNode p = new GraphNode(node.v, distance[pair.v]+node.weight);
-                if(pq.contains(p) && distance[pair.v]!= Integer.MAX_VALUE && distance[node.v]>= distance[pair.v]+node.weight ){
-                    distance[node.v] = distance[pair.v]+node.weight;
+            GraphNode parent = pq.poll();
+            for(GraphNode node: nodes[parent.v]){
+                GraphNode p = new GraphNode(node.v, distance[parent.v]+node.weight);
+                if(pq.contains(p) && distance[parent.v]!= Integer.MAX_VALUE && distance[node.v]>= distance[parent.v]+node.weight ){
+                    distance[node.v] = distance[parent.v]+node.weight;
                     pq.remove(p);
                     pq.offer(p);
                 }
