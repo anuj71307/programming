@@ -18,7 +18,7 @@ public class CourseSchedule {
 
     /**
      * https://leetcode.com/problems/course-schedule/
-     *
+     * Detect cycle in directed unweighted graph
      * @param numCourses
      * @param edges
      * @return
