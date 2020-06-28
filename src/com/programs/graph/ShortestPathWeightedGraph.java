@@ -111,6 +111,7 @@ public class ShortestPathWeightedGraph {
                 GraphNode p = new GraphNode(node.v, distance[pair.v]+node.weight);
                 if(pq.contains(p) && distance[pair.v]!= Integer.MAX_VALUE && distance[node.v]>= distance[pair.v]+node.weight ){
                     distance[node.v] = distance[pair.v]+node.weight;
+                    pq.remove(p);
                     pq.offer(p);
                 }
             }
@@ -139,8 +140,8 @@ class GraphNode implements Comparable<GraphNode> {
 
     @Override
     public int compareTo(GraphNode o) {
-        if(this.v <o.v) return -1;
-        if(this.v>o.v) return 1;
+        if(this.weight <o.weight) return -1;
+        if(this.weight>o.weight) return 1;
         return 0;
     }
 
