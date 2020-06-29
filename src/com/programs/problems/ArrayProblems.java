@@ -44,11 +44,35 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/two-city-scheduling/
-     *
+     * Leetcode 1029
      * @param costs
      * @return
      */
     public int twoCitySchedCost(int[][] costs) {
+        Arrays.sort(costs, new SortByDiff());
+        int ans = 0;
+        for (int i = 0; i < costs.length / 2; i++) {
+            ans += costs[i][0];
+            ans += costs[i + (costs.length / 2)][1];
+        }
+        return ans;
+    }
+
+    class SortByDiff implements Comparator<int[]> {
+
+        @Override
+        public int compare(int[] a, int[] b) {
+            return (a[0] + b[1] < b[0] + a[1]) ? -1 : 1;
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/two-city-scheduling/
+     *
+     * @param costs
+     * @return
+     */
+    public int twoCitySchedCostRecursive(int[][] costs) {
         int price[] = new int[1];
         price[0] = Integer.MAX_VALUE;
         int[][] dp = new int[costs.length][2];
