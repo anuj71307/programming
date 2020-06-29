@@ -45,6 +45,8 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/two-city-scheduling/
      * Leetcode 1029
+     * We first sort an array such that all the array for which we will take cost of a comes first and for city b comes later
+     * to find it we compare two array if a[0]+b[1] is less than a[1]+b[0] then first array should be considered for city a
      * @param costs
      * @return
      */
