@@ -39,6 +39,34 @@ public class TreeProblems {
     }
 
     /**
+     * https://leetcode.com/problems/deepest-leaves-sum/
+     * Leetcode 1302
+     * Time complexity - O(N) cause we traverse all the node
+     * Space - Worst case O(H) where H is height of tree
+     * @param root
+     * @return
+     */
+    public int deepestLeavesSum(TreeNode root) {
+        int res[] = new int[1];
+
+        int[] max = new int[1];
+        sum(root, 0, max, res);
+        return res[0];
+    }
+
+    public void sum(TreeNode root, int depth, int[] max, int[] res) {
+        if (root == null) return;
+        if (depth == max[0]) {
+            res[0] += root.value;
+        } else if (depth > max[0]) {
+            max[0] = depth;
+            res[0] = root.value;
+        }
+        sum(root.left, depth + 1, max, res);
+        sum(root.right, depth + 1, max, res);
+    }
+
+    /**
      * Find in order successor of a node in Binary Search Tree. In node is not present or successor is not available return -1
      * Time complexity - if Balanced BST then Log(N) where N is number of node or O(H) where H ie height of tree
      * If tree is not balanced then time complexity is O(N) where is number of node
