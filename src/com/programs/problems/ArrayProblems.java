@@ -43,6 +43,40 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/two-city-scheduling/
+     *
+     * @param costs
+     * @return
+     */
+    public int twoCitySchedCost(int[][] costs) {
+        int price[] = new int[1];
+        price[0] = Integer.MAX_VALUE;
+        int[][] dp = new int[costs.length][2];
+        twoCityScheduledCost(costs, 0, 0, 0, 0, 0, price);
+        return price[0];
+    }
+
+
+    public void twoCityScheduledCost(int[][] costs, int cityA, int cityB, int index, int priceA, int priceB, int[] price) {
+        if (cityA + cityB == costs.length) {
+            price[0] = Math.min(price[0], priceA + priceB);
+            return;
+        }
+        if (cityA + cityB > costs.length || index >= costs.length) {
+            return;
+        }
+
+        if (cityA < (costs.length) / 2) {
+            twoCityScheduledCost(costs, cityA + 1, cityB, index + 1, priceA + costs[index][0], priceB, price);
+        }
+
+        if (cityB < costs.length / 2) {
+            twoCityScheduledCost(costs, cityA, cityB + 1, index + 1, priceA, priceB + costs[index][1], price);
+        }
+
+    }
+
+    /**
      * https://leetcode.com/problems/count-square-submatrices-with-all-ones/
      *
      * @param arr
@@ -83,7 +117,6 @@ public class ArrayProblems {
         }
         return countSquare(arr, row + 1, col + 1, size + 1) + 1;
     }
-
 
 
     /**
