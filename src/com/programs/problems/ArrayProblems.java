@@ -43,6 +43,66 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/two-city-scheduling/
+     * Leetcode 1029
+     * We first sort an array such that all the array for which we will take cost of a comes first and for city b comes later
+     * to find it we compare two array if a[0]+b[1] is less than a[1]+b[0] then first array should be considered for city a
+     * @param costs
+     * @return
+     */
+    public int twoCitySchedCost(int[][] costs) {
+        Arrays.sort(costs, new SortByDiff());
+        int ans = 0;
+        for (int i = 0; i < costs.length / 2; i++) {
+            ans += costs[i][0];
+            ans += costs[i + (costs.length / 2)][1];
+        }
+        return ans;
+    }
+
+    class SortByDiff implements Comparator<int[]> {
+
+        @Override
+        public int compare(int[] a, int[] b) {
+            return (a[0] + b[1] < b[0] + a[1]) ? -1 : 1;
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/two-city-scheduling/
+     *
+     * @param costs
+     * @return
+     */
+    public int twoCitySchedCostRecursive(int[][] costs) {
+        int price[] = new int[1];
+        price[0] = Integer.MAX_VALUE;
+        int[][] dp = new int[costs.length][2];
+        twoCityScheduledCost(costs, 0, 0, 0, 0, 0, price);
+        return price[0];
+    }
+
+
+    public void twoCityScheduledCost(int[][] costs, int cityA, int cityB, int index, int priceA, int priceB, int[] price) {
+        if (cityA + cityB == costs.length) {
+            price[0] = Math.min(price[0], priceA + priceB);
+            return;
+        }
+        if (cityA + cityB > costs.length || index >= costs.length) {
+            return;
+        }
+
+        if (cityA < (costs.length) / 2) {
+            twoCityScheduledCost(costs, cityA + 1, cityB, index + 1, priceA + costs[index][0], priceB, price);
+        }
+
+        if (cityB < costs.length / 2) {
+            twoCityScheduledCost(costs, cityA, cityB + 1, index + 1, priceA, priceB + costs[index][1], price);
+        }
+
+    }
+
+    /**
      * https://leetcode.com/problems/count-square-submatrices-with-all-ones/
      *
      * @param arr
@@ -83,7 +143,6 @@ public class ArrayProblems {
         }
         return countSquare(arr, row + 1, col + 1, size + 1) + 1;
     }
-
 
 
     /**
