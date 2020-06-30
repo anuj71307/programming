@@ -29,6 +29,7 @@ public class TreeProblems {
     /**
      * https://leetcode.com/problems/all-possible-full-binary-trees/
      * LeetCode 894
+     * Generate all structurally unique possible full tree of given size
      * @param N
      * @return
      */
