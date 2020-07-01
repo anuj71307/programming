@@ -16,27 +16,62 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        BinarySearchTree<Integer> tree = new BinarySearchTree(20);
-        tree.add(11);
-        tree.add(17);
-        tree.add(6);
-        tree.add(7);
-        tree.add(8);
-        tree.add(2);
-        tree.add(38);
-        tree.add(24);
-        tree.add(41);
-        tree.add(27);
-        tree.add(55);
-        tree.add(28);
-        int check = 55;
-
-        iterativeInorder(tree);
-        System.out.println();
-        BinarySearchTree<Integer> node = tp.inOrderSuccessor(tree, check);
-        int v = node != null ? node.getData() : -1;
-        System.out.println(v);
+        List<TreeNode> list = tp.allPossibleFBT(5);
+        for(TreeNode node:list){
+            System.out.println();
+            System.out.print("[");
+            tp.doIterative(node);
+            System.out.print("]");
+            System.out.println();
+        }
     }
+
+    /**
+     * https://leetcode.com/problems/all-possible-full-binary-trees/
+     * LeetCode 894
+     * Generate all structurally unique possible full tree of given size
+     * @param N
+     * @return
+     */
+    public List<TreeNode> allPossibleFBT(int N) {
+        List<TreeNode> list = new ArrayList();
+        if(N%2==0) return list;
+        TreeNode root = new TreeNode(0);
+        list.add(root);
+        if(N==1) return list;
+
+        HashMap<Integer, List<TreeNode>> total = new HashMap<>();
+        total.put(1, list);
+
+        for (int i = 3; i <= N; i = i + 2) {
+            List<TreeNode> l = new ArrayList<>();
+            for (int j = 2; j < i; j = j + 2) {
+                int k = j - 1;
+                for (TreeNode temp : total.get(k)) {
+                    int m = i - j;
+                    for (TreeNode t : total.get(m)) {
+                        TreeNode node = new TreeNode(0);
+                        node.left = temp;
+                        node.right = t;
+                        l.add(node);
+                    }
+                }
+            }
+            total.put(i, l);
+        }
+        return total.get(N);
+    }
+
+    public void doIterative(TreeNode node){
+        if(node==null) {
+            System.out.print(null+", ");
+            return;
+        }
+        System.out.print(node.value+", ");
+        doIterative(node.left);
+        doIterative(node.right);
+    }
+
 
     /**
      * https://leetcode.com/problems/deepest-leaves-sum/
