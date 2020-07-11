@@ -37,9 +37,58 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {-1, -1, 2, 0, 1, 1, 3, 1, -8, 0, 0, 5, 1};
-        int target = 5;
-        System.out.println(ap.smallestSubArray(arr, target));
+        int[] nums = {1,1};
+        int index[] = {1,1};
+        int target[] = ap.createTargetArray(nums, index);
+        for(int k: target){
+            System.out.print(k+" ");
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/max-chunks-to-make-sorted/
+     * Leet code 769
+     * We only need to find when max is equal to i then it can be seperate chunks
+     * @param arr
+     * @return
+     */
+    public int maxChunksToSorted(int[] arr) {
+        int max = arr[0];
+        int total = 0;
+        for (int i = 0; i < arr.length; i++) {
+
+            max = Math.max(max, arr[i]);
+            if (max == i) {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    /**
+     * https://leetcode.com/problems/create-target-array-in-the-given-order/
+     * @param nums
+     * @param index
+     * @return
+     */
+    public int[] createTargetArray(int[] nums, int[] index) {
+        int target[] = new int[nums.length];
+        Arrays.fill(target, -1);
+        for(int i =0; i<nums.length;i++){
+            int idx = index[i];
+            int elem = nums[i];
+            for(int k = idx; k<nums.length;k++){
+                int temp = target[k];
+                target[k] =elem;
+                elem = temp;
+                if(target[k]==-1){
+                    target[k] = elem;
+                    break;
+                }
+            }
+        }
+
+        return target;
     }
 
     /**
