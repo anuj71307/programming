@@ -37,9 +37,41 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[] arr = {-1, -1, 2, 0, 1, 1, 3, 1, -8, 0, 0, 5, 1};
+        int[] arr = {1,1,2,3,1,1};
         int target = 5;
-        System.out.println(ap.smallestSubArray(arr, target));
+       ap.wiggleSort(arr);
+       for(int i:arr){
+           System.out.print(i+" ");
+       }
+    }
+
+    /**
+     * https://leetcode.com/problems/wiggle-sort-ii/
+     * LeetCode 324
+     * Sort the array
+     * then since at mid item coulde be same of left side at right side, we will start updating the array such that
+     *  lets say our sorted array is [1,1,1,2,2,4,5,6], we divide array in two parts 0 to mid, mid+1 to end
+     *  we start updating array from 0 by first taking element from mid then from end and decreasing each one
+     *  after element is taken. This is done to prevent having common elements next to each other
+     * @param arr
+     */
+    public void wiggleSort(int[] arr) {
+        if (arr == null || arr.length < 2) return;
+        int[] temp = Arrays.copyOf(arr, arr.length);
+        Arrays.sort(temp);
+        int half = (arr.length-1) / 2;
+        int max = arr.length-1;
+        int min = half;
+        for ( int i = 0; i < arr.length;) {
+
+            if(i%2==0){
+                arr[i++] = temp[min--];
+            }
+            else{
+                arr[i++] = temp[max--];
+            }
+
+        }
     }
 
     /**
