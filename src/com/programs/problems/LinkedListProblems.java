@@ -15,10 +15,45 @@ public class LinkedListProblems<T> {
         node.next.next.next = new ListNode(4);
         node.next.next.next.next = new ListNode(5);
         ListNode arr = lp.reverseBetween(node, 1, 3);
-        while(arr!=null){
-            System.out.print(arr.val+" ");
+        while (arr != null) {
+            System.out.print(arr.val + " ");
             arr = arr.next;
         }
+    }
+
+    /**
+     * https://leetcode.com/problems/odd-even-linked-list/
+     * LeetCode 328
+     * Idea is to maintain two seperate list for odd and even and when we are at odd postion we add it to odd list
+     * and when we are at even position we add it to even list.
+     * Later we just point the tail of odd-list to head of even-list.
+     *
+     * @param head
+     * @return
+     */
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null || head.next == null || head.next.next == null) return head;
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode oddHead = odd;
+        ListNode evenHead = even;
+        int i = 1;
+        head = head.next.next;
+        while (head != null) {
+            if (i % 2 == 1) {
+                odd.next = head;
+                odd = odd.next;
+            } else {
+                even.next = head;
+                even = even.next;
+            }
+            head = head.next;
+            i++;
+        }
+        even.next = null;
+        odd.next = evenHead;
+
+        return oddHead;
     }
 
     /**
@@ -26,6 +61,7 @@ public class LinkedListProblems<T> {
      * Reverse a linked list between m to n
      * 1 <= m <=n <= length of list
      * Time complexity 0(n)
+     *
      * @param head
      * @param m
      * @param n
@@ -35,7 +71,7 @@ public class LinkedListProblems<T> {
         if (head == null || head.next == null || m == n) return head;
         ListNode temp = head;
         ListNode prev = null;
-        while (m>1) {
+        while (m > 1) {
             prev = temp;
             temp = temp.next;
             n--;
@@ -43,13 +79,13 @@ public class LinkedListProblems<T> {
         }
 
         boolean uh = false;
-        if(prev ==null ){
+        if (prev == null) {
             uh = true;
             prev = new ListNode(-1);
         }
         ListNode tail = temp;
         ListNode curr = tail;
-        while (n > 1 && tail.next!=null) {
+        while (n > 1 && tail.next != null) {
             temp = tail.next;
             tail.next = temp.next;
             temp.next = curr;
@@ -57,11 +93,11 @@ public class LinkedListProblems<T> {
             prev.next = curr;
             n--;
         }
-        if(uh) return prev.next;
+        if (uh) return prev.next;
         return head;
     }
 
-        // 1 2 3 4 5 , k =2
+    // 1 2 3 4 5 , k =2
     public ListNode rotateRight(ListNode head, int k) {
         if (head == null || head.next == null || k == 0) return head;
         int size = getSize(head);
