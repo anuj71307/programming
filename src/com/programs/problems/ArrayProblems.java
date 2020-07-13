@@ -38,8 +38,27 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[] nums[] = {{1,5,9}, {10,11,13}, {12,13,15}};
-        System.out.print(ap.kthSmallest(nums, 4));
+        int[] nums = {5,4,1,2,3};
+        System.out.print(ap.increasingTriplet(nums));
+    }
+
+    /**
+     * Find there exist a increasing triplet in array.
+     * Leet code - 334
+     *  We traverse array and keep track of lowest element so far and also the element bigger thaan that.
+     *  If we find element bigger thwen both then we have solution
+     * @param nums
+     * @return
+     */
+    public boolean increasingTriplet(int[] nums) {
+        // start with two largest values, as soon as we find a number bigger than both, while both have been updated, return true.
+        int small = Integer.MAX_VALUE, big = Integer.MAX_VALUE;
+        for (int n : nums) {
+            if (n <= small) { small = n; } // update small if n is smaller than both
+            else if (n <= big) { big = n; } // update big only if greater than small but smaller than big
+            else return true; // return if you find a number bigger than both
+        }
+        return false;
     }
 
     /**
