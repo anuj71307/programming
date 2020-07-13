@@ -3,6 +3,7 @@ package com.programs.problems;
 import com.programs.heap.MaxHeap;
 import com.programs.heap.MinHeap;
 import com.programs.map.THashMap;
+import com.sun.tools.javac.util.ArrayUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -37,11 +38,56 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[] nums = {1,1};
-        int index[] = {1,1};
-        int target[] = ap.createTargetArray(nums, index);
-        for(int k: target){
-            System.out.print(k+" ");
+        int[] nums[] = {{1,5,9}, {10,11,13}, {12,13,15}};
+        System.out.print(ap.kthSmallest(nums, 4));
+    }
+
+    /**
+     * https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
+     * LeetCode 378
+     * Use a min heap and add 1st element of each row, Then for k times pop item from min heap and from the row from which
+     * remove element belongs add next element if in range.
+     * Time Complexity  - Adding row of each element  and heapify -> N
+     * for K time we remove so KLogN
+     * Total = N+KLogN
+     * @param matrix
+     * @param k
+     * @return
+     */
+    public int kthSmallest(int[][] matrix, int k) {
+        PriorityQueue<Pair> pq = new PriorityQueue<Pair>(new Comparator<Pair>() {
+            @Override
+            public int compare(Pair o1, Pair o2) {
+                return matrix[o1.row][o1.col]-matrix[o2.row][o2.col];
+            }
+        });
+
+        for(int i =0; i< matrix.length; i++){
+            pq.offer(new Pair(i, 0));
+        }
+        int res = matrix[0][0];
+        while(k>0){
+
+            Pair pair = pq.poll();
+            res = matrix[pair.row][pair.col];
+            int col = pair.col+1;
+            if(col<matrix[0].length){
+                pq.offer(new Pair(pair.row, col));
+            }
+            k--;
+        }
+
+        return res;
+
+    }
+
+    class Pair{
+        int row;
+        int col;
+
+        public Pair(int x, int y){
+            row = x;
+            col = y;
         }
     }
 
@@ -50,24 +96,24 @@ public class ArrayProblems {
      * LeetCode 324
      * Sort the array
      * then since at mid item coulde be same of left side at right side, we will start updating the array such that
-     *  lets say our sorted array is [1,1,1,2,2,4,5,6], we divide array in two parts 0 to mid, mid+1 to end
-     *  we start updating array from 0 by first taking element from mid then from end and decreasing each one
-     *  after element is taken. This is done to prevent having common elements next to each other
+     * lets say our sorted array is [1,1,1,2,2,4,5,6], we divide array in two parts 0 to mid, mid+1 to end
+     * we start updating array from 0 by first taking element from mid then from end and decreasing each one
+     * after element is taken. This is done to prevent having common elements next to each other
+     *
      * @param arr
      */
     public void wiggleSort(int[] arr) {
         if (arr == null || arr.length < 2) return;
         int[] temp = Arrays.copyOf(arr, arr.length);
         Arrays.sort(temp);
-        int half = (arr.length-1) / 2;
-        int max = arr.length-1;
+        int half = (arr.length - 1) / 2;
+        int max = arr.length - 1;
         int min = half;
-        for ( int i = 0; i < arr.length;) {
+        for (int i = 0; i < arr.length; ) {
 
-            if(i%2==0){
+            if (i % 2 == 0) {
                 arr[i++] = temp[min--];
-            }
-            else{
+            } else {
                 arr[i++] = temp[max--];
             }
 
@@ -78,6 +124,7 @@ public class ArrayProblems {
      * https://leetcode.com/problems/max-chunks-to-make-sorted/
      * Leet code 769
      * We only need to find when max is equal to i then it can be seperate chunks
+     *
      * @param arr
      * @return
      */
@@ -96,6 +143,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/create-target-array-in-the-given-order/
+     *
      * @param nums
      * @param index
      * @return
@@ -103,14 +151,14 @@ public class ArrayProblems {
     public int[] createTargetArray(int[] nums, int[] index) {
         int target[] = new int[nums.length];
         Arrays.fill(target, -1);
-        for(int i =0; i<nums.length;i++){
+        for (int i = 0; i < nums.length; i++) {
             int idx = index[i];
             int elem = nums[i];
-            for(int k = idx; k<nums.length;k++){
+            for (int k = idx; k < nums.length; k++) {
                 int temp = target[k];
-                target[k] =elem;
+                target[k] = elem;
                 elem = temp;
-                if(target[k]==-1){
+                if (target[k] == -1) {
                     target[k] = elem;
                     break;
                 }
@@ -125,6 +173,7 @@ public class ArrayProblems {
      * Leetcode 1029
      * We first sort an array such that all the array for which we will take cost of a comes first and for city b comes later
      * to find it we compare two array if a[0]+b[1] is less than a[1]+b[0] then first array should be considered for city a
+     *
      * @param costs
      * @return
      */
