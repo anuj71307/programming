@@ -38,15 +38,59 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[] nums = {5,4,1,2,3};
-        System.out.print(ap.increasingTriplet(nums));
+        int[] nums = {4, 3, 2, 1};
+        System.out.print(ap.numTeams(nums));
+    }
+
+    /**
+     * https://leetcode.com/problems/count-number-of-teams/
+     * LeetCode 1395
+     * We traverse array and for each item check howmany element are small in left side and greater in right side
+     * If we multiply both it should give answer for increasing count.
+     * Same thing can be used to find decreasing count as well.
+     * Assumption-> Array does ot contain dulicate. But can be handle by proper check
+     * Time complexity -> N^2
+     *
+     * @param arr
+     * @return
+     */
+    public int numTeams(int[] arr) {
+        int res = 0;
+        int before[] = new int[2];
+        int after[] = new int[2];
+        for (int i = 0; i < arr.length; i++) {
+            before[0] = 0;
+            before[1] = 0;
+            after[0] = 0;
+            after[1] = 0;
+
+            for (int j = 0; j < i; j++) {
+                if (arr[j] < arr[i]) {
+                    before[0]++;
+                } else {
+                    before[1]++;
+                }
+            }
+
+            for (int k = i + 1; k < arr.length; k++) {
+                if (arr[k] < arr[i]) {
+                    after[0]++;
+                } else {
+                    after[1]++;
+                }
+            }
+            res += (before[0] * after[1]) + (before[1] * after[0]);
+        }
+
+        return res;
     }
 
     /**
      * Find there exist a increasing triplet in array.
      * Leet code - 334
-     *  We traverse array and keep track of lowest element so far and also the element bigger thaan that.
-     *  If we find element bigger thwen both then we have solution
+     * We traverse array and keep track of lowest element so far and also the element bigger thaan that.
+     * If we find element bigger thwen both then we have solution
+     *
      * @param nums
      * @return
      */
@@ -54,8 +98,12 @@ public class ArrayProblems {
         // start with two largest values, as soon as we find a number bigger than both, while both have been updated, return true.
         int small = Integer.MAX_VALUE, big = Integer.MAX_VALUE;
         for (int n : nums) {
-            if (n <= small) { small = n; } // update small if n is smaller than both
-            else if (n <= big) { big = n; } // update big only if greater than small but smaller than big
+            if (n <= small) {
+                small = n;
+            } // update small if n is smaller than both
+            else if (n <= big) {
+                big = n;
+            } // update big only if greater than small but smaller than big
             else return true; // return if you find a number bigger than both
         }
         return false;
@@ -69,6 +117,7 @@ public class ArrayProblems {
      * Time Complexity  - Adding row of each element  and heapify -> N
      * for K time we remove so KLogN
      * Total = N+KLogN
+     *
      * @param matrix
      * @param k
      * @return
@@ -77,20 +126,20 @@ public class ArrayProblems {
         PriorityQueue<Pair> pq = new PriorityQueue<Pair>(new Comparator<Pair>() {
             @Override
             public int compare(Pair o1, Pair o2) {
-                return matrix[o1.row][o1.col]-matrix[o2.row][o2.col];
+                return matrix[o1.row][o1.col] - matrix[o2.row][o2.col];
             }
         });
 
-        for(int i =0; i< matrix.length; i++){
+        for (int i = 0; i < matrix.length; i++) {
             pq.offer(new Pair(i, 0));
         }
         int res = matrix[0][0];
-        while(k>0){
+        while (k > 0) {
 
             Pair pair = pq.poll();
             res = matrix[pair.row][pair.col];
-            int col = pair.col+1;
-            if(col<matrix[0].length){
+            int col = pair.col + 1;
+            if (col < matrix[0].length) {
                 pq.offer(new Pair(pair.row, col));
             }
             k--;
@@ -100,11 +149,11 @@ public class ArrayProblems {
 
     }
 
-    class Pair{
+    class Pair {
         int row;
         int col;
 
-        public Pair(int x, int y){
+        public Pair(int x, int y) {
             row = x;
             col = y;
         }
