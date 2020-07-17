@@ -38,8 +38,44 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[] nums = {4, 3, 2, 1};
-        System.out.print(ap.numTeams(nums));
+        int[] nums = {1, 4, 7};
+        System.out.print(ap.longestConsecutive(nums));
+    }
+
+    /**
+     * https://leetcode.com/problems/longest-consecutive-sequence/
+     * LeetCode 128
+     * Idea is to use hasing, we insert all element in hash and check for each item one by one.
+     * if this can be starting(ie set doesnot contain element just below it) then we check its sequence.
+     *
+     * @param nums
+     * @return
+     */
+    public int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int len = 1;
+        HashSet<Integer> set = new HashSet<>();
+
+        // Add all item in hash
+        for (int i : nums) {
+            set.add(i);
+        }
+        // iterate for each item
+        for (int i : nums) {
+
+            // if this item is starting point, then traverse till set contains all number after this,
+            // for ex if it is 4 then check 4,5,6 and so on
+            if (!set.contains(i - 1)) {
+                int max = 0;
+                int j = i;
+                while (set.contains(j)) {
+                    j++;
+                    max = j - i;
+                }
+                len = Math.max(max, len);
+            }
+        }
+        return len;
     }
 
     /**
