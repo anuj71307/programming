@@ -78,7 +78,9 @@ public class Matrix {
     /**
      * LeetCode 304
      * https://leetcode.com/problems/range-sum-query-2d-immutable/
-     * Another approach. Time complexity is same as above method but now [sumRegion2] run in constant time
+     * Another approach built on above approach. Here we keep sum of every range ending at that position.
+     * Not to find sume at any point we need to remove part which should not be included.
+     * Time complexity is same as above method but now [sumRegion2] run in constant time
      *
      * @param matrix
      * @param p      just extra param to avoid conflict
