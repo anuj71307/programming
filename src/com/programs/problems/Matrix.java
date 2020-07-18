@@ -7,6 +7,22 @@ package com.programs.problems;
 public class Matrix {
     int dp[][];
 
+    public static void main(String[] srg) {
+        int[][] matrix = {
+                {3, 0, 1, 4, 2},
+                {5, 6, 3, 2, 1},
+                {1, 2, 0, 1, 5},
+                {4, 1, 0, 1, 7},
+                {1, 0, 3, 0, 5}};
+        Matrix mat = new Matrix(matrix, 4);
+        for (int[] i : mat.dp) {
+            for (int k : i) {
+                System.out.print(k + " ");
+            }
+            System.out.println();
+        }
+    }
+
     /**
      * Idea is to keep track of  continuous sum of each array in mattrix
      * For ex if first array is [3,0,1,4,2] we keep [3,3,4,8,10]
@@ -55,6 +71,36 @@ public class Matrix {
                 sum += (dp[i][col2] - dp[i][col1 - 1]);
             }
         }
+        return sum;
+    }
+
+
+    /**
+     * LeetCode 304
+     * https://leetcode.com/problems/range-sum-query-2d-immutable/
+     * Another approach. Time complexity is same as above method but now [sumRegion2] run in constant time
+     *
+     * @param matrix
+     * @param p      just extra param to avoid conflict
+     */
+    public Matrix(int[][] matrix, int p) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return;
+        dp = new int[matrix.length + 1][matrix[0].length + 1];
+        for (int i = 1; i <= matrix.length; i++) {
+            for (int j = 1; j <= matrix[0].length; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1] - dp[i - 1][j - 1] + matrix[i - 1][j - 1];
+            }
+        }
+    }
+
+    public int sumRegion2(int row1, int col1, int row2, int col2) {
+        if (dp == null || dp.length == 0 || dp[0].length == 0) return 0;
+        row1++;
+        col1++;
+        row2++;
+        col2++;
+        int sum = 0;
+        sum += dp[row2][col2] - dp[row1 - 1][col2] - dp[row2][col1 - 1] + dp[row1 - 1][col1 - 1];
         return sum;
     }
 }
