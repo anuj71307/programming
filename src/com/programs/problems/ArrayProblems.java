@@ -83,6 +83,33 @@ public class ArrayProblems {
     }
 
     /**
+     * LeetCode 973
+     * https://leetcode.com/problems/k-closest-points-to-origin/
+     * This is pure Math to find distance. Given height and base
+     * height. distance from origin would be SQRT(height^2 + base^2).
+     * Since SQRT of greater number will also be grether than SQRT of smaller number we can ignore
+     * finding SQRT and save some time.
+     * We just sort the array based on this and find first K points from it.
+     *
+     * @param points
+     * @param K
+     * @return
+     */
+    public int[][] kClosest(int[][] points, int K) {
+        int res[][] = new int[k][2];
+        Arrays.sort(points, (p1, p2) -> {
+            int p1v = (p1[0] * p1[0]) + (p1[1] * p1[1]);
+            int p2v = (p2[0] * p2[0]) + (p2[1] * p2[1]);
+            return p1v - p2v;
+        });
+
+        for (int i = 0; i < k && i < points.length; i++) {
+            res[i] = points[i];
+        }
+        return res;
+    }
+
+    /**
      * https://leetcode.com/problems/longest-consecutive-sequence/
      * LeetCode 128
      * Idea is to use hasing, we insert all element in hash and check for each item one by one.
