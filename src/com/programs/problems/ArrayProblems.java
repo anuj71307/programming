@@ -43,6 +43,46 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/maximal-square/
+     * LeetCode - 221
+     * We do a matric traversal and at each index we just check if all 3 position contains one if so then it will form a
+     * square. Extending on this logic we just meed to update value at each position and we build up on it.
+     * @param matrix
+     * @return
+     */
+    public int maximalSquare(char[][] matrix) {
+        int max = 0;
+        if(matrix==null || matrix.length==0) return 0;
+        for(int i =0;i<matrix.length;i++){
+
+            if(matrix[i][0]=='1') max = 1;
+        }
+
+        for(int i =0;i<matrix[0].length;i++){
+
+            if(matrix[0][i]=='1') max = 1;
+        }
+
+        for(int i =1; i<matrix.length;i++){
+            for(int j =1; j<matrix[0].length;j++){
+                if(matrix[i][j]!='0'){
+                    matrix[i][j] = (char)(getMin(matrix[i][j-1], matrix[i-1][j], matrix[i-1][j-1])+1);
+                    max = Math.max(max, matrix[i][j]-'0');
+                }
+            }
+        }
+        return max*max;
+    }
+
+    int getMin(int x, int y, int z){
+
+        int min = x;
+        if(y<min) min =y;
+        if(z<min) min = z;
+        return min;
+    }
+
+    /**
      * LeetCode 973
      * https://leetcode.com/problems/k-closest-points-to-origin/
      * This is pure Math to find distance. Given height and base
