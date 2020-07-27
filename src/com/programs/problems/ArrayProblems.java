@@ -52,6 +52,44 @@ public class ArrayProblems {
         }
     }
 
+
+    /**
+     * https://leetcode.com/problems/friend-circles/
+     * LeetCode 547
+     * This is simple graph problem where we find all connected nodes. We can do dfs  or bfs . TIme complexity would be
+     * same.
+     * I am doing bfs where I am traversing all the friends of a node and adding to queue if its not visited.
+     * Once we traverse all the friend and fried's friend and so on we have one connected circle.
+     * Time Complexity - O(M*N) or N^2 since M==N.
+     * Space complexity is O(M) since we create temporary array to keep visited index.
+     *
+     * @param M
+     * @return
+     */
+    public int findCircleNum(int[][] M) {
+        if (M == null || M.length == 0) return 0;
+        boolean visited[] = new boolean[M.length];
+        int count = 0;
+        for (int i = 0; i < M.length; i++) {
+            if (!visited[i]) {
+                dfs(M, i, visited);
+                count++;
+            }
+        }
+
+        return count;
+
+    }
+
+    public void dfs(int[][] arr, int index, boolean[] visited) {
+        for (int k = 0; k < arr.length; k++) {
+            if (arr[index][k] == 1 && !visited[k]) {
+                visited[k] = true;
+                dfs(arr, k, visited);
+            }
+        }
+    }
+
     /**
      * https://leetcode.com/problems/surrounded-regions/
      * LeetCode 130
@@ -95,49 +133,6 @@ public class ArrayProblems {
         dfs(board,i-1,j);
         dfs(board,i,j+1);
         dfs(board,i,j-1);
-        //int[] arr[] = {{1,0},{0,1}};
-        int[] nums[] = {
-                {1, 1, 0},
-                {1, 1, 1},
-                {0, 0, 1}};
-        System.out.print(ap.findCircleNum(nums));
-    }
-
-    /**
-     * https://leetcode.com/problems/friend-circles/
-     * LeetCode 547
-     * This is simple graph problem where we find all connected nodes. We can do dfs  or bfs . TIme complexity would be
-     * same.
-     * I am doing bfs where I am traversing all the friends of a node and adding to queue if its not visited.
-     * Once we traverse all the friend and fried's friend and so on we have one connected circle.
-     * Time Complexity - O(M*N) or N^2 since M==N.
-     * Space complexity is O(M) since we create temporary array to keep visited index.
-     *
-     * @param M
-     * @return
-     */
-    public int findCircleNum(int[][] M) {
-        if (M == null || M.length == 0) return 0;
-        boolean visited[] = new boolean[M.length];
-        int count = 0;
-        for (int i = 0; i < M.length; i++) {
-            if (!visited[i]) {
-                dfs(M, i, visited);
-                count++;
-            }
-        }
-
-        return count;
-
-    }
-
-    public void dfs(int[][] arr, int index, boolean[] visited) {
-        for (int k = 0; k < arr.length; k++) {
-            if (arr[index][k] == 1 && !visited[k]) {
-                visited[k] = true;
-                dfs(arr, k, visited);
-            }
-        }
     }
 
     /**
