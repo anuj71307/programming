@@ -38,8 +38,49 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[] nums = {1, 4, 7};
-        System.out.print(ap.longestConsecutive(nums));
+        //int[] arr[] = {{1,0},{0,1}};
+        int[] nums[] = {
+                {1, 1, 0},
+                {1, 1, 1},
+                {0, 0, 1}};
+        System.out.print(ap.findCircleNum(nums));
+    }
+
+    /**
+     * https://leetcode.com/problems/friend-circles/
+     * LeetCode 547
+     * This is simple graph problem where we find all connected nodes. We can do dfs  or bfs . TIme complexity would be
+     * same.
+     * I am doing bfs where I am traversing all the friends of a node and adding to queue if its not visited.
+     * Once we traverse all the friend and fried's friend and so on we have one connected circle.
+     * Time Complexity - O(M*N) or N^2 since M==N.
+     * Space complexity is O(M) since we create temporary array to keep visited index.
+     *
+     * @param M
+     * @return
+     */
+    public int findCircleNum(int[][] M) {
+        if (M == null || M.length == 0) return 0;
+        boolean visited[] = new boolean[M.length];
+        int count = 0;
+        for (int i = 0; i < M.length; i++) {
+            if (!visited[i]) {
+                dfs(M, i, visited);
+                count++;
+            }
+        }
+
+        return count;
+
+    }
+
+    public void dfs(int[][] arr, int index, boolean[] visited) {
+        for (int k = 0; k < arr.length; k++) {
+            if (arr[index][k] == 1 && !visited[k]) {
+                visited[k] = true;
+                dfs(arr, k, visited);
+            }
+        }
     }
 
     /**
@@ -47,38 +88,39 @@ public class ArrayProblems {
      * LeetCode - 221
      * We do a matric traversal and at each index we just check if all 3 position contains one if so then it will form a
      * square. Extending on this logic we just meed to update value at each position and we build up on it.
+     *
      * @param matrix
      * @return
      */
     public int maximalSquare(char[][] matrix) {
         int max = 0;
-        if(matrix==null || matrix.length==0) return 0;
-        for(int i =0;i<matrix.length;i++){
+        if (matrix == null || matrix.length == 0) return 0;
+        for (int i = 0; i < matrix.length; i++) {
 
-            if(matrix[i][0]=='1') max = 1;
+            if (matrix[i][0] == '1') max = 1;
         }
 
-        for(int i =0;i<matrix[0].length;i++){
+        for (int i = 0; i < matrix[0].length; i++) {
 
-            if(matrix[0][i]=='1') max = 1;
+            if (matrix[0][i] == '1') max = 1;
         }
 
-        for(int i =1; i<matrix.length;i++){
-            for(int j =1; j<matrix[0].length;j++){
-                if(matrix[i][j]!='0'){
-                    matrix[i][j] = (char)(getMin(matrix[i][j-1], matrix[i-1][j], matrix[i-1][j-1])+1);
-                    max = Math.max(max, matrix[i][j]-'0');
+        for (int i = 1; i < matrix.length; i++) {
+            for (int j = 1; j < matrix[0].length; j++) {
+                if (matrix[i][j] != '0') {
+                    matrix[i][j] = (char) (getMin(matrix[i][j - 1], matrix[i - 1][j], matrix[i - 1][j - 1]) + 1);
+                    max = Math.max(max, matrix[i][j] - '0');
                 }
             }
         }
-        return max*max;
+        return max * max;
     }
 
-    int getMin(int x, int y, int z){
+    int getMin(int x, int y, int z) {
 
         int min = x;
-        if(y<min) min =y;
-        if(z<min) min = z;
+        if (y < min) min = y;
+        if (z < min) min = z;
         return min;
     }
 
