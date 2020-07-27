@@ -38,6 +38,63 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
+        char[][] arr = {
+                {'X','O', 'X','O'},
+                {'O','X', 'O', 'X'},
+                {'X','O', 'X','X'}
+        };
+        ap.solveChar(arr);
+        for(char c[]: arr ){
+            for(char p: c){
+                System.out.print(p+" ");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/surrounded-regions/
+     * LeetCode 130
+     * This probem is dfs traversal. Any 'O' index which is connected to any index at boundry with value 'O' can not
+     * be converted to 'X' so we do dfs to each index at boundry and updated all the edge which has 'O' with a marker.
+     * then we do simple traveral and mark everything with 'X' except the index which has marker. marked index can be
+     * updated to 'O'
+     *
+     * @param board
+     */
+    public void solveChar(char[][] board) {
+        if(board==null || board.length<2 || board[0].length<2) return;
+        //boolean visited[][] = new boolean[board.length][board[0].length];
+        for(int i = 0; i< board[0].length;i++){
+            dfs(board,0,i);
+            dfs(board,board.length-1,i);
+        }
+
+        for(int i = 0; i< board.length;i++){
+            dfs(board,i,0);
+            dfs(board,i,board[0].length-1);
+        }
+
+        for(int i =0; i< board.length;i++){
+            for(int j = 0 ; j< board[0].length;j++){
+                if(board[i][j]=='#'){
+                    board[i][j]= 'O';
+                }else{
+                    board[i][j]= 'X';
+                }
+            }
+        }
+    }
+
+
+
+    void dfs(char[][] board, int i , int j){
+        if(i<0 || j<0 || i>=board.length || j>=board[0].length || board[i][j]!='O') return;
+        board[i][j] = '#';
+        dfs(board,i+1,j);
+        dfs(board,i-1,j);
+        dfs(board,i,j+1);
+        dfs(board,i,j-1);
         //int[] arr[] = {{1,0},{0,1}};
         int[] nums[] = {
                 {1, 1, 0},
