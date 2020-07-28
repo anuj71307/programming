@@ -38,18 +38,48 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        char[][] arr = {
-                {'X','O', 'X','O'},
-                {'O','X', 'O', 'X'},
-                {'X','O', 'X','X'}
+        int[][] arr = {
+                {0,0,0,0},
+
         };
-        ap.solveChar(arr);
-        for(char c[]: arr ){
-            for(char p: c){
-                System.out.print(p+" ");
+        System.out.print(ap.maxAreaOfIsland(arr));
+
+    }
+
+    /**
+     * https://leetcode.com/problems/max-area-of-island/
+     * LeetCode 695
+     * We just need a traversal of grid and keep a count when we find 1 and mark index as visisted
+     * Time complexity O(M*N). SpaceO(M*N)
+     * @param grid
+     * @return
+     */
+    public int maxAreaOfIsland(int[][] grid) {
+
+        if(grid==null || grid.length==0) return 0;
+        int res = 0;
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        for(int i = 0; i<grid.length;i++){
+            for(int j = 0; j<grid[0].length;j++){
+                if(!visited[i][j]){
+                    int count = area(grid, visited, i, j);
+                    res = Math.max(res, count);
+                }
             }
-            System.out.println();
         }
+
+        return res;
+    }
+
+    private int area(int[][] grid, boolean[][] visited, int i, int j) {
+        if(i<0||j<0||i>=grid.length||j>=grid[i].length|| visited[i][j] || grid[i][j]==0) return 0;
+        int res = 1;
+        visited[i][j] = true;
+        res+=area(grid, visited, i+1, j);
+        res+=area(grid, visited, i-1, j);
+        res+=area(grid, visited, i, j+1);
+        res+=area(grid, visited, i, j-1);
+        return res;
     }
 
 
