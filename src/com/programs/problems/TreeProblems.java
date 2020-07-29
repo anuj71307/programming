@@ -16,29 +16,66 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        List<TreeNode> list = tp.allPossibleFBT(5);
-        for(TreeNode node:list){
-            System.out.println();
-            System.out.print("[");
-            tp.doIterative(node);
-            System.out.print("]");
-            System.out.println();
+        TreeNode node = new TreeNode(5);
+        // node.left = new TreeNode(3);
+        node.right = new TreeNode(4);
+        node.right.right = new TreeNode(4);
+        System.out.print(tp.t2Sum(node, 8));
+    }
+
+    /**
+     * Find two nodes in a binary tree which sum equals to target
+     * All nodes will have positive value and target also
+     * We just do level order traversal ie BFS and keep a set of all element before this level.
+     * at each node we just check if set contains target-node.value.
+     *
+     * @param root   = root of tree
+     * @param target = target
+     * @return
+     */
+    public int t2Sum(TreeNode root, int target) {
+
+        HashSet<Integer> set = new HashSet();
+        Queue<TreeNode> que = new LinkedList<>();
+        que.add(root);
+        HashSet<Integer> temp = new HashSet<>();
+        while (!que.isEmpty()) {
+            int i = que.size();
+            while (i > 0) {
+                i--;
+                TreeNode node = que.poll();
+                int val = node.value;
+                if (set.contains(target - val)) {
+                    return 1;
+                }
+                temp.add(val);
+                if (node.left != null) {
+                    que.add(node.left);
+                }
+                if (node.right != null) {
+                    que.add(node.right);
+                }
+            }
+            set.addAll(temp);
+            temp.clear();
         }
+        return 0;
     }
 
     /**
      * https://leetcode.com/problems/all-possible-full-binary-trees/
      * LeetCode 894
      * Generate all structurally unique possible full tree of given size
+     *
      * @param N
      * @return
      */
     public List<TreeNode> allPossibleFBT(int N) {
         List<TreeNode> list = new ArrayList();
-        if(N%2==0) return list;
+        if (N % 2 == 0) return list;
         TreeNode root = new TreeNode(0);
         list.add(root);
-        if(N==1) return list;
+        if (N == 1) return list;
 
         HashMap<Integer, List<TreeNode>> total = new HashMap<>();
         total.put(1, list);
@@ -62,12 +99,12 @@ public class TreeProblems {
         return total.get(N);
     }
 
-    public void doIterative(TreeNode node){
-        if(node==null) {
-            System.out.print(null+", ");
+    public void doIterative(TreeNode node) {
+        if (node == null) {
+            System.out.print(null + ", ");
             return;
         }
-        System.out.print(node.value+", ");
+        System.out.print(node.value + ", ");
         doIterative(node.left);
         doIterative(node.right);
     }
@@ -78,6 +115,7 @@ public class TreeProblems {
      * Leetcode 1302
      * Time complexity - O(N) cause we traverse all the node
      * Space - Worst case O(H) where H is height of tree
+     *
      * @param root
      * @return
      */
