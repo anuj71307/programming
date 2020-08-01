@@ -39,11 +39,54 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         int[][] arr = {
-                {0,0,0,0},
-
+                {1,0,0,1},
+                {0,0,0,0}
         };
-        System.out.print(ap.maxAreaOfIsland(arr));
+        System.out.print(ap.calculateHours(arr));
 
+    }
+
+    /**
+     * https://leetcode.com/discuss/interview-question/411357/
+     * Time taken by zombie to convert human to zombie
+     * @param arr
+     * @return
+     */
+    public int calculateHours(int[][] arr){
+        if(arr==null || arr.length==0) return -1;
+        Queue<Pair> queue = new LinkedList();
+        int total = arr.length*arr[0].length;
+        for(int i =0; i< arr.length;i++){
+            for(int j = 0; j< arr[0].length;j++){
+                if(arr[i][j]==1){
+                    queue.add(new Pair(i,j));
+                    total--;
+                }
+            }
+        }
+
+        if(queue.isEmpty()) return -1;
+        int rows[] =  {-1,0,0,1};
+        int cols[]  = {0,-1,1,0};
+        int hours = 0;
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            if(total<=0) return hours;
+            hours++;
+            for(int index = 0; index<size;index++) {
+                Pair pair = queue.poll();
+                for (int pos = 0; pos < 4; pos++) {
+                    int row = pair.row+rows[pos];
+                    int col = pair.col+cols[pos];
+                    if(row <0 || row>=arr.length || col<0 || col>= arr[0].length || arr[row][col]==1) continue;
+                    total--;
+                    arr[row][col] = 1;
+                    queue.add(new Pair(row, col));
+                }
+            }
+        }
+
+        return hours;
     }
 
     /**
