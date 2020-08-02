@@ -38,12 +38,39 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[][] arr = {
-                {1,0,0,1},
-                {0,0,0,0}
-        };
-        System.out.print(ap.calculateHours(arr));
+        int[]arr = {1,2,-3,4,5};
+        System.out.print(ap.maxSumKNegation(arr, 2));
 
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/maximize-array-sum-k-negations-set-2/
+     * Since we change number's sign and need to maximize sum we should pick smallest number and convert its sign
+     * One approach is to take smallest number k times and do this. TIme complexity would be N*K
+     * but we can optimize it to first create min heap in O(N) then K time take min element and update it.
+     * Time complexity of this would be K*Log(N).
+     * Sum is calculated on the run.
+     * @param arr
+     * @param k
+     * @return
+     */
+    public int maxSumKNegation(int[] arr, int k){
+        if(arr==null || arr.length==0) return 0;
+        int sum = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(int i :arr){
+            pq.add(i);
+            sum+=i;
+        }
+        while(k-->0){
+            int val = pq.poll();
+            sum-=val;
+            val*=-1;
+            sum+=val;
+            pq.add(val);
+        }
+
+        return sum;
     }
 
     /**
