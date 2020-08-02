@@ -38,9 +38,13 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[]arr = {1,2,-3,4,5};
-        System.out.print(ap.maxSumKNegation(arr, 2));
-
+        int[]arr[] = {
+                {10,20,30,40,50},
+                {15,25,35,45,55},
+                {18,28,36,48,56},
+                {34,39,41,91,102}
+        };
+        System.out.print(ap.searchSortedMatrix(arr, 1));
     }
 
     /**
@@ -2278,7 +2282,7 @@ public class ArrayProblems {
 
     /**
      * https://leetcode.com/problems/search-a-2d-matrix-ii/
-     * Search in sorted 2D array O(n) time
+     * Search in sorted 2D array O(m*n) time
      *
      * @param matrix
      * @param target
@@ -2305,6 +2309,35 @@ public class ArrayProblems {
 
         return false;
     }
+
+    /**
+     * https://leetcode.com/problems/search-a-2d-matrix-ii/
+     * LeetCode 240
+     * @param matrix
+     * @param target
+     * @return
+     */
+    boolean searchSortedMatrix(int[][] matrix, int target){
+        return searchSortedMatrix(matrix, 0, matrix.length-1, 0, matrix[0].length-1, target);
+    }
+
+    private boolean searchSortedMatrix(int[][] matrix, int rs, int re, int cs, int ce, int target) {
+        if(rs>re || cs>ce) return false;
+
+        int rm = (rs+re)/2;
+        int cm = (cs+ce)/2;
+        int mid = matrix[rm][cm];
+        if(mid == target) return true;
+        if(mid>target){
+            return searchSortedMatrix(matrix, rs, re, cs, cm-1, target) ||
+                    searchSortedMatrix(matrix, rs, rm-1, cm, ce, target);
+        }
+        else{
+            return searchSortedMatrix(matrix, rm+1, re, cs, ce, target) ||
+                    searchSortedMatrix(matrix, rs, rm, cm+1, ce, target);
+        }
+    }
+
 
     /**
      * https://leetcode.com/problems/target-sum/
