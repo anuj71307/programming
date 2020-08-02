@@ -16,11 +16,64 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        TreeNode node = new TreeNode(5);
-        // node.left = new TreeNode(3);
-        node.right = new TreeNode(4);
-        node.right.right = new TreeNode(4);
-        System.out.print(tp.t2Sum(node, 8));
+        TreeNode node = new TreeNode(45);
+        node.left = new TreeNode(6);
+        node.left.left = new TreeNode(11);
+        node.left.right = new TreeNode(13);
+        node.left.right.left = new TreeNode(12);
+        node.right = new TreeNode(9);
+        node.right.right = new TreeNode(8);
+        node.right.right.left = new TreeNode(19);
+        node.right.right.left.left = new TreeNode(5);
+        node.right.right.right = new TreeNode(24);
+        System.out.print(tp.findPath(node, 41));
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/find-distance-root-given-node-binary-tree/
+     * Find distance from root to node
+     * Time complexity O(N)
+     *
+     * @param root
+     * @param x
+     * @return
+     */
+    int findDistance(TreeNode root, int x) {
+        if (root == null) return -1;
+        if (root.value == x) return 0;
+        int dis = findDistance(root.left, x);
+        if (dis != -1) return dis + 1;
+        dis = findDistance(root.right, x);
+        if (dis != -1) return dis + 1;
+        return -1;
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/print-path-root-given-node-binary-tree/
+     * Find path from root to given node
+     * Time complexity O(N)
+     *
+     * @param root
+     * @param x
+     * @return
+     */
+    List<TreeNode> findPath(TreeNode root, int x) {
+        if (root == null) return null;
+        List<TreeNode> path = new ArrayList<>();
+        findPath(root, path, x);
+        return path;
+    }
+
+    private boolean findPath(TreeNode root, List<TreeNode> path, int x) {
+        if (root == null) return false;
+        path.add(root);
+        if (root.value == x) {
+            return true;
+        }
+        if (findPath(root.left, path, x) || findPath(root.right, path, x)) return true;
+        path.remove(path.size() - 1);
+        return false;
+
     }
 
     /**

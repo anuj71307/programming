@@ -130,4 +130,9 @@ data class TreeNode constructor(@JvmField var value: Int, @JvmField var left: Tr
     constructor(value: Int) : this(value, null, null) {
 
     }
+
+    override fun toString(): String {
+        return "TreeNode(value=$value)"
+    }
+
 }
