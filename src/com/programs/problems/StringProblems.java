@@ -12,19 +12,19 @@ public class StringProblems {
 
     /**
      * // System.out.println(dp.editDistDP("horse", "ros"));
-     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-     int test = Integer.parseInt(reader.readLine());
-     for(int i = 0 ; i<test;i++){
-     int k = Integer.parseInt(reader.readLine());
-     String str = reader.readLine();
-     String [] ar = str.split(",");
-     int arr[] = new int[ar.length];
-     for(int m = 0; m < arr.length;m++){
-     arr[m] = Integer.parseInt(ar[m].trim());
-     }
-     System.out.println(dp.longestZigZag(arr));
-     }
-     reader.close();
+     * BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+     * int test = Integer.parseInt(reader.readLine());
+     * for(int i = 0 ; i<test;i++){
+     * int k = Integer.parseInt(reader.readLine());
+     * String str = reader.readLine();
+     * String [] ar = str.split(",");
+     * int arr[] = new int[ar.length];
+     * for(int m = 0; m < arr.length;m++){
+     * arr[m] = Integer.parseInt(ar[m].trim());
+     * }
+     * System.out.println(dp.longestZigZag(arr));
+     * }
+     * reader.close();
      */
 
     public static void main(String[] args) throws IOException {
@@ -32,7 +32,7 @@ public class StringProblems {
         StringProblems sp = new StringProblems();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int test = Integer.parseInt(reader.readLine());
-        for(int i = 0 ; i<test;i++){
+        for (int i = 0; i < test; i++) {
             String str = reader.readLine();
             int k = Integer.parseInt(reader.readLine());
             System.out.println(sp.kUniqueLength(str, k));
@@ -41,9 +41,64 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/longest-palindromic-substring/
+     * Leetcode 5
+     * Alternate solution [longestPalindrome2]
+     *
+     * @param str
+     * @return
+     */
+    public String longestPalindrome(String str) {
+        if (str == null || str.length() <= 1) return str;
+        boolean dp[][] = new boolean[str.length()][str.length()];
+        int length = str.length();
+        int len = 0;
+        int start = 0;
+        for (int i = length - 1; i >= 0; i--) {
+            for (int j = i; j < length; j++) {
+                dp[i][j] = str.charAt(i) == str.charAt(j) && (j - i <= 3 || dp[i + 1][j - 1]);
+                if (dp[i][j] && j - i + 1 > len) {
+                    len = j - i + 1;
+                    start = i;
+                }
+            }
+        }
+        return str.substring(start, start + len);
+    }
+
+    /**
+     * https://leetcode.com/problems/longest-palindromic-substring/
+     * Leetcode 5
+     * Time complexity (N^2) as we have nested for loop, in practical situation this wont happen since loop will break
+     * when character doesnt match
+     *
+     * @param str
+     * @return
+     */
+    public String longestPalindrome2(String str) {
+        if (str == null || str.length() <= 1) return str;
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < str.length(); i++) {
+            int len1 = expand(str, i, i);
+
+            int len2 = expand(str, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+
+        }
+
+        return str.substring(start, end + 1);
+    }
+
+    /**
      * https://www.geeksforgeeks.org/find-the-longest-substring-with-k-unique-characters-in-a-given-string/
      * e keep adding count of each character in hashmap, if at any point map.size becomes more than
      * k then we start popping element from start. until size is greater
+     *
      * @param str
      * @param k
      * @return
@@ -79,6 +134,7 @@ public class StringProblems {
      * we keep adding count of each character in count array and anytime new character added we increase out count of
      * unique character, if at any point unique character count  becomes more than k then we start popping element from
      * start. until unqieue character count becomes equal to k
+     *
      * @param str
      * @param k
      * @return
@@ -92,11 +148,11 @@ public class StringProblems {
 
         for (int index = 0; index < str.length(); index++) {
             char character = str.charAt(index);
-            int c =  charCount[character-'a'];
-            if(c==0){
+            int c = charCount[character - 'a'];
+            if (c == 0) {
                 count++;
             }
-            charCount[character-'a'] = c+1;
+            charCount[character - 'a'] = c + 1;
             while (count > k) {
                 int pos = str.charAt(start) - 'a';
                 c = charCount[pos];
@@ -106,7 +162,7 @@ public class StringProblems {
                 }
                 start++;
             }
-            if(count==k) {
+            if (count == k) {
                 max = Math.max(max, index - start + 1);
             }
 
@@ -117,20 +173,21 @@ public class StringProblems {
     /**
      * https://leetcode.com/problems/repeated-substring-pattern/
      * Another solution: https://leetcode.com/problems/repeated-substring-pattern/discuss/541860/One-liner-with-explaination
+     *
      * @param s
      * @return
      */
     public boolean repeatedSubstringPattern(String s) {
 
         int length = s.length();
-        if(length<2) return false;
-        for(int i=(length/2);i>0;i--){
-            StringBuilder str = new StringBuilder(s.substring(0,i));
+        if (length < 2) return false;
+        for (int i = (length / 2); i > 0; i--) {
+            StringBuilder str = new StringBuilder(s.substring(0, i));
             StringBuilder temp = new StringBuilder(str);
-            while(str.length()<s.length()){
+            while (str.length() < s.length()) {
                 str.append(temp);
             }
-            if(str.toString().equals(s)){
+            if (str.toString().equals(s)) {
                 return true;
             }
         }
@@ -158,6 +215,7 @@ public class StringProblems {
      * We maintain map for each traversal which contain each word's distance from source, We do BFS.
      * if while traversing a word is already found in another map ie it is already traversed then we return
      * sum of current traversal and already traversed path
+     *
      * @param beginWord
      * @param endWord
      * @param wordList
@@ -1043,28 +1101,6 @@ public class StringProblems {
 
         // required smallest number
         return (new String(num));
-    }
-
-    /*
-    find longest palindromic substring from given string
-     */
-    public static String longestPalindromic(String str) {
-        if (str == null || str.length() <= 1) return str;
-        int start = 0;
-        int end = 0;
-        for (int i = 0; i < str.length(); i++) {
-            int len1 = expand(str, i, i);
-
-            int len2 = expand(str, i, i + 1);
-            int len = Math.max(len1, len2);
-            if (len > end - start + 1) {
-                start = i - (len - 1) / 2;
-                end = i + len / 2;
-            }
-
-        }
-
-        return str.substring(start, end + 1);
     }
 
     /**
