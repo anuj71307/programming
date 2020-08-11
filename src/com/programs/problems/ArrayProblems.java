@@ -38,13 +38,59 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[]arr[] = {
-                {10,20,30,40,50},
-                {15,25,35,45,55},
-                {18,28,36,48,56},
-                {34,39,41,91,102}
-        };
-        System.out.print(ap.searchSortedMatrix(arr, 1));
+        int[]arr= {0,1,0,1,1,0,0,1};
+        int[] res = ap.prisonAfterNDays(arr, 100);
+    }
+
+    /**
+     * https://leetcode.com/problems/prison-cells-after-n-days/
+     * Leetcode 957
+     * Afer certain days there will be repitive value once we find it we can just iterate over N%(count from where its repeating)
+     * Time complexity Worst case O(N)
+     * @param cells
+     * @param N
+     * @return
+     */
+    public int[] prisonAfterNDays(int[] cells, int N) {
+
+        //int[] temp = new int[cells.length];
+        boolean hasCycle = false;
+        int cycle = 0;
+        HashSet<String> set = new HashSet<>();
+        for(int k =0;k<N;k++){
+            int[] temp = nextDay(cells);
+            String key = Arrays.toString(temp);
+            if(set.contains(key)){
+                hasCycle = true;
+                break;
+            }
+            else{
+                set.add(key);
+                cycle++;
+            }
+            cells = temp;
+        }
+
+        if(hasCycle){
+            N%=cycle;
+            for(int i =0; i<N;i++){
+                cells = nextDay(cells);
+            }
+        }
+        return cells;
+    }
+
+    int[] nextDay(int[] cells){
+        int[] temp = new int[cells.length];
+        for(int i =1;i<7;i++ ){
+            if(cells[i-1]==cells[i+1]){
+                temp[i]=1;
+            }
+            else{
+                temp[i]=0;
+            }
+        }
+        return temp;
     }
 
     /**
