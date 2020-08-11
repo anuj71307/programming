@@ -33,7 +33,65 @@ public class DynamicProgramming {
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
 
-        System.out.println(dp.maxProduct(10));
+        String[] words = {"a", "b", "ba", "bca", "bda", "bdca"};
+        System.out.println(dp.longestStrChain(words));
+    }
+
+    /**
+     * https://leetcode.com/problems/longest-string-chain/
+     * LeetCode 1048
+     *
+     * @param words
+     * @return
+     */
+    public int longestStrChain(String[] words) {
+
+        Arrays.sort(words, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.length() - o2.length();
+            }
+        });
+
+        int[] dp = new int[words.length];
+        int max = 0;
+        for (int i = 0; i < words.length; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (oneAddAway(words[j], words[i])) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            max = Math.max(max, dp[i]);
+        }
+
+        return max;
+    }
+
+    /**
+     * Check if first string can be transformed to second by adding just one char at any place
+     * Condition- second is always bigger in length than first
+     * * Time Complexity - O(M) M is length of first string
+     *
+     * @param first
+     * @param second
+     * @return
+     */
+    private boolean oneAddAway(String first, String second) {
+        int k = second.length() - first.length();
+        if (k != 1) return false;
+        int diff = 0;
+        for (int i = 0, j = 0; i < first.length(); ) {
+            if (first.charAt(i) == second.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                diff++;
+                if (diff > 1) return false;
+                j++;
+            }
+        }
+        return true;
     }
 
     /**
