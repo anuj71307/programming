@@ -12,6 +12,7 @@ public class GraphProblems {
 
     /**
      * Create graph dynamically
+     *
      * @param args
      * @throws Exception
      */
@@ -42,24 +43,99 @@ public class GraphProblems {
     public static void main(String[] args) {
         GraphProblems gp = new GraphProblems();
         int n = 6;
-        int edges[][] = {{0,3}, {1,3}, {2,3}, {4,3}, {5,4}, {3,5}, {0,5}};
-        GenericGraph<Integer> graph = gp.createGraph(n, edges);
-       // System.out.println(graph.shortestDistanceBfs(graph.map.get(3), graph.map.get(5)));
-        System.out.println("Using Dfs");
-        System.out.println(graph.shortestDistanceDfs(graph.map.get(0), graph.map.get(5)));
+        //[[0,1],[1,2],[2,0],[1,3]]
+        List<List<Integer>> lists = new ArrayList<>();
+        lists.add(new ArrayList<Integer>(Arrays.asList(0, 1)));
+        lists.add(new ArrayList<Integer>(Arrays.asList(1, 2)));
+        lists.add(new ArrayList<Integer>(Arrays.asList(2, 0)));
+        lists.add(new ArrayList<Integer>(Arrays.asList(1, 3)));
+        lists.add(new ArrayList<Integer>(Arrays.asList(3, 4)));
+        lists.add(new ArrayList<Integer>(Arrays.asList(4, 5)));
+        lists.add(new ArrayList<Integer>(Arrays.asList(5, 3)));
+
+        System.out.print(gp.criticalConnections(n, lists));
     }
 
-    public GenericGraph<Integer> createGraph(int n, int[][] edges){
+    int time = 0;
+
+    /**
+     * Critical Connection in a graph/network
+     * Leetcode 119
+     * https://leetcode.com/problems/critical-connections-in-a-network/
+     *
+     * @param n
+     * @param connections
+     * @return
+     */
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        LinkedList<Integer>[] graph = new LinkedList[n];
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        int discoveryTime[] = new int[n];
+        int lowLink[] = new int[n];
+        buildGraph(n, graph, connections, discoveryTime, lowLink);
+        for (int i = 0; i < n; i++) {
+            if (discoveryTime[i] == -1) {
+                criticalConnections(graph, discoveryTime, lowLink, i, -1, result);
+            }
+        }
+        return result;
+    }
+
+    private void criticalConnections(LinkedList<Integer>[] graph, int[] discoveryTime, int[] lowLink, int node, int parent, List<List<Integer>> result) {
+        discoveryTime[node] = lowLink[node] = time++;
+        for (int child : graph[node]) {
+            if (child == parent) continue;
+            if (discoveryTime[child] == -1) {
+                criticalConnections(graph, discoveryTime, lowLink, child, node, result);
+                lowLink[node] = Math.min(lowLink[node], lowLink[child]);
+
+                if (lowLink[child] > discoveryTime[node]) {
+                    result.add(new ArrayList<>(Arrays.asList(node, child)));
+                }
+
+            } else {
+                lowLink[node] = Math.min(lowLink[node], discoveryTime[child]);
+            }
+
+        }
+
+    }
+
+    /**
+     * Used for critical connection
+     *
+     * @param n
+     * @param graph
+     * @param connections
+     * @param discoveryTime
+     * @param lowLink
+     */
+    private void buildGraph(int n, LinkedList<Integer>[] graph, List<List<Integer>> connections, int discoveryTime[], int lowLink[]) {
+        for (int i = 0; i < n; i++) {
+            graph[i] = new LinkedList();
+            discoveryTime[i] = -1;
+            lowLink[i] = i;
+        }
+        for (List<Integer> connection : connections) {
+            int first = connection.get(0);
+            int second = connection.get(1);
+            graph[first].add(second);
+            graph[second].add(first);
+        }
+    }
+
+    public GenericGraph<Integer> createGraph(int n, int[][] edges) {
         GenericGraph<Integer> gp = new GenericGraph();
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             gp.addVertices(i);
         }
-        for(int edge[]:edges){
+        for (int edge[] : edges) {
             gp.addEdge(edge[0], edge[1]);
         }
         return gp;
     }
-
 
 
     /**
@@ -69,16 +145,17 @@ public class GraphProblems {
      * Idea is we first traverse all the leaf nodes and remove their reference from other vertices. We keep on doing so.
      * Its like removing layer until we are at inner most leavel.
      * We can not have more than 2 nodes as a solution.
+     *
      * @param n
      * @param edges
      * @return
      */
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         GenericGraph<Integer> gp = new GenericGraph();
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             gp.addVertices(i);
         }
-        for(int edge[]:edges){
+        for (int edge[] : edges) {
             gp.addEdge(edge[0], edge[1]);
         }
 
@@ -91,13 +168,13 @@ public class GraphProblems {
             }
         }
 
-        while(n>2){
+        while (n > 2) {
             n = n - leaves.size();
             List<Integer> list = new ArrayList<>();
-            for(Integer leave : leaves){
+            for (Integer leave : leaves) {
                 List<GenericGraphNode> child = map.get(leave).getChildren();
                 child.get(0).getChildren().remove(map.get(leave));
-                if(child.get(0).getChildren().size()<2 && !child.get(0).isVisited()){
+                if (child.get(0).getChildren().size() < 2 && !child.get(0).isVisited()) {
                     child.get(0).setVisited(true);
                     list.add((Integer) child.get(0).getKey());
                 }
@@ -109,7 +186,7 @@ public class GraphProblems {
 
     /**
      * https://medium.com/@rebeccahezhang/leetcode-737-sentence-similarity-ii-2ca213f10115
-     *
+     * <p>
      * We create graph for each string, we traverse pair and add edge between them in our graph class.
      * once graph is constructed we just traverse sentence1 and sentence2 and take the param at respoective index and just check if
      * ther eis a path in graoh from word in sentence1 to word in sentence2 at same index
@@ -119,7 +196,7 @@ public class GraphProblems {
      * @param synonyms
      * @return
      */
-    public boolean areSentenceSimilar(String sentence1[], String sentence2[], String[][] synonyms){
+    public boolean areSentenceSimilar(String sentence1[], String sentence2[], String[][] synonyms) {
         if (sentence1 == null && sentence2 == null) return true;
         if (sentence1 == null || sentence2 == null) return false;
         if (sentence1.length != sentence2.length) return false;
