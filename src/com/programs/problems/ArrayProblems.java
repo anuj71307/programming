@@ -38,8 +38,76 @@ public class ArrayProblems {
     public static void main(String[] args) throws Exception {
         //code
         ArrayProblems ap = new ArrayProblems();
-        int[]arr= {0,1,0,1,1,0,0,1};
-        int[] res = ap.prisonAfterNDays(arr, 100);
+        // [1,2,3,6,2,3,4,7,8]
+        int[] arr = {11, 11, 12};
+        System.out.println(ap.isNStraightHand(arr, 3));
+    }
+
+    /**
+     * https://leetcode.com/problems/hand-of-straights/
+     * Leetcode 846, Leetcode 1296
+     * @param hand
+     * @param W
+     * @return
+     */
+    public boolean isNStraightHand(int[] hand, int W) {
+        if (hand.length % W != 0) return false;
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        int max = -1;
+        int min = Integer.MAX_VALUE;
+        for (int i : hand) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+            max = Math.max(max, i);
+            min = Math.min(min, i);
+        }
+
+        int i = min;
+        int next = -1;
+        while (i <= max) {
+            if (next == -1) {
+                while (i <= max && map.getOrDefault(i, 0) == 0) i++;
+                next = i;
+            }
+            i = next;
+            next = -1;
+
+            int k = i + W; // 4
+            for (; i < k; i++) {
+                if (map.getOrDefault(i, 0) <= 0) return false;
+                if (map.getOrDefault(i, 0) > 1 && next == -1) {
+                    next = i;
+                }
+                map.put(i, map.getOrDefault(i, 0) - 1);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * https://leetcode.com/problems/hand-of-straights/
+     * Leetcode 846, Leetcode 1296
+     * @param hand
+     * @param W
+     * @return
+     */
+    public boolean isNStraightHandPriorityQueue(int[] hand, int W) {
+        if (hand.length % W != 0) return false;
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for (int i : hand) {
+            minHeap.add(i);
+        }
+        while (minHeap.size() != 0) {
+            int start = minHeap.poll();
+            for (int j = 1; j < W; j++) {
+                if (minHeap.remove(start + j)) {
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -47,6 +115,7 @@ public class ArrayProblems {
      * Leetcode 957
      * Afer certain days there will be repitive value once we find it we can just iterate over N%(count from where its repeating)
      * Time complexity Worst case O(N)
+     *
      * @param cells
      * @param N
      * @return
@@ -57,37 +126,35 @@ public class ArrayProblems {
         boolean hasCycle = false;
         int cycle = 0;
         HashSet<String> set = new HashSet<>();
-        for(int k =0;k<N;k++){
+        for (int k = 0; k < N; k++) {
             int[] temp = nextDay(cells);
             String key = Arrays.toString(temp);
-            if(set.contains(key)){
+            if (set.contains(key)) {
                 hasCycle = true;
                 break;
-            }
-            else{
+            } else {
                 set.add(key);
                 cycle++;
             }
             cells = temp;
         }
 
-        if(hasCycle){
-            N%=cycle;
-            for(int i =0; i<N;i++){
+        if (hasCycle) {
+            N %= cycle;
+            for (int i = 0; i < N; i++) {
                 cells = nextDay(cells);
             }
         }
         return cells;
     }
 
-    int[] nextDay(int[] cells){
+    int[] nextDay(int[] cells) {
         int[] temp = new int[cells.length];
-        for(int i =1;i<7;i++ ){
-            if(cells[i-1]==cells[i+1]){
-                temp[i]=1;
-            }
-            else{
-                temp[i]=0;
+        for (int i = 1; i < 7; i++) {
+            if (cells[i - 1] == cells[i + 1]) {
+                temp[i] = 1;
+            } else {
+                temp[i] = 0;
             }
         }
         return temp;
@@ -100,23 +167,24 @@ public class ArrayProblems {
      * but we can optimize it to first create min heap in O(N) then K time take min element and update it.
      * Time complexity of this would be K*Log(N).
      * Sum is calculated on the run.
+     *
      * @param arr
      * @param k
      * @return
      */
-    public int maxSumKNegation(int[] arr, int k){
-        if(arr==null || arr.length==0) return 0;
+    public int maxSumKNegation(int[] arr, int k) {
+        if (arr == null || arr.length == 0) return 0;
         int sum = 0;
         PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for(int i :arr){
+        for (int i : arr) {
             pq.add(i);
-            sum+=i;
+            sum += i;
         }
-        while(k-->0){
+        while (k-- > 0) {
             int val = pq.poll();
-            sum-=val;
-            val*=-1;
-            sum+=val;
+            sum -= val;
+            val *= -1;
+            sum += val;
             pq.add(val);
         }
 
@@ -126,36 +194,37 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/discuss/interview-question/411357/
      * Time taken by zombie to convert human to zombie
+     *
      * @param arr
      * @return
      */
-    public int calculateHours(int[][] arr){
-        if(arr==null || arr.length==0) return -1;
+    public int calculateHours(int[][] arr) {
+        if (arr == null || arr.length == 0) return -1;
         Queue<Pair> queue = new LinkedList();
-        int total = arr.length*arr[0].length;
-        for(int i =0; i< arr.length;i++){
-            for(int j = 0; j< arr[0].length;j++){
-                if(arr[i][j]==1){
-                    queue.add(new Pair(i,j));
+        int total = arr.length * arr[0].length;
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[0].length; j++) {
+                if (arr[i][j] == 1) {
+                    queue.add(new Pair(i, j));
                     total--;
                 }
             }
         }
 
-        if(queue.isEmpty()) return -1;
-        int rows[] =  {-1,0,0,1};
-        int cols[]  = {0,-1,1,0};
+        if (queue.isEmpty()) return -1;
+        int rows[] = {-1, 0, 0, 1};
+        int cols[] = {0, -1, 1, 0};
         int hours = 0;
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int size = queue.size();
-            if(total<=0) return hours;
+            if (total <= 0) return hours;
             hours++;
-            for(int index = 0; index<size;index++) {
+            for (int index = 0; index < size; index++) {
                 Pair pair = queue.poll();
                 for (int pos = 0; pos < 4; pos++) {
-                    int row = pair.row+rows[pos];
-                    int col = pair.col+cols[pos];
-                    if(row <0 || row>=arr.length || col<0 || col>= arr[0].length || arr[row][col]==1) continue;
+                    int row = pair.row + rows[pos];
+                    int col = pair.col + cols[pos];
+                    if (row < 0 || row >= arr.length || col < 0 || col >= arr[0].length || arr[row][col] == 1) continue;
                     total--;
                     arr[row][col] = 1;
                     queue.add(new Pair(row, col));
@@ -171,17 +240,18 @@ public class ArrayProblems {
      * LeetCode 695
      * We just need a traversal of grid and keep a count when we find 1 and mark index as visisted
      * Time complexity O(M*N). SpaceO(M*N)
+     *
      * @param grid
      * @return
      */
     public int maxAreaOfIsland(int[][] grid) {
 
-        if(grid==null || grid.length==0) return 0;
+        if (grid == null || grid.length == 0) return 0;
         int res = 0;
         boolean[][] visited = new boolean[grid.length][grid[0].length];
-        for(int i = 0; i<grid.length;i++){
-            for(int j = 0; j<grid[0].length;j++){
-                if(!visited[i][j]){
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (!visited[i][j]) {
                     int count = area(grid, visited, i, j);
                     res = Math.max(res, count);
                 }
@@ -192,13 +262,13 @@ public class ArrayProblems {
     }
 
     private int area(int[][] grid, boolean[][] visited, int i, int j) {
-        if(i<0||j<0||i>=grid.length||j>=grid[i].length|| visited[i][j] || grid[i][j]==0) return 0;
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[i].length || visited[i][j] || grid[i][j] == 0) return 0;
         int res = 1;
         visited[i][j] = true;
-        res+=area(grid, visited, i+1, j);
-        res+=area(grid, visited, i-1, j);
-        res+=area(grid, visited, i, j+1);
-        res+=area(grid, visited, i, j-1);
+        res += area(grid, visited, i + 1, j);
+        res += area(grid, visited, i - 1, j);
+        res += area(grid, visited, i, j + 1);
+        res += area(grid, visited, i, j - 1);
         return res;
     }
 
@@ -251,38 +321,37 @@ public class ArrayProblems {
      * @param board
      */
     public void solveChar(char[][] board) {
-        if(board==null || board.length<2 || board[0].length<2) return;
+        if (board == null || board.length < 2 || board[0].length < 2) return;
         //boolean visited[][] = new boolean[board.length][board[0].length];
-        for(int i = 0; i< board[0].length;i++){
-            dfs(board,0,i);
-            dfs(board,board.length-1,i);
+        for (int i = 0; i < board[0].length; i++) {
+            dfs(board, 0, i);
+            dfs(board, board.length - 1, i);
         }
 
-        for(int i = 0; i< board.length;i++){
-            dfs(board,i,0);
-            dfs(board,i,board[0].length-1);
+        for (int i = 0; i < board.length; i++) {
+            dfs(board, i, 0);
+            dfs(board, i, board[0].length - 1);
         }
 
-        for(int i =0; i< board.length;i++){
-            for(int j = 0 ; j< board[0].length;j++){
-                if(board[i][j]=='#'){
-                    board[i][j]= 'O';
-                }else{
-                    board[i][j]= 'X';
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == '#') {
+                    board[i][j] = 'O';
+                } else {
+                    board[i][j] = 'X';
                 }
             }
         }
     }
 
 
-
-    void dfs(char[][] board, int i , int j){
-        if(i<0 || j<0 || i>=board.length || j>=board[0].length || board[i][j]!='O') return;
+    void dfs(char[][] board, int i, int j) {
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length || board[i][j] != 'O') return;
         board[i][j] = '#';
-        dfs(board,i+1,j);
-        dfs(board,i-1,j);
-        dfs(board,i,j+1);
-        dfs(board,i,j-1);
+        dfs(board, i + 1, j);
+        dfs(board, i - 1, j);
+        dfs(board, i, j + 1);
+        dfs(board, i, j - 1);
     }
 
     /**
@@ -2359,28 +2428,28 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/search-a-2d-matrix-ii/
      * LeetCode 240
+     *
      * @param matrix
      * @param target
      * @return
      */
-    boolean searchSortedMatrix(int[][] matrix, int target){
-        return searchSortedMatrix(matrix, 0, matrix.length-1, 0, matrix[0].length-1, target);
+    boolean searchSortedMatrix(int[][] matrix, int target) {
+        return searchSortedMatrix(matrix, 0, matrix.length - 1, 0, matrix[0].length - 1, target);
     }
 
     private boolean searchSortedMatrix(int[][] matrix, int rs, int re, int cs, int ce, int target) {
-        if(rs>re || cs>ce) return false;
+        if (rs > re || cs > ce) return false;
 
-        int rm = (rs+re)/2;
-        int cm = (cs+ce)/2;
+        int rm = (rs + re) / 2;
+        int cm = (cs + ce) / 2;
         int mid = matrix[rm][cm];
-        if(mid == target) return true;
-        if(mid>target){
-            return searchSortedMatrix(matrix, rs, re, cs, cm-1, target) ||
-                    searchSortedMatrix(matrix, rs, rm-1, cm, ce, target);
-        }
-        else{
-            return searchSortedMatrix(matrix, rm+1, re, cs, ce, target) ||
-                    searchSortedMatrix(matrix, rs, rm, cm+1, ce, target);
+        if (mid == target) return true;
+        if (mid > target) {
+            return searchSortedMatrix(matrix, rs, re, cs, cm - 1, target) ||
+                    searchSortedMatrix(matrix, rs, rm - 1, cm, ce, target);
+        } else {
+            return searchSortedMatrix(matrix, rm + 1, re, cs, ce, target) ||
+                    searchSortedMatrix(matrix, rs, rm, cm + 1, ce, target);
         }
     }
 
