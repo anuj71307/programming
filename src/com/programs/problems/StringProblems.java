@@ -30,10 +30,64 @@ public class StringProblems {
     public static void main(String[] args) throws IOException {
 
         StringProblems sp = new StringProblems();
-        String[] words = {"ksqvsyq", "ks", "kss", "czvh", "zczpzvdhx", "zczpzvh", "zczpzvhx", "zcpzvh", "zczvh", "gr", "grukmj", "ksqvsq", "gruj", "kssq", "ksqsq", "grukkmj", "grukj", "zczpzfvdhx", "gru"};
+        String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.longestStrChain(words));
+        System.out.println(sp.expressiveWords("hello", words));
     }
+
+
+    /**
+     * https://leetcode.com/problems/expressive-words/
+     * Leetcode 809
+     * Time Complexity = O(N*M), N is number of words, M is length of S.
+     * @param stretchyWord
+     * @param words
+     * @return
+     */
+    public int expressiveWords(String stretchyWord, String[] words) {
+        int count = 0;
+        for (String word : words) {
+            if (isStretchy(stretchyWord, word)) count++;
+        }
+        return count;
+    }
+
+    /**
+     * Check if first string can be stretchy version of second string
+     * @param stretchyWord
+     * @param original
+     * @return
+     */
+    boolean isStretchy(String stretchyWord, String original) {
+        if (stretchyWord == null || original == null || stretchyWord.length() < original.length()) return false;
+
+        int i = 0;
+        int j = 0;
+        while (i < stretchyWord.length() && j < original.length()) {
+            if (stretchyWord.charAt(i) != original.charAt(j)) return false;
+            int fLength = getLength(stretchyWord, i);
+            int sLength = getLength(original, j);
+            if (fLength < sLength || (fLength < 3 && fLength != sLength)) return false;
+            i += fLength;
+            j += sLength;
+        }
+
+        return i >= stretchyWord.length() && j >= original.length();
+    }
+
+
+    /**
+     * Return length of number of same consecutive character starting from character at i
+     * @param word
+     * @param i index from which we need to find similar consecutive character
+     * @return
+     */
+    int getLength(String word, int i) {
+        int j = i;
+        while (j<word.length() && word.charAt(j) == word.charAt(i)) j++;
+        return j - i;
+    }
+
 
     /**
      * https://leetcode.com/problems/longest-string-chain/
