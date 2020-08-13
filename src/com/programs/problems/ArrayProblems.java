@@ -40,8 +40,85 @@ public class ArrayProblems {
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
         int[] arr = {11, 11, 12};
-        System.out.println(ap.isNStraightHand(arr, 3));
+        // 10, 20, 46, 104, 240, 544
+        System.out.println(ap.knightDialer(6));
     }
+
+    int count;
+
+    /**
+     * https://leetcode.com/problems/knight-dialer/
+     * Leetcode 935
+     * @param N
+     * @return
+     */
+    public int knightDialer(int N) {
+
+        List<List<Integer>> list = new ArrayList();
+        for(int i =0;i<=9;i++){
+            list.add(new ArrayList());
+            populate(list.get(i), i);
+        }
+
+        for(int i =0; i<10;i++){
+            dfs(list,i,N-1);
+        };
+        return count;
+    }
+
+    public void dfs(List<List<Integer>> list, int index, int total) {
+        if (total <= 0 || index >= list.size()) {
+            count++;
+            return;
+        }
+        for (int i = 0; i < list.get(index).size(); i++) {
+            dfs(list, list.get(index).get(i), total - 1);
+        }
+
+    }
+
+    private void populate(List<Integer> integers, int k) {
+        switch (k){
+            case 0: {
+                integers.add(6);integers.add(4);
+                break;
+            }
+            case 1: {
+                integers.add(8);integers.add(6);
+                break;
+            }
+            case 2: {
+                integers.add(7);integers.add(9);
+                break;
+            }
+            case 3: {
+                integers.add(4);integers.add(8);
+                break;
+            }
+            case 4: {
+                integers.add(9);integers.add(3); integers.add(0);
+                break;
+            }
+            case 6: {
+                integers.add(1);integers.add(7); integers.add(0);
+                break;
+            }
+            case 7: {
+                integers.add(6);integers.add(2);
+                break;
+            }
+            case 8: {
+                integers.add(1);integers.add(3);
+                break;
+            }
+            case 9: {
+                integers.add(2);integers.add(4);
+                break;
+            }
+            default: break;
+        }
+    }
+
 
     /**
      * https://leetcode.com/problems/hand-of-straights/
