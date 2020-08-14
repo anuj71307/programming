@@ -13,6 +13,7 @@ import java.util.*;
  */
 public class DynamicProgramming {
 
+    public static final int MOD = 1000000007;
     /**
      * // System.out.println(dp.editDistDP("horse", "ros"));
      * BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -34,7 +35,37 @@ public class DynamicProgramming {
         DynamicProgramming dp = new DynamicProgramming();
 
         String[] words = {"a", "b", "ba", "bca", "bda", "bdca"};
-        System.out.println(dp.longestStrChain(words));
+        System.out.println(dp.knightDialer(154));
+    }
+
+    /**
+     * https://leetcode.com/problems/knight-dialer/
+     * Leetcode 935
+     * Similar to graph problem where find number of ways to take N steps in a directed graph
+     * For recursive approach check [ArrayProblems.knightDialer]. We need to memorize the already
+     * calculated input since same number can be repeated
+     * @param N
+     * @return
+     */
+    public int knightDialer(int N) {
+        int[][] arr = new int[][]{{4,6},{6,8},{7,9},{4,8},{3,9,0},{},{1,7,0},{2,6},{1,3},{2,4}};
+        Integer [][] dp = new Integer[N+1][10];
+        int count = 0;
+        for(int i =0;i<10;i++){
+            count =(count+dfs(arr, dp, N-1, i))%MOD;
+        }
+        return count;
+    }
+
+    private int dfs(int[][] arr, Integer[][] dp, int total, int index) {
+        if(total<=0) return 1;
+        if(dp[total][index]!=null) return dp[total][index];
+        int count=0;
+        for(int num:arr[index]){
+            count= (count+dfs(arr, dp, total-1, num))%MOD;
+        }
+        dp[total][index] = count;
+        return count;
     }
 
     /**
