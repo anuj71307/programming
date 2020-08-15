@@ -39,9 +39,105 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
-        int[] arr = {11, 11, 12};
+        int[][] arr = {{2, 3}};
+        int[] test = {};
         // 10, 20, 46, 104, 240, 544
-        System.out.println(ap.knightDialer(6));
+        arr = ap.insert(arr, test);
+        for (int[] res : arr) {
+            System.out.print(Arrays.toString(res));
+        }
+    }
+
+    /**
+     * https://leetcode.com/problems/insert-interval/
+     * Leetcode 57
+     * We first add all interval which are smaller then new ie whose end time is smaller then start time of new interval
+     * then merge all overlapping interval ie whose start time is less then end time of new interval
+     * then add all remaining intervals
+     *
+     * @param intervals
+     * @param newInterval
+     * @return
+     */
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        if (newInterval == null || newInterval.length == 0) return intervals;
+        if (intervals == null || intervals.length == 0) {
+            int[][] result = new int[1][];
+            result[0] = newInterval;
+            return result;
+        }
+        List<int[]> list = new ArrayList<>();
+        int i = 0;
+        while (i < intervals.length && intervals[i][1] < newInterval[0]) {
+            list.add(intervals[i++]);
+        }
+        while (i < intervals.length && intervals[i][0] <= newInterval[1]) {
+            newInterval[0] = Math.min(intervals[i][0], newInterval[0]);
+            newInterval[1] = Math.max(intervals[i][1], newInterval[1]);
+            i++;
+        }
+
+        list.add(newInterval);
+        while (i < intervals.length) {
+            list.add(intervals[i]);
+            i++;
+        }
+        int result[][] = new int[list.size()][];
+        for (int k = 0; k < list.size(); k++) {
+            result[k] = list.get(k);
+        }
+        return result;
+    }
+
+    //  // intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+    private int[][] mergeInterval(int[][] intervals, int[] newInterval, int start, int end) {
+        int size = 0;
+        if (start == end) size = intervals.length;
+        else size = intervals.length - (end - start);
+
+        int result[][] = new int[size][2];
+        newInterval[0] = Math.min(newInterval[0], intervals[start][0]);
+        newInterval[1] = Math.max(newInterval[1], intervals[end][1]);
+        int i = 0;
+        for (i = 0; i < start; i++) {
+            result[i] = intervals[i];
+        }
+        result[i++] = newInterval;
+        for (int k = end + 1; k < intervals.length; i++, k++) {
+            result[i] = intervals[k];
+        }
+        return result;
+    }
+
+    private int[][] addInterval(int[][] intervals, int[] newInterval) {
+        int result[][] = new int[intervals.length + 1][2];
+        int k = 0;
+        boolean kTaken = false;
+        for (int i = 0; i < intervals.length; i++) {
+            if (newInterval[0] < intervals[k][0]) {
+                result[i] = newInterval;
+                kTaken = true;
+            } else {
+                result[i] = intervals[k++];
+            }
+        }
+        result[intervals.length] = kTaken ? intervals[intervals.length - 1] : newInterval;
+        return result;
+    }
+
+
+    int search(int[][] intervals, int target) {
+
+        int i = 0;
+        int j = intervals.length - 1;
+        while (i <= j) {
+            int mid = (i + j) / 2;
+            int[] midArr = intervals[mid];
+            if (target >= midArr[0] && target <= midArr[1]) return mid;
+            if (target > midArr[1]) i = mid + 1;
+            else j = mid - 1;
+        }
+        return -1;
     }
 
     int count;
@@ -49,20 +145,22 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/knight-dialer/
      * Leetcode 935
+     *
      * @param N
      * @return
      */
     public int knightDialer(int N) {
 
         List<List<Integer>> list = new ArrayList();
-        for(int i =0;i<=9;i++){
+        for (int i = 0; i <= 9; i++) {
             list.add(new ArrayList());
             populate(list.get(i), i);
         }
 
-        for(int i =0; i<10;i++){
-            dfs(list,i,N-1);
-        };
+        for (int i = 0; i < 10; i++) {
+            dfs(list, i, N - 1);
+        }
+        ;
         return count;
     }
 
@@ -78,44 +176,56 @@ public class ArrayProblems {
     }
 
     private void populate(List<Integer> integers, int k) {
-        switch (k){
+        switch (k) {
             case 0: {
-                integers.add(6);integers.add(4);
+                integers.add(6);
+                integers.add(4);
                 break;
             }
             case 1: {
-                integers.add(8);integers.add(6);
+                integers.add(8);
+                integers.add(6);
                 break;
             }
             case 2: {
-                integers.add(7);integers.add(9);
+                integers.add(7);
+                integers.add(9);
                 break;
             }
             case 3: {
-                integers.add(4);integers.add(8);
+                integers.add(4);
+                integers.add(8);
                 break;
             }
             case 4: {
-                integers.add(9);integers.add(3); integers.add(0);
+                integers.add(9);
+                integers.add(3);
+                integers.add(0);
                 break;
             }
             case 6: {
-                integers.add(1);integers.add(7); integers.add(0);
+                integers.add(1);
+                integers.add(7);
+                integers.add(0);
                 break;
             }
             case 7: {
-                integers.add(6);integers.add(2);
+                integers.add(6);
+                integers.add(2);
                 break;
             }
             case 8: {
-                integers.add(1);integers.add(3);
+                integers.add(1);
+                integers.add(3);
                 break;
             }
             case 9: {
-                integers.add(2);integers.add(4);
+                integers.add(2);
+                integers.add(4);
                 break;
             }
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -123,6 +233,7 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/hand-of-straights/
      * Leetcode 846, Leetcode 1296
+     *
      * @param hand
      * @param W
      * @return
@@ -161,9 +272,11 @@ public class ArrayProblems {
         return true;
     }
 
+
     /**
      * https://leetcode.com/problems/hand-of-straights/
      * Leetcode 846, Leetcode 1296
+     *
      * @param hand
      * @param W
      * @return
