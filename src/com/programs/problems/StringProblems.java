@@ -32,14 +32,51 @@ public class StringProblems {
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.expressiveWords("hello", words));
+        System.out.println(sp.getHint("1123", "1123"));
+
     }
 
+    /**
+     * https://leetcode.com/problems/bulls-and-cows/
+     * Leetcode 299
+     * Time complexity O(N) N is length of string
+     * we traverse the secret first and if char at index is matching with chat at index in guess then increase the bull
+     * count, ig not increase the count in counter array ie arr
+     * later iterate guess string and if char at index is not matching then check if this char was previously present in
+     * secret index by looking into counter array. if yes increase cow count and decrease count in counter array
+     *
+     * @param secret
+     * @param guess
+     * @return
+     */
+    public String getHint(String secret, String guess) {
+
+        int[] arr = new int[10];
+        int bull = 0;
+        for (int i = 0; i < secret.length(); i++) {
+            if (secret.charAt(i) == guess.charAt(i)) {
+                bull++;
+                continue;
+            }
+            arr[secret.charAt(i) - '0']++;
+        }
+
+        int cow = 0;
+        for (int i = 0; i < guess.length(); i++) {
+            if (secret.charAt(i) != guess.charAt(i)) {
+                int index = guess.charAt(i) - '0';
+                if (arr[index] > 0) cow++;
+                arr[index]--;
+            }
+        }
+        return bull + "A" + cow + "B";
+    }
 
     /**
      * https://leetcode.com/problems/expressive-words/
      * Leetcode 809
      * Time Complexity = O(N*M), N is number of words, M is length of S.
+     *
      * @param stretchyWord
      * @param words
      * @return
@@ -54,6 +91,7 @@ public class StringProblems {
 
     /**
      * Check if first string can be stretchy version of second string
+     *
      * @param stretchyWord
      * @param original
      * @return
@@ -78,13 +116,14 @@ public class StringProblems {
 
     /**
      * Return length of number of same consecutive character starting from character at i
+     *
      * @param word
-     * @param i index from which we need to find similar consecutive character
+     * @param i    index from which we need to find similar consecutive character
      * @return
      */
     int getLength(String word, int i) {
         int j = i;
-        while (j<word.length() && word.charAt(j) == word.charAt(i)) j++;
+        while (j < word.length() && word.charAt(j) == word.charAt(i)) j++;
         return j - i;
     }
 
@@ -93,6 +132,7 @@ public class StringProblems {
      * https://leetcode.com/problems/longest-string-chain/
      * LeetCode 1048
      * Time complexity - Sorting NLogN + (N*N*M(oneAddAway))
+     *
      * @param words
      * @return
      */
@@ -124,6 +164,7 @@ public class StringProblems {
      * Check if first string can be transformed to second by adding just one char at any place
      * Condition- second is always bigger in length than first
      * Time Complexity - O(M) M is length of first string
+     *
      * @param first
      * @param second
      * @return
