@@ -56,6 +56,36 @@ public class GraphProblems {
         System.out.print(gp.criticalConnections(n, lists));
     }
 
+
+    int count = 0;
+
+    /**
+     * https://leetcode.com/problems/keys-and-rooms/
+     * Leetcode 841
+     * Typical Graph traversal problem.. we only need to check if can visited every node from source
+     * or not. we can do either dfs or bfs
+     * Time complexity(Worst case) = O(V+E), V is number of vertices and E is number of edges
+     * @param rooms
+     * @return
+     */
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        boolean[] visited = new boolean[rooms.size()];
+        count = 0;
+        dfs(rooms, 0, visited);
+        return count == rooms.size();
+
+    }
+
+    void dfs(List<List<Integer>> rooms, int src, boolean visited[]) {
+        if (visited[src]) return;
+        if (count == visited.length) return;
+        visited[src] = true;
+        count++;
+        for (int child : rooms.get(src)) {
+            dfs(rooms, child, visited);
+        }
+    }
+
     int time = 0;
 
     /**
