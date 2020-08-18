@@ -39,13 +39,42 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
-        int[][] arr = {{2, 3}};
-        int[] test = {};
-        // 10, 20, 46, 104, 240, 544
-        arr = ap.insert(arr, test);
-        for (int[] res : arr) {
-            System.out.print(Arrays.toString(res));
+        int[] arr = {1, 2, 3, 6, 7, 8, 9, 4};
+        System.out.println(ap.isPossible(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/split-array-into-consecutive-subsequences/
+     * Leetcode 659
+     *We iterate through the array once to get the frequency of all the elements in the array
+     * We iterate through the array once more and for each element we either see if it can be appended to a
+     * previously constructed consecutive sequence or if it can be the start of a new consecutive sequence.
+     * If neither are true, then we return false.
+     * @param nums
+     * @return
+     */
+    public boolean isPossible(int[] nums) {
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        HashMap<Integer, Integer> seqMap = new HashMap<>();
+        for (int num : nums) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
         }
+        for (int num : nums) {
+            if (countMap.getOrDefault(num, 0) == 0) continue;
+            int count = seqMap.getOrDefault(num, 0);
+            if (count > 0) {
+                seqMap.put(num, count - 1);
+                seqMap.put(num + 1, seqMap.getOrDefault(num + 1, 0) + 1);
+            } else if (countMap.getOrDefault(num + 1, 0) > 0 && countMap.getOrDefault(num + 2, 0) > 0) {
+                countMap.put(num + 1, countMap.get(num + 1) - 1);
+                countMap.put(num + 2, countMap.get(num + 2) - 1);
+                seqMap.put(num + 3, seqMap.getOrDefault(num + 3, 0) + 1);
+            } else {
+                return false;
+            }
+            countMap.put(num, countMap.get(num) - 1);
+        }
+        return true;
     }
 
     /**
