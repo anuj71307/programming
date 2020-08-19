@@ -43,17 +43,117 @@ public class GraphProblems {
     public static void main(String[] args) {
         GraphProblems gp = new GraphProblems();
         int n = 6;
-        //[[0,1],[1,2],[2,0],[1,3]]
-        List<List<Integer>> lists = new ArrayList<>();
-        lists.add(new ArrayList<Integer>(Arrays.asList(0, 1)));
-        lists.add(new ArrayList<Integer>(Arrays.asList(1, 2)));
-        lists.add(new ArrayList<Integer>(Arrays.asList(2, 0)));
-        lists.add(new ArrayList<Integer>(Arrays.asList(1, 3)));
-        lists.add(new ArrayList<Integer>(Arrays.asList(3, 4)));
-        lists.add(new ArrayList<Integer>(Arrays.asList(4, 5)));
-        lists.add(new ArrayList<Integer>(Arrays.asList(5, 3)));
+        String arr[] = {"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"};
+        String target = "8888";
+        System.out.println(gp.openLock(arr, target));
+        System.out.println(gp.openLockBiDirectionalBfs(arr, target));
+    }
 
-        System.out.print(gp.criticalConnections(n, lists));
+    /**
+     * https://leetcode.com/problems/open-the-lock/
+     * Leetcode 752
+     * Bi direction graph bfs for uni-directional refer [openlock method]
+     *
+     * @param deadends
+     * @param target
+     * @return
+     */
+    public int openLockBiDirectionalBfs(String[] deadends, String target) {
+        if (target.equals("0000")) return 0;
+        HashSet<String> set = new HashSet();
+        for (String deadend : deadends) {
+            set.add(deadend);
+        }
+        if (set.contains("0000")) return -1;
+        HashMap<String, Integer> visitedStart = new HashMap<>();
+        Queue<String> queueStart = new LinkedList();
+        queueStart.add("0000");
+        visitedStart.put("0000", 0);
+
+        Queue<String> queueEnd = new LinkedList();
+        queueEnd.add(target);
+
+
+        HashMap<String, Integer> visitedEnd = new HashMap<>();
+        visitedEnd.put(target, 0);
+        while (!queueStart.isEmpty() || !queueEnd.isEmpty()) {
+            int k = checkQueue(queueStart, visitedStart, visitedEnd, set);
+            if (k != -1) return k + 1;
+            k = checkQueue(queueEnd, visitedEnd, visitedStart, set);
+            if (k != -1) return k + 1;
+
+        }
+        return -1;
+    }
+
+    private int checkQueue(Queue<String> queue, HashMap<String, Integer> visitedMap, HashMap<String, Integer> otherMap, HashSet<String> deadEnds) {
+        int size = queue.size();
+        for (int i = 0; i < size; i++) {
+            String str = queue.poll();
+            int time = visitedMap.get(str);
+            for (int k = 0; k < 4; k++) {
+                char c = str.charAt(k);
+                String first = str.substring(0, k) + (c == '9' ? 0 : c - '0' + 1) + str.substring(k + 1);
+                String second = str.substring(0, k) + (c == '0' ? 9 : c - '0' - 1) + str.substring(k + 1);
+                if (otherMap.containsKey(first)) return otherMap.get(first) + time;
+                if (otherMap.containsKey(second)) return otherMap.get(second) + time;
+                if (!deadEnds.contains(first) && !visitedMap.containsKey(first)) {
+                    queue.add(first);
+                    visitedMap.put(first, time + 1);
+                }
+                if (!deadEnds.contains(second) && !visitedMap.containsKey(second)) {
+                    queue.add(second);
+                    visitedMap.put(second, time + 1);
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * https://leetcode.com/problems/open-the-lock/
+     * Leetcode 752
+     * Uni direction graph bfs for bi-directional(faster) refer [openLockBiDirectionalBfs method]
+     *
+     * @param deadends
+     * @param target
+     * @return
+     */
+    public int openLock(String[] deadends, String target) {
+        if (target.equals("0000")) return 0;
+        HashSet<String> set = new HashSet();
+        for (String deadend : deadends) {
+            set.add(deadend);
+        }
+        if (set.contains("0000")) return -1;
+        HashSet<String> visited = new HashSet<>();
+        int time = 0;
+        Queue<String> queue = new LinkedList();
+        queue.add("0000");
+        while (!queue.isEmpty()) {
+
+            int size = queue.size();
+            time++;
+            for (int i = 0; i < size; i++) {
+                String str = queue.poll();
+                for (int k = 0; k < 4; k++) {
+                    char c = str.charAt(k);
+                    String first = str.substring(0, k) + (c == '9' ? 0 : c - '0' + 1) + str.substring(k + 1);
+                    String second = str.substring(0, k) + (c == '0' ? 9 : c - '0' - 1) + str.substring(k + 1);
+                    if (first.equals(target) || second.equals(target)) return time;
+                    if (!set.contains(first) && !visited.contains(first)) {
+                        queue.add(first);
+                        visited.add(first);
+                    }
+                    if (!set.contains(second) && !visited.contains(second)) {
+                        queue.add(second);
+                        visited.add(second);
+                    }
+                }
+            }
+
+        }
+        return -1;
     }
 
 
@@ -65,6 +165,7 @@ public class GraphProblems {
      * Typical Graph traversal problem.. we only need to check if can visited every node from source
      * or not. we can do either dfs or bfs
      * Time complexity(Worst case) = O(V+E), V is number of vertices and E is number of edges
+     *
      * @param rooms
      * @return
      */
