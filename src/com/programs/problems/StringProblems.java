@@ -32,8 +32,53 @@ public class StringProblems {
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.getHint("1123", "1123"));
+        System.out.println(sp.doesMatch("H4", "H1"));
 
+    }
+
+    /**
+     * Given a original word and aand pattern string check if string matches the pattern
+     * For ex If original string is Hospital and pattern in H3i2l then it return true as in pattern after H we can skip
+     * 3 character in original string
+     * Ex 2. If original is H4k and pattern in H2 then it should return true
+     * Ex 3: If original is HA and pattern is H5 then it will return false
+     * Ex 4 Original is H4 and pattern is H1 - true
+     * both string are case sensitive
+     * @param original
+     * @param pattern
+     * @return
+     */
+    public boolean doesMatch(String original, String pattern){
+        int i = 0;
+        int j = 0;
+
+        while (i<original.length() && j < pattern.length()){
+            if(original.charAt(i)==pattern.charAt(j)){
+                i++;
+                j++;
+            }
+            else if(Character.isAlphabetic(pattern.charAt(j))){
+                return false;
+            }
+            else{
+                int index = getNextCharPos(pattern, j);
+                int num = Integer.parseInt(pattern.substring(j,index));
+                j = index;
+                int k = 0;
+                for(;k<num && i<original.length();k++){
+                    i++;
+                }
+                if(k<num) return false;
+            }
+        }
+        return i>=original.length() && j>=pattern.length();
+    }
+
+    private int getNextCharPos(String pattern, int index) {
+        while (index<pattern.length() && pattern.charAt(index)>='0' && pattern.charAt(index)<='9'){
+            index++;
+        }
+        return index;
     }
 
     /**
