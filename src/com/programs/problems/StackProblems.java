@@ -21,6 +21,31 @@ public class StackProblems {
     }
 
     /**
+     * https://leetcode.com/problems/validate-stack-sequences/
+     * Leetcode 946
+     * Time complexity : O(N)
+     *
+     * @param pushed
+     * @param popped
+     * @return
+     */
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        if (pushed == null && popped == null) return true;
+        if (pushed == null || popped == null) return true;
+        Stack<Integer> st = new Stack();
+        int j = 0;
+        for (int x : pushed) {
+            st.push(x);
+            while (!st.isEmpty() && j < popped.length && st.peek() == popped[j]) {
+                st.pop();
+                j++;
+
+            }
+        }
+        return j >= popped.length;
+    }
+
+    /**
      * Reverse stack using recursion
      * @param st
      */
