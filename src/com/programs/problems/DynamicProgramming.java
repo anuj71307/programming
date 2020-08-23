@@ -34,8 +34,50 @@ public class DynamicProgramming {
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
 
-        String[] words = {"a", "b", "ba", "bca", "bda", "bdca"};
-        System.out.println(dp.knightDialer(154));
+        int[] arr = {7,2,5,10,8};
+        System.out.println(dp.splitArray(arr,2));
+    }
+
+    /**
+     * https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
+     * Leet code 363
+     * @return
+     */
+    public int splitArray(int[] nums, int m) {
+        int dp[][] = new int[m+1][nums.length];
+        int sums[] = new int[nums.length];
+        sums[nums.length-1] = nums[nums.length-1];
+        for(int i = nums.length-2;i>=0;i--){
+            sums[i]= nums[i]+sums[i+1];
+        }
+        return splitArray(nums,m, 0,dp, sums);
+    }
+
+
+    /**
+     * https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
+     * Leet code 363
+     * @param nums
+     * @param m
+     * @param start
+     * @param dp
+     * @param sums
+     * @return
+     */
+    private int splitArray(int[] nums, int m, int start, int[][] dp, int[] sums) {
+        if (m == 1) {
+            return sums[start];
+        }
+        if(dp[m][start]!=0) return dp[m][start];
+
+        int min= Integer.MAX_VALUE;
+        int sum = 0;
+        for(int i = start; i<=nums.length-m;i++){
+            sum+=nums[i];
+            min = Math.min(min, Math.max(sum, splitArray(nums, m-1, i+1, dp, sums)));
+        }
+        dp[m][start] = min;
+        return dp[m][start];
     }
 
     /**
