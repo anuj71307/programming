@@ -39,8 +39,36 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
-        int[] arr = {1, 2, 3, 6, 7, 8, 9, 4};
-        System.out.println(ap.isPossible(arr));
+        int[] arr [] = {{1,100}, {1,100}};
+        System.out.println(ap.eraseOverlapIntervals(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/non-overlapping-intervals/
+     *
+     * @param intervals
+     * @return
+     */
+    public int eraseOverlapIntervals(int[][] intervals) {
+        if(intervals==null || intervals.length==0) return 0;
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                    return o1[0] - o2[0];
+            }
+        });
+
+        int res = 0;
+        int prevEnd = intervals[0][1];
+        for(int i=1;i<intervals.length;i++){
+            if(prevEnd>intervals[i][0]){
+                prevEnd = Math.min(prevEnd, intervals[i][1]);
+                res++;
+            }else{
+                prevEnd = intervals[i][1];
+            }
+        }
+        return res;
     }
 
     /**
