@@ -32,8 +32,45 @@ public class StringProblems {
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.doesMatch("H4", "H1"));
+        System.out.println(sp.characterReplacement("AABACBBABB",0));
 
+    }
+
+    /**
+     * https://leetcode.com/problems/longest-repeating-character-replacement/
+     * Leetcode 424
+     * @param s
+     * @param k
+     * @return
+     */
+    public int characterReplacement(String s, int k) {
+
+        if(s==null || s.length()==0) return 0;
+        int[] count = new int[26];
+        int start = 0;
+        int res = 0;
+        for(int i=0;i<s.length();i++){
+            int index = s.charAt(i)-'A';
+            count[index]++;
+            while (!isValid(count, k)){
+                count[s.charAt(start)-'A']--;
+                start++;
+            }
+            res = Math.max(res, i-start+1);
+        }
+        return res;
+    }
+
+    private boolean isValid(int[] count, int k) {
+
+        int total =0;
+        int max = 0;
+        for(int i:count){
+            total+=i;
+            max = Math.max(max, i);
+        }
+
+        return total-max<=k;
     }
 
     /**
