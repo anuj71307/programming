@@ -27,6 +27,6 @@ fun cloneGraph(node: Node?, hashMap: HashMap<Node, Node>) {
     }
 }
 
-class Node(var `val`: Int) {
-    var neighbors: ArrayList<Node?> = ArrayList<Node?>()
+class Node(@JvmField var `val`: Int) {
+    @JvmField var neighbors: ArrayList<Node?> = ArrayList<Node?>()
 }

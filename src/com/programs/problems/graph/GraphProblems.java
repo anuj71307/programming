@@ -356,6 +356,29 @@ public class GraphProblems {
         }
     }
 
+    /**
+     * https://leetcode.com/problems/clone-graph/
+     * Leetcode 133
+     * Clone graph
+     * TIme complexity - O(V+E) All the vertex + all the edges
+     * @param node
+     * @return
+     */
+    public Node cloneGraph(Node node) {
 
+        HashMap<Node, Node> cloned = new HashMap<>();
+        return cloneGraph(node, cloned);
+    }
+
+    private Node cloneGraph(Node node, HashMap<Node, Node> cloned) {
+        if (cloned.containsKey(node)) cloned.get(node);
+        Node cNode = new Node(node.val);
+        cloned.put(node, cNode);
+        for (Node neigh : node.neighbors) {
+            cloneGraph(neigh, cloned);
+            cNode.neighbors.add( cloneGraph(neigh, cloned));
+        }
+        return cNode;
+    }
 }
 
