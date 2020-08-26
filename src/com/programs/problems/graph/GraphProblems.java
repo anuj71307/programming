@@ -43,10 +43,50 @@ public class GraphProblems {
     public static void main(String[] args) {
         GraphProblems gp = new GraphProblems();
         int n = 6;
-        String arr[] = {"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"};
-        String target = "8888";
-        System.out.println(gp.openLock(arr, target));
-        System.out.println(gp.openLockBiDirectionalBfs(arr, target));
+        int[][] arr = {{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}};
+        System.out.println(gp.pacificAtlantic(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/pacific-atlantic-water-flow/
+     * Leetcode 417
+     * Simple matrix/graph dfs traversal, can be solved using bfs as well.
+     * @param matrix
+     * @return
+     */
+    public List<List<Integer>> pacificAtlantic(int[][] matrix) {
+
+        boolean[][] pacificVisited = new boolean[matrix.length][matrix[0].length];
+        boolean[][] atlanticVisited = new boolean[matrix.length][matrix[0].length];
+
+        for(int row=0;row<matrix.length;row++){
+            traverse(matrix, pacificVisited, row, 0, Integer.MIN_VALUE);
+            traverse(matrix, atlanticVisited, row, matrix[row].length-1, Integer.MIN_VALUE);
+        }
+
+        for(int col=0;col<matrix[0].length;col++){
+            traverse(matrix, pacificVisited, 0, col, Integer.MIN_VALUE);
+            traverse(matrix, atlanticVisited, matrix.length-1, col, Integer.MIN_VALUE);
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        for(int i = 0; i<matrix.length;i++){
+            for(int j =0; j<matrix[i].length;j++){
+                if(pacificVisited[i][j] && atlanticVisited[i][j]){
+                    result.add(Arrays.asList(i,j));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private void traverse(int[][] matrix, boolean[][] visited, int row, int col, int prevVal) {
+        if(row<0 || col<0 || row>=matrix.length||col>=matrix[row].length || visited[row][col] || matrix[row][col]<prevVal) return;
+        visited[row][col] = true;
+        traverse(matrix, visited, row, col+1, matrix[row][col]);
+        traverse(matrix, visited, row, col-1, matrix[row][col]);
+        traverse(matrix, visited, row+1, col, matrix[row][col]);
+        traverse(matrix, visited, row-1, col, matrix[row][col]);
     }
 
     /**
