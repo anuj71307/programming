@@ -2164,36 +2164,22 @@ public class ArrayProblems {
     }
 
     /**
-     * Dp solution is in DynamicProgramming class
+     * Dp solution is in DynamicProgramming class -> combinationSum4BottomUp && combinationSum4
      * https://leetcode.com/problems/combination-sum-iv/
      *
      * @param nums
      * @param target
      * @return
      */
-    public int combinationSum4(int[] nums, int target) {
-        List<List<Integer>> list = new ArrayList<>();
-        if (nums == null || nums.length == 0) return list.size();
-        //Arrays.sort(nums);
-        backtrack(nums, target, list, new ArrayList(), 0);
-        return list.size();
-    }
-
-    void backtrack(int[] arr, int target, List<List<Integer>> list, List<Integer> tempList, int start) {
-        if (target < 0) return;
-        if (target == 0) {
-
-            list.add(new ArrayList<>(tempList));
-
-            return;
+    public int combinationSum4BruteForce(int[] nums, int target) {
+        if(target<0) return 0;
+        if(target==0) return 1;
+        int res=0;
+        for(int i=0;i<nums.length;i++){
+            res+=combinationSum4BruteForce(nums,target-nums[i]);
         }
 
-
-        for (int i = start; i < arr.length; i++) {
-            tempList.add(arr[i]);
-            backtrack(arr, target - arr[i], list, tempList, i);
-            tempList.remove(tempList.size() - 1);
-        }
+        return res;
     }
 
     /**
