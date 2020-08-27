@@ -708,7 +708,27 @@ public class DynamicProgramming {
 
     /**
      * https://leetcode.com/problems/combination-sum-iv/
-     *
+     * Leetcode 377
+     * Time complexity = Target *N -> N is length of input array
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int combinationSum4BottomUp(int[] nums, int target) {
+        long[] dp = new long[target+1];
+        dp[0]=1;
+        for(int i=1;i<=target;i++){
+            for(int num:nums){
+                if(num>i) continue;
+                dp[i] = dp[i]+dp[i-num];
+            }
+        }
+        return (int)(dp[target]);
+    }
+
+    /**
+     * https://leetcode.com/problems/combination-sum-iv/
+     * Leetcode 377
      * @param nums
      * @param target
      * @return
