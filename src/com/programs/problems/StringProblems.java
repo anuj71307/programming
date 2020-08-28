@@ -1417,67 +1417,38 @@ public class StringProblems {
 
     /**
      * https://www.geeksforgeeks.org/count-possible-decodings-given-digit-sequence/
+     * https://leetcode.com/problems/decode-ways/
+     * Leetcode 91
      * decode a string in place
      *
-     * @param str number as string to decode
      * @return number of possible decoding
      * 12
      */
-    public static int decode(String str) {
-        //index i-2
-        int i = 1;
-        //index i-1
-        int j = 1;
-        //current count
-        int current = 1;
-
-        for (int k = 2; k <= str.length(); k++) {
-            current = 0;
-            if (str.charAt(k - 1) > '0') {
-                current = j;
-            }
-            if (str.charAt(k - 2) == '1' || (str.charAt(k - 2) == '2' && str.charAt(k - 1) < '7')) {
-                current = current + i;
-            }
-            i = j;
-            j = current;
-        }
-        return current;
-
-    }
-
-    /*
-    https://leetcode.com/problems/decode-ways/
-     */
-    public static int numDecodings(String s) {
-        if (s == null || s.length() == 0) return 0;
-        if (s.length() == 1) {
-            if (s.charAt(0) > '0') return 1;
+    public int numDecodings(String s) {
+        if(s==null || s.length()==0) return 0;
+        if(s.length()==1){
+            if(s.charAt(0)>'0') return 1;
             else return 0;
         }
-        int first = 0;
-        int second = 0;
-        if (s.charAt(0) > '0') {
-            first = 1;
+        int a = 0;
+        if(s.charAt(0)>'0') a= 1;
+        int b =0;
+        if(s.charAt(1)>'0' && a !=0){
+            b =1;
         }
-        if (s.charAt(1) > '0' && first != 0) {
-            second = 1;
-        }
-        int current = 1;
-        for (int i = 2; i <= s.length(); i++) {
-            current = 0;
-            if (s.charAt(i - 1) > '0') {
-                current = second;
+        for(int i=1;i<s.length();i++){
+            int curr =0;
+            if(s.charAt(i)>'0'){
+                curr = b;
             }
-            if (s.charAt(i - 2) == '1' || (s.charAt(i - 2) == '2' && s.charAt(i - 1) < '7')) {
-                current += first;
+            if(s.charAt(i-1)=='1' || (s.charAt(i)<'7' && s.charAt(i-1)=='2')){
+                curr+=a;
             }
-            first = second;
-            second = current;
+            a=b;
+            b=curr;
+
         }
-
-        return second;
-
+        return b;
     }
 
     /**
