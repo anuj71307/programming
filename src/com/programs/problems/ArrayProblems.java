@@ -44,6 +44,32 @@ public class ArrayProblems {
     }
 
     /**
+     * Maximum Number of Non-Overlapping Subarrays With Sum Equals Target
+     * Leetcode 1546
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int maxNonOverlapping(int[] nums, int target) {
+        int max = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0,-1);
+        int lastIndex = -1;
+        int sum = 0;
+        for(int i=0;i<nums.length;i++){
+            sum+=nums[i];
+            if(map.getOrDefault(sum-target, -2)>=lastIndex){
+                lastIndex = i;
+                max++;
+            }
+            map.put(sum, i);
+        }
+
+
+        return max;
+    }
+
+    /**
      * https://leetcode.com/problems/non-overlapping-intervals/
      *
      * @param intervals
