@@ -38,6 +38,86 @@ public class DynamicProgramming {
         System.out.println(dp.splitArray(arr,2));
     }
 
+
+    /**
+     * https://leetcode.com/problems/wiggle-subsequence/
+     * Leetcode 376.
+     * Idea is if we iterate and do bottom up then if we know the length at i-1 index can know the length at i index
+     * but if ith element is more then i-1 element then we need to know value at i-1 with less value
+     * to do this we need two array one which will contain if ith value is more then previous
+     * and other exact opposite
+     * Top Top Down - Time complexity - O(N)
+     * For O(n) check wiggleMaxLength
+     */
+    public int wiggleMaxLengthLinear(int[] nums) {
+
+        if(nums==null || nums.length==0) return 0;
+        if(nums.length==1) return 1;
+
+        int dpUp[] = new int[nums.length];
+        int dpDown[] = new int[nums.length];
+        dpUp[0] = dpDown[0]=1;
+        for(int i =1;i<nums.length;i++){
+            if(nums[i]>nums[i-1]){
+                dpUp[i] = dpDown[i-1]+1;
+                dpDown[i] = dpDown[i-1];
+            }
+            else if(nums[i]<nums[i-1]){
+                dpDown[i] = dpUp[i-1]+1;
+                dpUp[i] = dpUp[i-1];
+            }
+            else{
+                dpUp[i] = dpUp[i-1];
+                dpDown[i] = dpDown[i-1];
+            }
+        }
+        return Math.max(dpDown[nums.length-1], dpUp[nums.length-1]);
+    }
+
+    /**
+     * https://leetcode.com/problems/wiggle-subsequence/
+     * Leetcode 376.
+     * Top Top Down - Time complexity - O(N^2)
+     * For O(n) check wiggleMaxLengthLinear
+     */
+    int res = 0;
+    public int wiggleMaxLength(int[] nums) {
+
+        if(nums==null || nums.length==0) return 0;
+        if(nums.length==1) return 1;
+
+        int dp[][] = new int[nums.length][2];
+        wiggle(nums, dp, 0, nums[0], 1);
+        wiggle(nums,dp,1, nums[0],1);
+        return res+1;
+    }
+
+    public int wiggle(int[] nums, int[][] dp, int greater, int val, int index){
+        if(index>=nums.length) return 0;
+        if( dp[index][greater]!=0) return dp[index][greater];
+
+        int count = 0;
+        if(greater==0){
+            for(int i=index;i<nums.length;i++){
+                if(nums[i]>val){
+                    count = wiggle(nums, dp,1,nums[i], i+1);
+                    dp[index][greater] = Math.max(dp[index][greater], count+1);
+                    //break;
+                }
+            }
+        }
+        else{
+            for(int i=index;i<nums.length;i++){
+                if(nums[i]<val){
+                    count = wiggle(nums, dp,0,nums[i], i+1);
+                    dp[index][greater] = Math.max(dp[index][greater], count+1);
+                    //break;
+                }
+            }
+        }
+        res = Math.max(dp[index][greater], res);
+        return dp[index][greater];
+    }
     /**
      * https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
      * Leet code 363
