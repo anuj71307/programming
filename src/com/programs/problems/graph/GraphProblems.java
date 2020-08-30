@@ -9,6 +9,134 @@ import java.util.*;
 
 public class GraphProblems {
 
+    public static void main(String[] args) {
+        GraphProblems gp = new GraphProblems();
+
+        int node = 5;
+        int src = 1;
+        int dest = 4;
+        int k = 1;
+        int[][] arr = {{0, 1, 100}, {1, 2, 100}, {0, 2, 500}, {0, 3, 20}, {3, 4, 40}, {4, 2, 10}};
+        System.out.println(gp.findCheapestPrice(node, arr, src, dest, k));
+    }
+
+    /**
+     * https://leetcode.com/problems/cheapest-flights-within-k-stops/
+     * Leetcode 787
+     * For BFS see findCheapestPrice
+     *
+     * @param n
+     * @param flights
+     * @param src
+     * @param dst
+     * @param k
+     * @return
+     */
+    public int findCheapestPricePQ(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList();
+        }
+        for (int[] flight : flights) {
+            graph[flight[0]].add(new Edge(flight[1], flight[2]));
+        }
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[1] - o2[1];
+            }
+        });
+
+        pq.add(new int[]{src, 0, -1});
+        while (!pq.isEmpty()) {
+            int[] next = pq.poll();
+            int dest = next[0];
+            int price = next[1];
+            int stop = next[2];
+            if (dest == dst) return price;
+            if (stop < k) {
+                for (Edge edge : graph[dest]) {
+                    pq.add(new int[]{edge.dest, price + edge.price, stop + 1});
+                }
+
+            }
+
+        }
+        return -1;
+    }
+
+    /**
+     * https://leetcode.com/problems/cheapest-flights-within-k-stops/
+     * Leetcode 787
+     * For PQ see findCheapestPricePQ
+     *
+     * @param n
+     * @param flights
+     * @param src
+     * @param dst
+     * @param k
+     * @return
+     */
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList();
+        }
+        for (int[] flight : flights) {
+            graph[flight[0]].add(new Edge(flight[1], flight[2]));
+        }
+
+        return traverse(graph, src, dst, k);
+    }
+
+
+    int traverse(ArrayList<Edge>[] graph, int src, int dst, int k) {
+
+        Queue<Edge> queue = new LinkedList();
+        int cost = Integer.MAX_VALUE;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (Edge edge : graph[src]) {
+            if (edge.dest == dst) {
+                cost = edge.price;
+            }
+            map.put(edge.dest, edge.price);
+            queue.add(new Edge(edge.dest, edge.price));
+        }
+
+        while (!queue.isEmpty() && k > 0) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Edge node = queue.poll();
+                for (Edge child : graph[node.dest]) {
+                    if (child.dest == dst) {
+                        cost = Math.min(cost, node.price + child.price);
+                        continue;
+                    }
+                    int priceOld = map.getOrDefault(child.dest, Integer.MAX_VALUE);
+                    int newPrice = child.price + node.price;
+                    if (newPrice < priceOld) {
+                        map.put(child.dest, newPrice);
+                        queue.add(new Edge(child.dest, newPrice));
+                    }
+
+                }
+            }
+
+            k--;
+        }
+        return cost == Integer.MAX_VALUE ? -1 : cost;
+    }
+
+    class Edge {
+        int dest;
+        int price;
+
+        public Edge(int dest, int price) {
+            this.dest = dest;
+            this.price = price;
+        }
+    }
 
     /**
      * Create graph dynamically
@@ -40,17 +168,11 @@ public class GraphProblems {
     }
 
 
-    public static void main(String[] args) {
-        GraphProblems gp = new GraphProblems();
-        int n = 6;
-        int[][] arr = {{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}};
-        System.out.println(gp.pacificAtlantic(arr));
-    }
-
     /**
      * https://leetcode.com/problems/pacific-atlantic-water-flow/
      * Leetcode 417
      * Simple matrix/graph dfs traversal, can be solved using bfs as well.
+     *
      * @param matrix
      * @return
      */
@@ -59,20 +181,20 @@ public class GraphProblems {
         boolean[][] pacificVisited = new boolean[matrix.length][matrix[0].length];
         boolean[][] atlanticVisited = new boolean[matrix.length][matrix[0].length];
 
-        for(int row=0;row<matrix.length;row++){
+        for (int row = 0; row < matrix.length; row++) {
             traverse(matrix, pacificVisited, row, 0, Integer.MIN_VALUE);
-            traverse(matrix, atlanticVisited, row, matrix[row].length-1, Integer.MIN_VALUE);
+            traverse(matrix, atlanticVisited, row, matrix[row].length - 1, Integer.MIN_VALUE);
         }
 
-        for(int col=0;col<matrix[0].length;col++){
+        for (int col = 0; col < matrix[0].length; col++) {
             traverse(matrix, pacificVisited, 0, col, Integer.MIN_VALUE);
-            traverse(matrix, atlanticVisited, matrix.length-1, col, Integer.MIN_VALUE);
+            traverse(matrix, atlanticVisited, matrix.length - 1, col, Integer.MIN_VALUE);
         }
         List<List<Integer>> result = new ArrayList<>();
-        for(int i = 0; i<matrix.length;i++){
-            for(int j =0; j<matrix[i].length;j++){
-                if(pacificVisited[i][j] && atlanticVisited[i][j]){
-                    result.add(Arrays.asList(i,j));
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (pacificVisited[i][j] && atlanticVisited[i][j]) {
+                    result.add(Arrays.asList(i, j));
                 }
             }
         }
@@ -81,12 +203,13 @@ public class GraphProblems {
     }
 
     private void traverse(int[][] matrix, boolean[][] visited, int row, int col, int prevVal) {
-        if(row<0 || col<0 || row>=matrix.length||col>=matrix[row].length || visited[row][col] || matrix[row][col]<prevVal) return;
+        if (row < 0 || col < 0 || row >= matrix.length || col >= matrix[row].length || visited[row][col] || matrix[row][col] < prevVal)
+            return;
         visited[row][col] = true;
-        traverse(matrix, visited, row, col+1, matrix[row][col]);
-        traverse(matrix, visited, row, col-1, matrix[row][col]);
-        traverse(matrix, visited, row+1, col, matrix[row][col]);
-        traverse(matrix, visited, row-1, col, matrix[row][col]);
+        traverse(matrix, visited, row, col + 1, matrix[row][col]);
+        traverse(matrix, visited, row, col - 1, matrix[row][col]);
+        traverse(matrix, visited, row + 1, col, matrix[row][col]);
+        traverse(matrix, visited, row - 1, col, matrix[row][col]);
     }
 
     /**
@@ -401,6 +524,7 @@ public class GraphProblems {
      * Leetcode 133
      * Clone graph
      * TIme complexity - O(V+E) All the vertex + all the edges
+     *
      * @param node
      * @return
      */
@@ -416,7 +540,7 @@ public class GraphProblems {
         cloned.put(node, cNode);
         for (Node neigh : node.neighbors) {
             cloneGraph(neigh, cloned);
-            cNode.neighbors.add( cloneGraph(neigh, cloned));
+            cNode.neighbors.add(cloneGraph(neigh, cloned));
         }
         return cNode;
     }
