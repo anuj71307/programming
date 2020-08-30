@@ -44,6 +44,27 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/min-cost-climbing-stairs/
+     * Leetcode 746
+     * Assumption : cost[i]>=0
+     * Time Complexity - O(N) N is length of array
+     * @param cost
+     * @return
+     */
+    public int minCostClimbingStairs(int[] cost) {
+        int a = cost[cost.length-1];
+        int b = cost[cost.length-2];
+        int c = 0;
+        for(int i =cost.length-3;i>=0;i--){
+            c = Math.min(b, a)+cost[i];
+            a=b;
+            b=c;
+        }
+
+        return Math.min(a,b);
+    }
+
+    /**
      * Maximum Number of Non-Overlapping Subarrays With Sum Equals Target
      * Leetcode 1546
      * @param nums
