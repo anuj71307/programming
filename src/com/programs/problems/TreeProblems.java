@@ -29,6 +29,47 @@ public class TreeProblems {
         System.out.print(tp.findPath(node, 41));
     }
 
+    int res;
+
+    /**
+     * https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
+     * Leetcode 1372
+     * Longest zigzag path in binary tree. At each node if it was left node then we should check height on right side and vide versa
+     * Brute force approach would be to traverse at each node.
+     * Optimal solution- This is similar to finding height of tree so if we do post order traversal
+     * and at each node we check value of left height and right height and return this pair.
+     * Once we have checked for both left and right height and have pair of both left and right child
+     * then for left child we need to see what it's right value is and for right child we need to check what its left height is
+     * to do this we return a array of size 2
+     * Time complexity O(N)
+     * @param root
+     * @return
+     */
+    public int longestZigZag(TreeNode root) {
+        if (root == null) return 0;
+        res = 0;
+        //HashMap<TreeNode,Pair> map = new HashMap();
+        longestZigZag(root, 1);
+        return res - 1;
+
+    }
+
+    public int[] longestZigZag(TreeNode root, int k) {
+        if (root == null) return new int[]{0, 0};
+        int[] lr = longestZigZag(root.left, k);
+        int[] rr = longestZigZag(root.right, k);
+        int[] arr = new int[]{1, 1};
+        if (root.left != null) {
+            arr[0] += lr[1];
+        }
+        if (root.right != null) {
+            arr[1] += rr[0];
+        }
+
+        res = Math.max(res, Math.max(arr[0], arr[1]));
+        return arr;
+    }
+
     /**
      * https://www.geeksforgeeks.org/find-distance-root-given-node-binary-tree/
      * Find distance from root to node
