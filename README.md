@@ -18,4 +18,6 @@ For most of the questions the problem link is given to understand the problem mo
 * # Dynamic Programming
   * Longest Chain of Pairs # [https://leetcode.com/problems/maximum-length-of-pair-chain/]
     * Solution # [https://github.com/anuj-github/Programming/pull/208/files]    
+  * Get the maximum score # [https://github.com/anuj-github/Programming/pull/302/files]
+    * Solution # [https://github.com/anuj-github/Programming/pull/302]      
     
