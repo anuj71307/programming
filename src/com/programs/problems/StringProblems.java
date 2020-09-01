@@ -28,49 +28,82 @@ public class StringProblems {
      */
 
     public static void main(String[] args) throws IOException {
-
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.characterReplacement("AABACBBABB",0));
+        System.out.println(sp.findSubstringInWraproundString("abde"));
+    }
 
+    /**
+     * https://leetcode.com/problems/unique-substrings-in-wraparound-string/
+     * Leetcode 467
+     * https://leetcode.com/problems/unique-substrings-in-wraparound-string/discuss/95439/Concise-Java-solution-using-DP
+     * The idea is, if we know the max number of unique substrings in p ends with 'a', 'b', ..., 'z', then the summary of them is the answer. Why is that?
+     * <p>
+     * The max number of unique substring ends with a letter equals to the length of max contiguous substring ends with that letter. Example "abcd", the max number of unique substring ends with 'd' is 4, apparently they are "abcd", "bcd", "cd" and "d".
+     * If there are overlapping, we only need to consider the longest one because it covers all the possible substrings. Example: "abcdbcd", the max number of unique substring ends with 'd' is 4 and all substrings formed by the 2nd "bcd" part are covered in the 4 substrings already.
+     * No matter how long is a contiguous substring in p, it is in s since s has infinite length.
+     * Now we know the max number of unique substrings in p ends with 'a', 'b', ..., 'z' and those substrings are all in s. Summary is the answer, according to the question.
+     *
+     * @param p
+     * @return
+     */
+    public int findSubstringInWraproundString(String p) {
+        if (p == null || p.length() == 0) return 0;
+        int arr[] = new int[26];
+        int length = 0;
+        for (int i = 0; i < p.length(); i++) {
+            if (i > 0 && (p.charAt(i) - p.charAt(i - 1) == 1 || p.charAt(i - 1) - p.charAt(i) == 25)) {
+                length++;
+            } else {
+                length = 1;
+            }
+            int index = p.charAt(i) - 'a';
+            arr[index] = Math.max(length, arr[index]);
+        }
+
+        int sum = 0;
+        for (int i : arr) {
+            sum += i;
+        }
+        return sum;
     }
 
     /**
      * https://leetcode.com/problems/longest-repeating-character-replacement/
      * Leetcode 424
+     *
      * @param s
      * @param k
      * @return
      */
     public int characterReplacement(String s, int k) {
 
-        if(s==null || s.length()==0) return 0;
+        if (s == null || s.length() == 0) return 0;
         int[] count = new int[26];
         int start = 0;
         int res = 0;
-        for(int i=0;i<s.length();i++){
-            int index = s.charAt(i)-'A';
+        for (int i = 0; i < s.length(); i++) {
+            int index = s.charAt(i) - 'A';
             count[index]++;
-            while (!isValid(count, k)){
-                count[s.charAt(start)-'A']--;
+            while (!isValid(count, k)) {
+                count[s.charAt(start) - 'A']--;
                 start++;
             }
-            res = Math.max(res, i-start+1);
+            res = Math.max(res, i - start + 1);
         }
         return res;
     }
 
     private boolean isValid(int[] count, int k) {
-
-        int total =0;
+        int total = 0;
         int max = 0;
-        for(int i:count){
-            total+=i;
+        for (int i : count) {
+            total += i;
             max = Math.max(max, i);
         }
 
-        return total-max<=k;
+        return total - max <= k;
     }
 
     /**
@@ -81,38 +114,37 @@ public class StringProblems {
      * Ex 3: If original is HA and pattern is H5 then it will return false
      * Ex 4 Original is H4 and pattern is H1 - true
      * both string are case sensitive
+     *
      * @param original
      * @param pattern
      * @return
      */
-    public boolean doesMatch(String original, String pattern){
+    public boolean doesMatch(String original, String pattern) {
         int i = 0;
         int j = 0;
 
-        while (i<original.length() && j < pattern.length()){
-            if(original.charAt(i)==pattern.charAt(j)){
+        while (i < original.length() && j < pattern.length()) {
+            if (original.charAt(i) == pattern.charAt(j)) {
                 i++;
                 j++;
-            }
-            else if(Character.isAlphabetic(pattern.charAt(j))){
+            } else if (Character.isAlphabetic(pattern.charAt(j))) {
                 return false;
-            }
-            else{
+            } else {
                 int index = getNextCharPos(pattern, j);
-                int num = Integer.parseInt(pattern.substring(j,index));
+                int num = Integer.parseInt(pattern.substring(j, index));
                 j = index;
                 int k = 0;
-                for(;k<num && i<original.length();k++){
+                for (; k < num && i < original.length(); k++) {
                     i++;
                 }
-                if(k<num) return false;
+                if (k < num) return false;
             }
         }
-        return i>=original.length() && j>=pattern.length();
+        return i >= original.length() && j >= pattern.length();
     }
 
     private int getNextCharPos(String pattern, int index) {
-        while (index<pattern.length() && pattern.charAt(index)>='0' && pattern.charAt(index)<='9'){
+        while (index < pattern.length() && pattern.charAt(index) >= '0' && pattern.charAt(index) <= '9') {
             index++;
         }
         return index;
@@ -1425,27 +1457,27 @@ public class StringProblems {
      * 12
      */
     public int numDecodings(String s) {
-        if(s==null || s.length()==0) return 0;
-        if(s.length()==1){
-            if(s.charAt(0)>'0') return 1;
+        if (s == null || s.length() == 0) return 0;
+        if (s.length() == 1) {
+            if (s.charAt(0) > '0') return 1;
             else return 0;
         }
         int a = 0;
-        if(s.charAt(0)>'0') a= 1;
-        int b =0;
-        if(s.charAt(1)>'0' && a !=0){
-            b =1;
+        if (s.charAt(0) > '0') a = 1;
+        int b = 0;
+        if (s.charAt(1) > '0' && a != 0) {
+            b = 1;
         }
-        for(int i=1;i<s.length();i++){
-            int curr =0;
-            if(s.charAt(i)>'0'){
+        for (int i = 1; i < s.length(); i++) {
+            int curr = 0;
+            if (s.charAt(i) > '0') {
                 curr = b;
             }
-            if(s.charAt(i-1)=='1' || (s.charAt(i)<'7' && s.charAt(i-1)=='2')){
-                curr+=a;
+            if (s.charAt(i - 1) == '1' || (s.charAt(i) < '7' && s.charAt(i - 1) == '2')) {
+                curr += a;
             }
-            a=b;
-            b=curr;
+            a = b;
+            b = curr;
 
         }
         return b;
