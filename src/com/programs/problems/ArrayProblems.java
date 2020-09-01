@@ -44,6 +44,47 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/get-the-maximum-score/
+     * Leetcode 1537
+     * The idea is same as DP:(https://leetcode.com/problems/get-the-maximum-score/discuss/774556/Java-O(n)-Time-O(1)-space-beat-100-cpu%2Bmemory.-Explained.)
+     * the max sum of the full path = the max sum of elements from the beginning to the next common element + the max sum of remaining subpaths
+     * Because no matter which path leads to the common element C, from C we can go ahead following any paths to the end, then just need to choose the max path to C first.
+     * In order to do that we need 2 pointers i, j and 2 sums sum1, sum2.
+     * Use i, j to traverse 2 arrays from left to right and find the common element C. While traversing calculate the sum for each array: sum1 is sum of elements of array nums1 from the begining to the C. The same for sum2 and nums2. We only need 2 sums because from C1 to the next C2 there are only 2 direct subpaths on each arrays.
+     * At the common element C we set sum1 = sum2 = the max sum of elements from the beginning to C cause it doesn't matter which path led to C
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int maxSum(int[] nums1, int[] nums2) {
+        int i =0;
+        int j =0;
+        long sum1=0;
+        long sum2 = 0;
+        while(i<nums1.length && j<nums2.length){
+            if(nums1[i]<nums2[j]){
+                sum1+= nums1[i++];
+            }
+            else if(nums1[i]>nums2[j]){
+                sum2+=nums2[j++];
+            }
+            else{
+                sum1 = Math.max(sum1,sum2)+nums1[i++];
+                sum2=sum1;
+                j++;
+            }
+        }
+
+        while(i<nums1.length){
+            sum1+= nums1[i++];
+        }
+        while(j<nums2.length){
+            sum2+= nums2[j++];
+        }
+        return (int) (Math.max(sum1, sum2) % 1000000007);
+    }
+
+    /**
      * https://leetcode.com/problems/min-cost-climbing-stairs/
      * Leetcode 746
      * Assumption : cost[i]>=0
