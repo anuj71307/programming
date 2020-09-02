@@ -9,6 +9,8 @@ For most of the questions the problem link is given to understand the problem mo
     * Solution # [https://github.com/anuj-github/Programming/pull/193/files]
   * Complete the circuit # [https://leetcode.com/problems/gas-station/]
     * Solution # [https://github.com/anuj-github/Programming/pull/226]
+  * Shortest bridge # [https://leetcode.com/problems/shortest-bridge/]
+    * Solution # [https://github.com/anuj-github/Programming/pull/303/files]  
 * # String
   * String pattern match # [https://leetcode.com/problems/word-pattern-ii/]
     * Solution # [https://github.com/anuj-github/Programming/pull/173/files]
