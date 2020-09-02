@@ -39,8 +39,76 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
-        int[] arr [] = {{1,100}, {1,100}};
-        System.out.println(ap.eraseOverlapIntervals(arr));
+        int[] arr[] = {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0, 0, 0},
+                {0, 1, 1, 0, 0, 0, 0},
+                {0, 1, 1, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {1, 1, 0, 0, 0, 0, 0},
+                {1, 1, 0, 0, 0, 0, 0}
+        };
+        System.out.println(ap.shortestBridge(arr));
+    }
+
+    /**
+     * https://leetcode.com/problems/shortest-bridge/
+     * Leetcode - 934
+     * Do a dfs a find all the index of first island and add to queue
+     * Now do bfs and find any node of second island
+     *
+     * @param A
+     * @return
+     */
+    public int shortestBridge(int[][] A) {
+
+        boolean done = false;
+        Queue<int[]> que = new LinkedList<>();
+
+        for (int row = 0; row < A.length; row++) {
+            if (done) break;
+            for (int col = 0; col < A.length; col++) {
+                if (A[row][col] == 1) {
+                    traverse(A, row, col, que);
+                    done = true;
+                    break;
+                }
+            }
+        }
+        return bfs(que, A);
+    }
+
+    int bfs(Queue<int[]> que, int[][] A) {
+        int[][] dirs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int min = 0;
+        while (!que.isEmpty()) {
+            int size = que.size();
+            for (int i = 0; i < size; i++) {
+                int[] pos = que.poll();
+                for (int[] dir : dirs) {
+                    int row = pos[0] + dir[0];
+                    int col = pos[1] + dir[1];
+                    if (row < 0 || col < 0 || row >= A.length || col >= A[0].length || A[row][col] == 2) continue;
+                    if (A[row][col] == 1) return min;
+                    A[row][col] = 2;
+                    que.add(new int[]{row, col});
+                }
+            }
+            min++;
+        }
+
+        return min;
+    }
+
+    public void traverse(int[][] arr, int row, int col, Queue<int[]> que) {
+        if (row < 0 || col < 0 || row >= arr.length || col >= arr[0].length || arr[row][col] == 0 || arr[row][col] == 2)
+            return;
+        arr[row][col] = 2;
+        que.add(new int[]{row, col});
+        traverse(arr, row + 1, col, que);
+        traverse(arr, row - 1, col, que);
+        traverse(arr, row, col + 1, que);
+        traverse(arr, row, col - 1, que);
     }
 
     /**
@@ -52,34 +120,33 @@ public class ArrayProblems {
      * In order to do that we need 2 pointers i, j and 2 sums sum1, sum2.
      * Use i, j to traverse 2 arrays from left to right and find the common element C. While traversing calculate the sum for each array: sum1 is sum of elements of array nums1 from the begining to the C. The same for sum2 and nums2. We only need 2 sums because from C1 to the next C2 there are only 2 direct subpaths on each arrays.
      * At the common element C we set sum1 = sum2 = the max sum of elements from the beginning to C cause it doesn't matter which path led to C
+     *
      * @param nums1
      * @param nums2
      * @return
      */
     public int maxSum(int[] nums1, int[] nums2) {
-        int i =0;
-        int j =0;
-        long sum1=0;
+        int i = 0;
+        int j = 0;
+        long sum1 = 0;
         long sum2 = 0;
-        while(i<nums1.length && j<nums2.length){
-            if(nums1[i]<nums2[j]){
-                sum1+= nums1[i++];
-            }
-            else if(nums1[i]>nums2[j]){
-                sum2+=nums2[j++];
-            }
-            else{
-                sum1 = Math.max(sum1,sum2)+nums1[i++];
-                sum2=sum1;
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] < nums2[j]) {
+                sum1 += nums1[i++];
+            } else if (nums1[i] > nums2[j]) {
+                sum2 += nums2[j++];
+            } else {
+                sum1 = Math.max(sum1, sum2) + nums1[i++];
+                sum2 = sum1;
                 j++;
             }
         }
 
-        while(i<nums1.length){
-            sum1+= nums1[i++];
+        while (i < nums1.length) {
+            sum1 += nums1[i++];
         }
-        while(j<nums2.length){
-            sum2+= nums2[j++];
+        while (j < nums2.length) {
+            sum2 += nums2[j++];
         }
         return (int) (Math.max(sum1, sum2) % 1000000007);
     }
@@ -89,25 +156,27 @@ public class ArrayProblems {
      * Leetcode 746
      * Assumption : cost[i]>=0
      * Time Complexity - O(N) N is length of array
+     *
      * @param cost
      * @return
      */
     public int minCostClimbingStairs(int[] cost) {
-        int a = cost[cost.length-1];
-        int b = cost[cost.length-2];
+        int a = cost[cost.length - 1];
+        int b = cost[cost.length - 2];
         int c = 0;
-        for(int i =cost.length-3;i>=0;i--){
-            c = Math.min(b, a)+cost[i];
-            a=b;
-            b=c;
+        for (int i = cost.length - 3; i >= 0; i--) {
+            c = Math.min(b, a) + cost[i];
+            a = b;
+            b = c;
         }
 
-        return Math.min(a,b);
+        return Math.min(a, b);
     }
 
     /**
      * Maximum Number of Non-Overlapping Subarrays With Sum Equals Target
      * Leetcode 1546
+     *
      * @param nums
      * @param target
      * @return
@@ -115,12 +184,12 @@ public class ArrayProblems {
     public int maxNonOverlapping(int[] nums, int target) {
         int max = 0;
         HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(0,-1);
+        map.put(0, -1);
         int lastIndex = -1;
         int sum = 0;
-        for(int i=0;i<nums.length;i++){
-            sum+=nums[i];
-            if(map.getOrDefault(sum-target, -2)>=lastIndex){
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (map.getOrDefault(sum - target, -2) >= lastIndex) {
                 lastIndex = i;
                 max++;
             }
@@ -138,21 +207,21 @@ public class ArrayProblems {
      * @return
      */
     public int eraseOverlapIntervals(int[][] intervals) {
-        if(intervals==null || intervals.length==0) return 0;
+        if (intervals == null || intervals.length == 0) return 0;
         Arrays.sort(intervals, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                    return o1[0] - o2[0];
+                return o1[0] - o2[0];
             }
         });
 
         int res = 0;
         int prevEnd = intervals[0][1];
-        for(int i=1;i<intervals.length;i++){
-            if(prevEnd>intervals[i][0]){
+        for (int i = 1; i < intervals.length; i++) {
+            if (prevEnd > intervals[i][0]) {
                 prevEnd = Math.min(prevEnd, intervals[i][1]);
                 res++;
-            }else{
+            } else {
                 prevEnd = intervals[i][1];
             }
         }
@@ -162,10 +231,11 @@ public class ArrayProblems {
     /**
      * https://leetcode.com/problems/split-array-into-consecutive-subsequences/
      * Leetcode 659
-     *We iterate through the array once to get the frequency of all the elements in the array
+     * We iterate through the array once to get the frequency of all the elements in the array
      * We iterate through the array once more and for each element we either see if it can be appended to a
      * previously constructed consecutive sequence or if it can be the start of a new consecutive sequence.
      * If neither are true, then we return false.
+     *
      * @param nums
      * @return
      */
@@ -2260,11 +2330,11 @@ public class ArrayProblems {
      * @return
      */
     public int combinationSum4BruteForce(int[] nums, int target) {
-        if(target<0) return 0;
-        if(target==0) return 1;
-        int res=0;
-        for(int i=0;i<nums.length;i++){
-            res+=combinationSum4BruteForce(nums,target-nums[i]);
+        if (target < 0) return 0;
+        if (target == 0) return 1;
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            res += combinationSum4BruteForce(nums, target - nums[i]);
         }
 
         return res;
