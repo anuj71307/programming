@@ -1357,33 +1357,37 @@ public class DynamicProgramming {
 
     /**
      * https://leetcode.com/problems/partition-equal-subset-sum/
-     *
+     * Leetcode : 416
      * @param nums
      * @return
      */
     public boolean canPartition(int[] nums) {
-
+        if (nums == null || nums.length == 0) return true;
         int sum = 0;
         for (int i : nums) sum += i;
         if (sum % 2 != 0) return false;
 
-        HashMap<String, Boolean> map = new HashMap<>();
         sum = sum / 2;
-        return sumTarget(nums, sum, 0, map);
+        int dp[] = new int[sum + 1];
+        return sumTarget(nums, sum, 0, dp) == 1;
     }
 
-    private boolean sumTarget(int[] nums, int sum, int index, HashMap<String, Boolean> map) {
-        String key = sum + "_" + index;
-        if (map.containsKey(key)) return map.get(key);
-        if (sum == 0) return true;
-        if (index >= nums.length) return false;
-
-
-        boolean found = sumTarget(nums, sum - nums[index], index + 1, map)
-                || sumTarget(nums, sum, index + 1, map);
-        map.put(key, found);
-        return found;
-
+    private int sumTarget(int[] nums, int sum, int index, int dp[]) {
+        if (sum == 0) return 1;
+        if (index >= nums.length) return 2;
+        if (dp[sum] != 0) return dp[sum];
+        int res = 2;
+        for (int i = index; i < nums.length; i++) {
+            if (nums[i] > sum) continue;
+            res = sumTarget(nums, sum - nums[i], i + 1, dp);
+            {
+                if (res == 1) {
+                    break;
+                }
+            }
+        }
+        dp[sum] = res;
+        return dp[sum];
     }
 
     /**
