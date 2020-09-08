@@ -31,7 +31,49 @@ public class StringProblems {
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.findSubstringInWraproundString("abde"));
+        System.out.println(sp.minRemoveToMakeValid("a)b(c)d"));
+    }
+
+    /**
+     * https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/
+     * Leetcode 1249
+     * Iterate string and if its alphabetic then ignore otherwise if its "(" then insert in stack
+     * if its ")" and stack has "(" at top then pop otherwise push.
+     * At the end we will have all the character which needs to be removed in stack. Therefore we store indexes in stack.
+     * HashSet is juts to optimize contains check.
+     * Next we iterate string again and build our result string by adding character but we only add character which is
+     * not part of stack.
+     * @param str
+     * @return
+     */
+    public String minRemoveToMakeValid(String str) {
+        if(str==null || str.isEmpty()) return str;
+        java.util.Stack<Integer> stack = new java.util.Stack<>();
+        for(int i =0;i<str.length();i++){
+            if(str.charAt(i)=='('){
+                stack.push(i);
+            } else if (str.charAt(i) == ')') {
+                if (!stack.isEmpty() && str.charAt(stack.peek()) == '(') {
+                    stack.pop();
+                }
+                else {
+                    stack.push(i);
+                }
+            }
+        }
+        if(stack.isEmpty()) return str;
+        HashSet<Integer> set = new HashSet<>();
+        while (!stack.isEmpty()){
+            set.add(stack.pop());
+        }
+
+        char arr[] = new char[str.length()-set.size()];
+        for(int i =0, k=0; i<str.length() && k<arr.length; i++){
+            if(!set.contains(i)){
+                arr[k++] = str.charAt(i);
+            }
+        }
+        return new String(arr);
     }
 
     /**
@@ -1145,56 +1187,6 @@ public class StringProblems {
     boolean isChar(char c) {
 
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    }
-
-    /**
-     * Given a string which might contain Invalid parenthesis. Return a string which has balanced parenthesis.
-     * Parenthesis can only be removed
-     * ie remove invalid parenthesis. If there are multiple solution return any balanced solution.
-     * For ex if given string is (v)())()
-     * return either (v)()() or  (v())()
-     * Note: parenthesis can only be removed
-     * Problem is similar to https://www.geeksforgeeks.org/remove-invalid-parentheses/
-     *
-     * @param str
-     * @return
-     */
-    public String removeInvalidParenthesis(String str) {
-        if (str == null || str.length() == 0) return str;
-
-        Stack<Integer> st = new Stack<>();
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (!isParenthesis(c)) continue;
-
-            if (st.isEmpty() || c == '(') st.push(i);
-            else {
-                char temp = str.charAt(st.peek());
-                if (temp == '(') st.pop();
-                else {
-                    st.push(i);
-                }
-            }
-        }
-
-        HashSet<Integer> set = new HashSet<>();
-        while (!st.isEmpty()) {
-            set.add(st.pop());
-        }
-
-        char arr[] = new char[str.length() - set.size()];
-        int j = 0;
-        for (int i = 0; i < str.length(); i++) {
-            if (set.contains(i)) continue;
-            arr[j] = str.charAt(i);
-            j++;
-        }
-
-        return new String(arr);
-    }
-
-    private boolean isParenthesis(char c) {
-        return c == '(' || c == ')';
     }
 
     /**
