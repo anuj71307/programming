@@ -16,34 +16,89 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        TreeNode node = new TreeNode(45);
-        node.left = new TreeNode(6);
-        node.left.left = new TreeNode(11);
-        node.left.right = new TreeNode(13);
-        node.left.right.left = new TreeNode(12);
-        node.right = new TreeNode(9);
-        node.right.right = new TreeNode(8);
-        node.right.right.left = new TreeNode(19);
-        node.right.right.left.left = new TreeNode(5);
-        node.right.right.right = new TreeNode(24);
-        System.out.print(tp.findPath(node, 41));
+        Node node = new Node(45);
+        node.left = new Node(6);
+        node.left.left = new Node(2);
+        node.left.right = new Node(11);
+
+        Node node2 = new Node(23);
+        node2.right = new Node(32);
+        node2.right.left = new Node(28);
+        System.out.print(tp.merge(node, node2));
     }
+
+
+    // Return a integer of integers having all the nodes in both the BSTs in a sorted order.
+
+    /**
+     * https://www.geeksforgeeks.org/merge-two-bsts-with-limited-extra-space/
+     * Given two BST return a sorted list.
+     * Idea is to do iterative in order traversal.
+     * Time complexity - O(N+M) N is number of node in tree1 and M is number of nodes in tree2
+     * Space complexity is : O(H+I) - H is height if tree1 and I is height of tree 2
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public List<Integer> merge(Node root1, Node root2) {
+        // Write your code here
+        Stack<Node> st1 = new Stack();
+        Stack<Node> st2 = new Stack();
+        List<Integer> list = new ArrayList();
+        while (root1 != null || root2 != null || !st1.isEmpty() || !st2.isEmpty()) {
+            if (root1 != null || root2 != null) {
+                if (root1 != null) {
+                    st1.push(root1);
+                    root1 = root1.left;
+                }
+
+                if (root2 != null) {
+                    st2.push(root2);
+                    root2 = root2.left;
+                }
+
+            } else {
+                if (!st1.isEmpty() && !st2.isEmpty()) {
+                    if (st1.peek().data < st2.peek().data) {
+                        root1 = st1.pop();
+                        list.add(root1.data);
+                        root1 = root1.right;
+                    } else {
+                        root2 = st2.pop();
+                        list.add(root2.data);
+                        root2 = root2.right;
+                    }
+                } else if (st1.isEmpty()) {
+                    root2 = st2.pop();
+                    list.add(root2.data);
+                    root2 = root2.right;
+                } else if (st2.isEmpty()) {
+                    root1 = st1.pop();
+                    list.add(root1.data);
+                    root1 = root1.right;
+                }
+            }
+        }
+        return list;
+}
+
 
     /**
      * https://leetcode.com/problems/unique-binary-search-trees/
      * Time complexity = N^2
+     *
      * @param n
      * @return
      */
     public int numTrees(int n) {
-        if(n<=2) return n;
-        int dp[] = new int[n+1];
+        if (n <= 2) return n;
+        int dp[] = new int[n + 1];
         dp[0] = 1;
         dp[1] = 1;
-        dp[2] =2;
-        for(int i =3;i<=n;i++){
-            for(int j=0;j<i;j++){
-                dp[i] += dp[j]*dp[i-j-1];
+        dp[2] = 2;
+        for (int i = 3; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                dp[i] += dp[j] * dp[i - j - 1];
             }
         }
         return dp[n];
@@ -63,6 +118,7 @@ public class TreeProblems {
      * then for left child we need to see what it's right value is and for right child we need to check what its left height is
      * to do this we return a array of size 2
      * Time complexity O(N)
+     *
      * @param root
      * @return
      */
@@ -715,16 +771,16 @@ public class TreeProblems {
         return new ArrayList<>(res);
     }
 
-    class Item {
-        TreeNode node;
-        TreeNode parent;
+class Item {
+    TreeNode node;
+    TreeNode parent;
 
-        Item(TreeNode n, TreeNode p) {
-            node = n;
-            parent = p;
-        }
-
+    Item(TreeNode n, TreeNode p) {
+        node = n;
+        parent = p;
     }
+
+}
 
     /**
      * https://leetcode.com/problems/delete-nodes-and-return-forest/
@@ -847,15 +903,15 @@ public class TreeProblems {
 
     }
 
-    class QueueO {
-        int hd;
-        Node node;
+class QueueO {
+    int hd;
+    Node node;
 
-        QueueO(Node node, int h) {
-            this.node = node;
-            hd = h;
-        }
+    QueueO(Node node, int h) {
+        this.node = node;
+        hd = h;
     }
+}
 
     /**
      * https://leetcode.com/problems/sum-root-to-leaf-numbers/
@@ -1262,9 +1318,9 @@ public class TreeProblems {
         minDepth(root.right, res, level + 1);
     }
 
-    class Result {
-        int val = Integer.MAX_VALUE;
-    }
+class Result {
+    int val = Integer.MAX_VALUE;
+}
 
     /**
      * do a zigzag traversal of a tree and return every level as list
@@ -1373,13 +1429,13 @@ public class TreeProblems {
 
     }
 
-    /**
-     * class used to print bottom view of a tree
-     */
-    static class Pair {
-        int data;
-        int height;
-    }
+/**
+ * class used to print bottom view of a tree
+ */
+static class Pair {
+    int data;
+    int height;
+}
 
     /**
      * https://www.geeksforgeeks.org/bottom-view-binary-tree/
@@ -1467,9 +1523,9 @@ public class TreeProblems {
         return count.res;
     }
 
-    static class Count {
-        int res;
-    }
+static class Count {
+    int res;
+}
 
     /*
     https://www.geeksforgeeks.org/find-count-of-singly-subtrees/
