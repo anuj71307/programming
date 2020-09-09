@@ -16,15 +16,75 @@ public class TreeProblems {
     public static void main(String args[]) throws Exception {
 
         TreeProblems tp = new TreeProblems();
-        Node node = new Node(45);
-        node.left = new Node(6);
-        node.left.left = new Node(2);
-        node.left.right = new Node(11);
+        TreeNode node = new TreeNode(45);
+        node.left = new TreeNode(6);
+        node.left.left = new TreeNode(2);
+        node.left.right = new TreeNode(11);
 
-        Node node2 = new Node(23);
-        node2.right = new Node(32);
-        node2.right.left = new Node(28);
-        System.out.print(tp.merge(node, node2));
+        node.right = new TreeNode(2);
+        node.right.right = new TreeNode(11);
+        node.right.right.right = new TreeNode(8);
+        node.right.right.right.left = new TreeNode(12);
+
+        String k = tp.serialize(node);
+        TreeNode temp = tp.deserialize(k);
+        System.out.println(tp.isSameTree(temp, node));
+    }
+
+    /**
+     * https://leetcode.com/problems/same-tree/
+     * Check is two trees are identical/same or not
+     *
+     * @param temp
+     * @param node
+     * @return
+     */
+    private boolean isSameTree(TreeNode temp, TreeNode node) {
+        if (node == null && temp == null) return true;
+        if (node == null || temp == null) return false;
+        if (node.value != temp.value) return false;
+        return isSameTree(temp.left, node.left) && isSameTree(temp.right, node.right);
+    }
+
+    /**
+     * https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+     * Leetcode 297
+     *
+     * @param root
+     * @return
+     */
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.toString();
+    }
+
+    public void serialize(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append("#,");
+            return;
+        }
+        sb.append(node.value);
+        sb.append(",");
+        serialize(node.left, sb);
+        serialize(node.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] arr = data.split(",");
+        return deserializer(arr, new int[]{0});
+    }
+
+    public TreeNode deserializer(String data[], int[] arr) {
+        if (arr[0] >= data.length) return null;
+        String str = data[arr[0]];
+        arr[0]++;
+        if (str.equals("#")) return null;
+        TreeNode node = new TreeNode(Integer.parseInt(str));
+        node.left = deserializer(data, arr);
+        node.right = deserializer(data, arr);
+        return node;
     }
 
 
@@ -36,6 +96,7 @@ public class TreeProblems {
      * Idea is to do iterative in order traversal.
      * Time complexity - O(N+M) N is number of node in tree1 and M is number of nodes in tree2
      * Space complexity is : O(H+I) - H is height if tree1 and I is height of tree 2
+     *
      * @param root1
      * @param root2
      * @return
@@ -80,7 +141,7 @@ public class TreeProblems {
             }
         }
         return list;
-}
+    }
 
 
     /**
@@ -771,16 +832,16 @@ public class TreeProblems {
         return new ArrayList<>(res);
     }
 
-class Item {
-    TreeNode node;
-    TreeNode parent;
+    class Item {
+        TreeNode node;
+        TreeNode parent;
 
-    Item(TreeNode n, TreeNode p) {
-        node = n;
-        parent = p;
+        Item(TreeNode n, TreeNode p) {
+            node = n;
+            parent = p;
+        }
+
     }
-
-}
 
     /**
      * https://leetcode.com/problems/delete-nodes-and-return-forest/
@@ -903,15 +964,15 @@ class Item {
 
     }
 
-class QueueO {
-    int hd;
-    Node node;
+    class QueueO {
+        int hd;
+        Node node;
 
-    QueueO(Node node, int h) {
-        this.node = node;
-        hd = h;
+        QueueO(Node node, int h) {
+            this.node = node;
+            hd = h;
+        }
     }
-}
 
     /**
      * https://leetcode.com/problems/sum-root-to-leaf-numbers/
@@ -1240,59 +1301,6 @@ class QueueO {
     }
 
     /**
-     * serialize a binary tree into string
-     *
-     * @param root
-     * @return
-     */
-    public String serialize(Node root) {
-        StringBuilder str = new StringBuilder();
-        serialize(root, str);
-        return str.toString();
-
-    }
-
-    public void serialize(Node root, StringBuilder str) {
-        if (root == null) {
-            str.append("n,");
-            return;
-        }
-        str.append(root.data);
-        str.append(",");
-        serialize(root.left, str);
-        serialize(root.right, str);
-    }
-
-    /**
-     * deserialize a binary tree from given string
-     *
-     * @param data
-     * @return
-     */
-    public Node deserialize(String data) {
-        String[] arr = data.split(",");
-        int[] index = new int[1];
-        return deserialize(arr, index);
-    }
-
-    public Node deserialize(String[] arr, int[] index) {
-        if (index[0] > arr.length) {
-            return null;
-        }
-
-        String str = arr[index[0]];
-        index[0]++;
-        if (str.equals("n")) {
-            return null;
-        }
-
-        Node node = new Node(Integer.valueOf(str));
-        node.left = deserialize(arr, index);
-        node.right = deserialize(arr, index);
-        return node;
-    }
-
-    /**
      * https://www.geeksforgeeks.org/find-minimum-depth-of-a-binary-tree/
      *
      * @param root
@@ -1318,9 +1326,9 @@ class QueueO {
         minDepth(root.right, res, level + 1);
     }
 
-class Result {
-    int val = Integer.MAX_VALUE;
-}
+    class Result {
+        int val = Integer.MAX_VALUE;
+    }
 
     /**
      * do a zigzag traversal of a tree and return every level as list
@@ -1429,13 +1437,13 @@ class Result {
 
     }
 
-/**
- * class used to print bottom view of a tree
- */
-static class Pair {
-    int data;
-    int height;
-}
+    /**
+     * class used to print bottom view of a tree
+     */
+    static class Pair {
+        int data;
+        int height;
+    }
 
     /**
      * https://www.geeksforgeeks.org/bottom-view-binary-tree/
@@ -1523,9 +1531,9 @@ static class Pair {
         return count.res;
     }
 
-static class Count {
-    int res;
-}
+    static class Count {
+        int res;
+    }
 
     /*
     https://www.geeksforgeeks.org/find-count-of-singly-subtrees/
