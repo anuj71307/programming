@@ -5,6 +5,7 @@ import com.programs.stack.Stack;
 import com.programs.trees.BinarySearchTree;
 import com.programs.trees.BinaryTree;
 import com.programs.trees.ITree;
+import com.sun.deploy.panel.ITreeNode;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.*;
@@ -17,20 +18,83 @@ public class TreeProblems {
 
         TreeProblems tp = new TreeProblems();
         TreeNode node = new TreeNode(45);
-        node.left = new TreeNode(6);
-        node.left.left = new TreeNode(2);
-        node.left.right = new TreeNode(11);
 
-        node.right = new TreeNode(2);
-        node.right.right = new TreeNode(11);
-        node.right.right.right = new TreeNode(8);
-        node.right.right.right.left = new TreeNode(12);
-
-        String k = tp.serialize(node);
-        TreeNode temp = tp.deserialize(k);
-        System.out.println(tp.isSameTree(temp, node));
+        System.out.println(tp.subtreeWithAllDeepest(null));
     }
 
+    /**
+     * https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/
+     * Leetcode 865
+     * First find all the nodes at deepepst level. Now do dfs again and check node is part of deepest level return node else
+     * return null,
+     * If for any node both its right and left return a valid node then this node would be the answer ot its parent depending upon
+     * how many nodes are at deepest level
+     * Time complexity O(N+N). For single pass check subtreeWithAllDeepestSinglePass
+     * @param root
+     * @return
+     */
+    int maxDepth = -1;
+    public TreeNode subtreeWithAllDeepest(TreeNode root) {
+        HashMap<Integer, HashSet<TreeNode>> map = new HashMap();
+        dfs(root, map, 0);
+        if (maxDepth == -1) return null;
+        HashSet<TreeNode> set = map.get(maxDepth);
+        return dfsFind(root, set);
+    }
+
+
+    public TreeNode dfsFind(TreeNode root, HashSet<TreeNode> set) {
+        if (root == null || set.contains(root)) return root;
+        TreeNode left = dfsFind(root.left, set);
+        TreeNode right = dfsFind(root.right, set);
+        if (left != null && right != null) return root;
+        return left != null ? left : right;
+
+    }
+
+
+    public void dfs(TreeNode root, HashMap<Integer, HashSet<TreeNode>> map, int depth) {
+        if (root == null) return;
+        maxDepth = Math.max(maxDepth, depth);
+        HashSet<TreeNode> set = map.getOrDefault(depth, new HashSet());
+        set.add(root);
+        map.put(depth, set);
+        dfs(root.left, map, depth + 1);
+        dfs(root.right, map, depth + 1);
+
+    }
+
+
+    /**
+     * https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/
+     * Leetcode 865
+     * Time complexity O(N)
+     * @param root
+     * @return
+     */
+    public TreeNode subtreeWithAllDeepestSinglePass(TreeNode root) {
+        return dfsResult(root).node;
+    }
+
+    private ResultNode dfsResult(TreeNode root) {
+        if(root==null) return new ResultNode(null, 0);
+        ResultNode left = dfsResult(root.left);
+        ResultNode right = dfsResult(root.right);
+        if(left.depth>right.depth) return new ResultNode(left.node, left.depth+1);
+        if(left.depth<right.depth) return new ResultNode(right.node, right.depth+1);
+        return new ResultNode(root, right.depth+1);
+    }
+
+
+    class ResultNode {
+        TreeNode node;
+        int depth;
+
+        public ResultNode(TreeNode node, int depth) {
+            this.node = node;
+            this.depth = depth;
+        }
+    }
     /**
      * https://leetcode.com/problems/same-tree/
      * Check is two trees are identical/same or not
