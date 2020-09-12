@@ -23,5 +23,9 @@ For most of the questions the problem link is given to understand the problem mo
   * Longest Chain of Pairs # [https://leetcode.com/problems/maximum-length-of-pair-chain/]
     * Solution # [https://github.com/anuj-github/Programming/pull/208/files]    
   * Get the maximum score # [https://github.com/anuj-github/Programming/pull/302/files]
-    * Solution # [https://github.com/anuj-github/Programming/pull/302]      
+    * Solution # [https://github.com/anuj-github/Programming/pull/302]
+* # Design Data structure
+  * Insert Delete GetRandom O(1) # [https://leetcode.com/problems/insert-delete-getrandom-o1/]
+    * Solution # [https://github.com/anuj-github/Programming/pull/310/files]    
+  
     
