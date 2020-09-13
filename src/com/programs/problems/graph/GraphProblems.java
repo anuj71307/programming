@@ -12,12 +12,123 @@ public class GraphProblems {
     public static void main(String[] args) {
         GraphProblems gp = new GraphProblems();
 
-        int node = 5;
-        int src = 1;
-        int dest = 4;
-        int k = 1;
-        int[][] arr = {{0, 1, 100}, {1, 2, 100}, {0, 2, 500}, {0, 3, 20}, {3, 4, 40}, {4, 2, 10}};
-        System.out.println(gp.findCheapestPrice(node, arr, src, dest, k));
+        int[][] arr = {{1,3}, {0,2}, {1,3}, {0,2}};
+        System.out.println(gp.isBipartiteDfs(arr));
+    }
+
+
+    /**
+     * https://leetcode.com/problems/is-graph-bipartite/
+     * Leetcode 785
+     * @param graph
+     * @return
+     */
+    public boolean isBipartiteDfs(int[][] graph) {
+
+        int marked [] = new int[graph.length];
+        for(int i = 0; i< graph.length;i++){
+            if(marked[i]==0 && !canBipartite(i, graph, marked, 1)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean canBipartite(int node, int[][] graph, int[] marked, int mark) {
+        if (marked[node] == -mark) return false;
+        marked[node] = mark;
+        for (int edge : graph[node]) {
+            if (marked[edge] == 0 && !canBipartite(edge, graph, marked, -mark)) {
+                return false;
+            }
+            if (marked[edge] == mark) return false;
+        }
+        return true;
+    }
+
+    /**
+     * https://leetcode.com/problems/is-graph-bipartite/
+     * Leetcode 785
+     * Using hash set and bfs
+     * @param graph
+     * @return
+     */
+    public boolean isBipartite(int[][] graph) {
+
+        HashSet<Integer> set1  = new HashSet<>();
+        HashSet<Integer> set2  = new HashSet<>();
+        boolean[] visited = new boolean[graph.length];
+        for(int i = 0; i< graph.length;i++){
+            if(!visited[i]){
+                if(!canBipartite(i, visited, set1, set2, graph)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean canBipartite(int parent, boolean[] visited, HashSet<Integer> set1, HashSet<Integer> set2, int[][] graph) {
+        Queue<Integer> queu = new LinkedList<>();
+        queu.add(parent);
+        while (!queu.isEmpty()){
+            int size = queu.size();
+            for(int i =0; i< size;i++){
+                int k = queu.poll();
+                if(visited[k]) continue;
+                if(!canBipartite(k, graph[k], set1, set2)){
+                    return false;
+                }
+                visited[k] = true;
+                for(int edge: graph[k]){
+                    queu.add(edge);
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean canBipartite(int parent, int[] edges, HashSet<Integer> set1 , HashSet<Integer> set2) {
+        if(set1.contains(parent)){
+            return updateAnotherSet(edges, set2, set1);
+        }
+        if(set2.contains(parent)){
+            return updateAnotherSet(edges, set1, set2);
+        }
+        boolean check1 = doesSetContainEdge(set1, edges);
+        boolean check2 = doesSetContainEdge(set2, edges);
+        if(check1 && check2) return false;
+        if(check1) {
+            set2.add(parent);
+            updateSet(edges, set1);
+        }
+        else {
+            set1.add(parent);
+            updateSet(edges, set2);
+        }
+        return true;
+    }
+
+    private void updateSet(int[] edges, HashSet<Integer> set) {
+        for(int edge: edges){
+            set.add(edge);
+        }
+    }
+
+    private boolean doesSetContainEdge(HashSet<Integer> set, int[] edges) {
+        for(int edge: edges){
+            if(set.contains(edge)) return true;
+        }
+        return false;
+    }
+
+    private boolean updateAnotherSet(int[] edges, HashSet<Integer> set, HashSet<Integer> parentSet) {
+        for(int i: edges){
+            if(parentSet.contains(i)) return false;
+            set.add(i);
+        }
+        return true;
     }
 
     /**
