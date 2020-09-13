@@ -31,7 +31,60 @@ public class StringProblems {
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.minRemoveToMakeValid("a)b(c)d"));
+        System.out.println(sp.customSortString("", "abcd"));
+    }
+
+    /**
+     * https://leetcode.com/problems/custom-sort-string/
+     * Leetcode 791
+     * @param S
+     * @param T
+     * @return
+     */
+    public String customSortString(String S, String T) {
+        if(S==null || S.length() ==0) return T;
+        if(T==null || T.length() ==0) return T;
+        int [] arr = new int[26];
+        for(int i =0; i<T.length();i++){
+            arr[T.charAt(i)-'a'] ++;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i =0;i<S.length();i++){
+            char c= S.charAt(i);
+            int count = arr[c-'a'];
+            while (count-->0){
+                sb.append(c);
+            }
+            arr[c-'a']= 0;
+        }
+        for(char ch = 'a'; ch<='z';ch++){
+            int count = arr[ch-'a'];
+            while (count-->0){
+                sb.append(ch);
+            }
+        }
+
+        return sb.toString();
+
+    }
+    public void customSortStringSort(String S, String T) {
+        int[] arr = new int[26];
+        for(int i =0; i<S.length();i++){
+            arr[S.charAt(i)-'a'] = i;
+        }
+        Character[] arrT = new Character[T.length()];
+        for(int i = 0;i<T.length();i++){
+            arrT[i] = T.charAt(i);
+        }
+        Arrays.sort(arrT, new Comparator<Character>() { // NLonN
+            @Override
+            public int compare(Character o1, Character o2) {
+                int value1 = arr[o1-'a'];
+                int value2 = arr[o2-'a'];
+                return value1-value2;
+            }
+        });
+        System.out.println(Arrays.toString(arrT));
     }
 
     /**
