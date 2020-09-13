@@ -31,7 +31,47 @@ public class StringProblems {
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
         // System.out.print(sp.oneAddAway("ba", "abcd"));
-        System.out.println(sp.customSortString("", "abcd"));
+        List<String> list = new ArrayList<>();
+        list.add("0:start:0");
+        list.add("0:end:3");
+        list.add("1:start:4");
+        list.add("2:start:6");
+        list.add("3:start:7");
+        list.add("3:end:9");
+        list.add("2:end:12");
+        list.add("1:end:15");
+
+
+        System.out.println(Arrays.toString(sp.exclusiveTime(4, list)));
+    }
+
+    /**
+     * https://leetcode.com/problems/exclusive-time-of-functions/
+     * Leetcode 636
+     * @param n
+     * @param logs
+     * @return
+     */
+    public int[] exclusiveTime(int n, List<String> logs) {
+        int[] res = new int[n];
+        if(logs==null || logs.isEmpty()) return res;
+        Stack<int[]> st = new Stack<>();
+        int prev = 0;
+
+        for(int i=0; i<logs.size();i++){
+            String str[] = logs.get(i).split(":");
+            int job = Integer.parseInt(str[0]);
+            int time = Integer.parseInt(str[2]);
+            if("start".equals(str[1])){
+                st.push(new int[] {job, time});
+            }
+            else{
+                int lastTime = time -st.pop()[1]+1;
+                res[job] += lastTime;
+                if(!st.isEmpty()) res[st.peek()[0]] -= lastTime;
+            }
+        }
+        return res;
     }
 
     /**
