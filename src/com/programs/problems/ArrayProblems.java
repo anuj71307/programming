@@ -39,18 +39,36 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
-        int[] arr[] = {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 1, 0, 0, 0, 0, 0},
-                {0, 1, 1, 0, 0, 0, 0},
-                {0, 1, 1, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {1, 1, 0, 0, 0, 0, 0},
-                {1, 1, 0, 0, 0, 0, 0}
-        };
-        System.out.println(ap.shortestBridge(arr));
+        int[] arr= {1,1,0,0,1,1,1,1,1};
+        System.out.println(ap.findMaxConsecutiveOnes(arr,3));
     }
 
+
+    /**
+     * https://leetcode.com/problems/max-consecutive-ones-iii/
+     * Leetcode 1004
+     * @param nums
+     * @param flip
+     * @return
+     */
+    public int findMaxConsecutiveOnes(int[] nums, int flip) {
+        int max =0, count =0;
+        int zero =0;
+        int start =0;
+        for(int i=0;i<nums.length;i++){
+           if(nums[i]==0){
+               zero++;
+               while (zero>flip && start<=i){
+                   if(nums[start]==0){
+                       zero--;
+                   }
+                   start++;
+               }
+            }
+           max = Math.max(max, i-start+1);
+        }
+        return max;
+    }
     /**
      * https://leetcode.com/problems/shortest-bridge/
      * Leetcode - 934
