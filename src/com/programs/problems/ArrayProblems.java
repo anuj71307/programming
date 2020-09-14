@@ -39,11 +39,97 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
-        int[] arr= {1,1,0,0,1,1,1,1,1};
-        System.out.println(ap.findMaxConsecutiveOnes(arr,3));
+        int[] arr= {1,2,3,4,5,6,7};
+        ap.rotate(arr,3);
     }
 
+    /**
+     * https://leetcode.com/problems/rotate-array/
+     * Leet code 189
+     * Rotate In place in O(N)
+     * @param nums
+     * @param k
+     */
+    public void rotate(int[] nums, int k) {
+        if(k%nums.length==0 || nums==null || nums.length<=1) return;
+        int end = nums.length-1;
+        if(k>end+1){
+            k = k%(end+1);
+        }
+        reverse(nums, 0, end);
+        reverse(nums, 0, k-1);
+        reverse(nums, k, end);
+    }
 
+    /***
+     * Reverse an array
+     * @param nums
+     * @param start
+     * @param end
+     */
+    private void reverse(int[] nums, int start, int end) {
+
+        while (start<end){
+            swap(nums, start, end);
+            start++;
+            end--;
+        }
+    }
+
+    /***
+     *  https://leetcode.com/problems/rotate-array/
+     * Leet code 189
+     * Rotate with additional data structure
+     * Time O(K+N)
+     * Space: O(K)
+     * @param nums
+     * @param k
+     */
+    public void rotateAddtionDS(int[] nums, int k) {
+
+        if(k%nums.length==0 || nums==null || nums.length<=1) return;
+        int end = nums.length-1;
+        if(k>end+1){
+            k = k%(end+1);
+        }
+        Queue<Integer> que = new LinkedList<>();
+        while (k-->0){
+           que.add(nums[end--]);
+        }
+        k = nums.length-1;
+        while (end>=0){
+            nums[k--] = nums[end--];
+        }
+        while (!que.isEmpty()){
+            nums[k--] = que.poll();
+        }
+        System.out.println(Arrays.toString(nums));
+    }
+
+    /**
+     * https://leetcode.com/problems/rotate-array/
+     * Leet code 189
+     * Rotate in place
+     * Time : O(K*N)
+     * @param nums
+     * @param k
+     */
+    public void rotateInPlace(int[] nums, int k) {
+        if(k%nums.length==0 || nums==null || nums.length<=1) return;
+
+
+        int end = nums.length-1;
+        if(k>end+1){
+            k = k%(end+1);
+        }
+        while (k-->0){
+            int temp = nums[end];
+            for(int i = end-1;i>=0;i--){
+                nums[i+1] = nums[i];
+            }
+            nums[0] = temp;
+        }
+    }
     /**
      * https://leetcode.com/problems/max-consecutive-ones-iii/
      * Leetcode 1004
@@ -2751,7 +2837,6 @@ public class ArrayProblems {
     }
 
     private void swap(int[] nums, int i, int j) {
-
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
