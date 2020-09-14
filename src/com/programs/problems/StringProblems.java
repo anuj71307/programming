@@ -30,19 +30,34 @@ public class StringProblems {
     public static void main(String[] args) throws IOException {
         StringProblems sp = new StringProblems();
         String[] words = {"hello"};
-        // System.out.print(sp.oneAddAway("ba", "abcd"));
-        List<String> list = new ArrayList<>();
-        list.add("0:start:0");
-        list.add("0:end:3");
-        list.add("1:start:4");
-        list.add("2:start:6");
-        list.add("3:start:7");
-        list.add("3:end:9");
-        list.add("2:end:12");
-        list.add("1:end:15");
+        System.out.println(sp.simplifyPath("/home/"));
+    }
 
+    /**
+     * https://leetcode.com/problems/simplify-path/
+     * Leetcode - 71
+     * @param path
+     * @return
+     */
+    public String simplifyPath(String path) {
+        Stack<String> st = new Stack();
+        String[] dirs = path.split("/");
+        for(String dir:dirs){
+            if(dir.equals("..")){
+                if(!st.isEmpty()){
+                    st.pop();
+                }
+            }
+            else if(!dir.equals(".") && !dir.equals("")){
+                st.push(dir);
+            }
+        }
 
-        System.out.println(Arrays.toString(sp.exclusiveTime(4, list)));
+        String res = "";
+        while(!st.isEmpty()){
+            res = "/"+st.pop()+res;
+        }
+        return res.isEmpty()?"/":res;
     }
 
     /**
