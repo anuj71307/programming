@@ -34,10 +34,39 @@ public class DynamicProgramming {
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
 
-        int[] arr = {7,2,5,10,8};
-        System.out.println(dp.splitArray(arr,2));
+        int[] arr = {1,2,3};
+        System.out.println(dp.largestDivisibleSubset(arr));
     }
 
+    /**
+     * https://leetcode.com/problems/largest-divisible-subset/
+     * Leetcode : 368. Largest Divisible Subset
+     * @param nums
+     * @return
+     */
+    public List<Integer> largestDivisibleSubset(int[] nums) {
+        ArrayList<Integer> result = new ArrayList();
+        Arrays.sort(nums);
+        ArrayList<Integer> lists[] = new ArrayList[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            lists[i] = new ArrayList<>();
+            ArrayList<Integer> largest = new ArrayList();
+            for (int j = 0; j < i; j++) {
+                if (nums[i] % nums[j] == 0) {
+                    if (lists[j].size() >= largest.size()) {
+                        largest = lists[j];
+                    }
+                }
+            }
+
+            lists[i].addAll(largest);
+            lists[i].add(nums[i]);
+            if (lists[i].size() > result.size()) {
+                result = lists[i];
+            }
+        }
+        return result;
+    }
 
     /**
      * https://leetcode.com/problems/wiggle-subsequence/
