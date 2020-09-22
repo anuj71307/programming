@@ -19,6 +19,8 @@ For most of the questions the problem link is given to understand the problem mo
     * Solution # [https://github.com/anuj-github/Programming/pull/172/files]
    * Unique Binary Search Trees # [https://leetcode.com/problems/unique-binary-search-trees/]
      * Solution # [https://github.com/anuj-github/Programming/pull/304/files]  
+    * Populating Next Right Pointers in Each Node of binary tree # [https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/]
+     * Solution # [https://github.com/anuj-github/Programming/pull/319/files]    
 * # Graph
   * Bipartite Graph # [https://leetcode.com/problems/is-graph-bipartite/]
     * Solution # [https://github.com/anuj-github/Programming/pull/311/files]     
