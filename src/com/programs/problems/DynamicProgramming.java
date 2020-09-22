@@ -30,7 +30,8 @@ public class DynamicProgramming {
      * }
      * reader.close();
      */
-
+    final int[] xMoves = {-1,0,1,0};
+    final int[] yMoves = {0,-1,0,1};
     public static void main(String[] args) throws IOException {
         DynamicProgramming dp = new DynamicProgramming();
 
@@ -38,6 +39,44 @@ public class DynamicProgramming {
         System.out.println(dp.largestDivisibleSubset(arr));
     }
 
+    /**
+     * https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+     * Leetcode 329
+     * @param matrix
+     * @return
+     */
+    public int longestIncreasingPath(int[][] matrix) {
+
+        if(matrix==null || matrix.length==0) return 0;
+        int res = 0;
+        int[][] dp = new int[matrix.length][matrix[0].length];
+        for(int[] row : dp) Arrays.fill(row,-1);
+        for(int i=0;i<matrix.length;i++){
+            for(int j=0;j<matrix[0].length;j++){
+
+                check(matrix,dp,i,j);
+                res = Math.max(res,dp[i][j]);
+            }
+        }
+
+        return res;
+    }
+
+    public int check(int[][] matrix,int[][] dp,  int x, int y){
+        if(dp[x][y]!=-1) return dp[x][y];
+        int max = 1;
+        for(int m=0;m<xMoves.length;m++){
+
+            int i = x+xMoves[m];
+            int j = y+yMoves[m];
+            if(i<0 || j<0 || i>=dp.length || j>=dp[0].length  || matrix[i][j]<=matrix[x][y]) continue;
+            max = Math.max(max, check(matrix,dp,i,j)+1);
+
+        }
+
+        dp[x][y] = max;
+        return max;
+    }
     /**
      * https://leetcode.com/problems/largest-divisible-subset/
      * Leetcode : 368. Largest Divisible Subset
