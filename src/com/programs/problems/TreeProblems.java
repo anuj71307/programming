@@ -531,35 +531,33 @@ public class TreeProblems {
 
     /**
      * https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
+     * Leetcode 117
+     * Constant space
      */
     private Node connectIterative(Node root) {
-
         for (Node temp = root; temp != null; ) {
-
-            Node head = new Node(0);
-            Node tail = head;
-            for (Node node = temp; node != null; node = node.next) {
-
-                if (node.left != null) {
-                    tail.next = node.left;
+            Node tail = new Node(0);
+            Node head = tail;
+            while (temp != null) {
+                if (temp.left != null) {
+                    tail.next = temp.left;
                     tail = tail.next;
                 }
-                if (node.right != null) {
-                    tail.next = node.right;
+                if (temp.right != null) {
+                    tail.next = temp.right;
                     tail = tail.next;
                 }
+                temp = temp.next;
             }
             temp = head.next;
-
         }
-
         return root;
     }
 
     /**
      * https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
      * Using Queue
-     *
+     * Leetcode 116
      * @param root
      * @return
      */
