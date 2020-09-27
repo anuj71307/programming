@@ -11,6 +11,8 @@ For most of the questions the problem link is given to understand the problem mo
      * Solution # [https://github.com/anuj-github/Programming/pull/226]
   * Shortest bridge # [https://leetcode.com/problems/shortest-bridge/]
      * Solution # [https://github.com/anuj-github/Programming/pull/303/files]  
+  * Subset Problems # [https://leetcode.com/problems/subsets-ii/]
+     * Solution # [https://github.com/anuj-github/Programming/pull/320/files]     
 * # String
   * String pattern match # [https://leetcode.com/problems/word-pattern-ii/]
      * Solution # [https://github.com/anuj-github/Programming/pull/173/files]
