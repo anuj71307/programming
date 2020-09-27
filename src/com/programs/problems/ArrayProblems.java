@@ -1807,37 +1807,6 @@ public class ArrayProblems {
     }
 
     /**
-     * https://leetcode.com/problems/subsets-ii/
-     *
-     * @param nums
-     * @return
-     */
-    public List<List<Integer>> subsetsWithDup(int[] nums) {
-        List<List<Integer>> result = new ArrayList();
-        Arrays.sort(nums);
-        backtrack(nums, 0, new ArrayList(), result);
-        return result;
-    }
-
-    private void backtrack(int[] nums, int index, List<Integer> list, List<List<Integer>> result) {
-
-        result.add(new ArrayList(list));
-        if (index >= nums.length) {
-            return;
-        }
-        for (int i = index; i < nums.length; ) {
-            list.add(nums[i]);
-            backtrack(nums, i + 1, list, result);
-            list.remove(list.size() - 1);
-            i++;
-            while (i < nums.length && i > 0) {
-                if (nums[i] == nums[i - 1]) i++;
-                else break;
-            }
-        }
-    }
-
-    /**
      * https://leetcode.com/problems/n-queens/
      *
      * @param n
@@ -2273,30 +2242,6 @@ public class ArrayProblems {
             m--;
         }
 
-    }
-
-    /**
-     * https://leetcode.com/problems/subsets/
-     *
-     * @param nums
-     * @return
-     */
-    public List<List<Integer>> subsets(int[] nums) {
-
-        List<List<Integer>> list = new ArrayList();
-        if (nums == null || nums.length == 0) return list;
-        backtrack(list, new ArrayList(), nums, 0);
-        return list;
-    }
-
-    void backtrack(List<List<Integer>> list, List<Integer> temp, int[] nums, int index) {
-        list.add(new ArrayList(temp));
-        for (int i = index; i < nums.length; i++) {
-
-            temp.add(nums[i]);
-            backtrack(list, temp, nums, i + 1);
-            temp.remove(temp.size() - 1);
-        }
     }
 
     /**
