@@ -39,10 +39,82 @@ public class ArrayProblems {
         //code
         ArrayProblems ap = new ArrayProblems();
         // [1,2,3,6,2,3,4,7,8]
-        int[] arr= {1,2,3,4,5,6,7};
-        ap.rotate(arr,3);
+        int[] arr= {-1,-2,-3};
+        int k =1;
+        System.out.println(ap.findPairsSorting(arr,1));
     }
 
+    /**
+     * https://leetcode.com/problems/k-diff-pairs-in-an-array/
+     * Leetcode 532
+     * For sorting check findPairsSorting
+     * Time complexity - Average O(N), Worst case O(N^2)
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findPairs(int[] nums, int k) {
+
+        if(nums==null || nums.length<2) return 0;
+        int count = 0;
+        HashMap<Integer, Integer> map = new HashMap();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        if(k==0){
+            for (int num : map.keySet()) {
+                int val = map.get(num);
+                // increase count if number is present more than once
+                if(val>1) count++;
+            }
+        }
+        else{
+            for (int num : map.keySet()) {
+                 int val = map.getOrDefault(num+k,0);
+                 // increase count if other number is present
+                 if(val>0) count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * https://leetcode.com/problems/k-diff-pairs-in-an-array/
+     * Leetcode 532.
+     * Time complexity - NLogN
+     * For map based check findPairs for O(N)
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findPairsSorting(int[] nums, int k) {
+        if(nums==null || nums.length<2) return 0;
+        int count = 0;
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            if(i>0 && nums[i]==nums[i-1]) continue;
+            boolean res = binarySearch(nums, k+nums[i], i+1, nums.length-1);
+            if(res) count++;
+        }
+        return count;
+    }
+
+
+    private boolean binarySearch(int[] nums, int target, int start, int end){
+
+        int mid = start;
+        while (start<=end){
+            mid = start+(end-start)/2;
+            if(nums[mid]==target) return true;
+            if(nums[mid]<target) {
+                start = mid+1;
+            }
+            else{
+                end = mid-1;
+            }
+        }
+        return false;
+    }
     /**
      * https://leetcode.com/problems/rotate-array/
      * Leet code 189
