@@ -23,6 +23,71 @@ public class TreeProblems {
     }
 
     /**
+     * https://leetcode.com/problems/house-robber-iii/
+     * Leetcode 337
+     * Time complexity - O(N), N is number of nodes
+     * Space complexity - O(H) - H is height of tree, worst case O(N) when tree is skewed and height is same as number of nodes
+     * @param root
+     * @return
+     */
+    public int rob(TreeNode root) {
+
+        TreeResult res = sum(root);
+        return Math.max(res.with, res.without);
+    }
+
+    public TreeResult sum(TreeNode node) {
+        TreeResult result = new TreeResult();
+        if (node == null) return result;
+        TreeResult left = sum(node.left);
+        TreeResult right = sum(node.right);
+        result.with = node.value + left.without + right.without;
+        result.without = Math.max(left.with, left.without) + Math.max(right.with, right.without);
+        return result;
+    }
+
+    class TreeResult {
+        int with;
+        int without;
+    }
+
+    /**
+     * https://leetcode.com/problems/house-robber-iii/
+     *
+     * @param root
+     * @return
+     */
+    public int rob(Node root) {
+        return rob(root, new HashMap<>());
+    }
+
+
+    /**
+     * https://leetcode.com/problems/house-robber-iii/
+     * Leetcode 337
+     * @param root
+     * @param map
+     * @return
+     */
+    public int rob(Node root, HashMap<Node, Integer> map) {
+
+        if (root == null) return 0;
+        if (map.containsKey(root)) return map.get(root);
+        int val = root.data;
+        if (root.left != null) {
+            val += rob(root.left.left, map) + rob(root.left.right, map);
+        }
+
+        if (root.right != null) {
+            val += rob(root.right.left, map) + rob(root.right.right, map);
+        }
+
+        val = Math.max(val, rob(root.left, map) + rob(root.right, map));
+        map.put(root, val);
+        return val;
+    }
+
+    /**
      * https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/
      * Leetcode 865
      * First find all the nodes at deepepst level. Now do dfs again and check node is part of deepest level return node else
@@ -30,10 +95,12 @@ public class TreeProblems {
      * If for any node both its right and left return a valid node then this node would be the answer ot its parent depending upon
      * how many nodes are at deepest level
      * Time complexity O(N+N). For single pass check subtreeWithAllDeepestSinglePass
+     *
      * @param root
      * @return
      */
     int maxDepth = -1;
+
     public TreeNode subtreeWithAllDeepest(TreeNode root) {
         HashMap<Integer, HashSet<TreeNode>> map = new HashMap();
         dfs(root, map, 0);
@@ -69,6 +136,7 @@ public class TreeProblems {
      * https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/
      * Leetcode 865
      * Time complexity O(N)
+     *
      * @param root
      * @return
      */
@@ -77,12 +145,12 @@ public class TreeProblems {
     }
 
     private ResultNode dfsResult(TreeNode root) {
-        if(root==null) return new ResultNode(null, 0);
+        if (root == null) return new ResultNode(null, 0);
         ResultNode left = dfsResult(root.left);
         ResultNode right = dfsResult(root.right);
-        if(left.depth>right.depth) return new ResultNode(left.node, left.depth+1);
-        if(left.depth<right.depth) return new ResultNode(right.node, right.depth+1);
-        return new ResultNode(root, right.depth+1);
+        if (left.depth > right.depth) return new ResultNode(left.node, left.depth + 1);
+        if (left.depth < right.depth) return new ResultNode(right.node, right.depth + 1);
+        return new ResultNode(root, right.depth + 1);
     }
 
 
@@ -95,6 +163,7 @@ public class TreeProblems {
             this.depth = depth;
         }
     }
+
     /**
      * https://leetcode.com/problems/same-tree/
      * Check is two trees are identical/same or not
@@ -558,6 +627,7 @@ public class TreeProblems {
      * https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
      * Using Queue
      * Leetcode 116
+     *
      * @param root
      * @return
      */
@@ -1120,42 +1190,6 @@ public class TreeProblems {
         int right = diameterOfTree(tree.getRightNode(), res);
         res[0] = Math.max(res[0], left + right + 1);
         return Math.max(left, right) + 1;
-    }
-
-    /**
-     * https://leetcode.com/problems/house-robber-iii/
-     *
-     * @param root
-     * @return
-     */
-    public int rob(Node root) {
-        return rob(root, new HashMap<>());
-    }
-
-
-    /**
-     * https://leetcode.com/problems/house-robber-iii/
-     *
-     * @param root
-     * @param map
-     * @return
-     */
-    public int rob(Node root, HashMap<Node, Integer> map) {
-
-        if (root == null) return 0;
-        if (map.containsKey(root)) return map.get(root);
-        int val = root.data;
-        if (root.left != null) {
-            val += rob(root.left.left, map) + rob(root.left.right, map);
-        }
-
-        if (root.right != null) {
-            val += rob(root.right.left, map) + rob(root.right.right, map);
-        }
-
-        val = Math.max(val, rob(root.left, map) + rob(root.right, map));
-        map.put(root, val);
-        return val;
     }
 
     /**
