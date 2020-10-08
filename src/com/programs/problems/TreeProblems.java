@@ -1001,34 +1001,31 @@ public class TreeProblems {
             set.add(i);
         }
         List<TreeNode> res = new ArrayList<>();
-
         delete(root, null, set, res);
-
         return res;
     }
 
     public void delete(TreeNode root, TreeNode p, HashSet<Integer> set, List<TreeNode> res) {
-        if (root == null) return;
-        if (p == null && !set.contains(root.value)) {
-            res.add(root);
-        }
-
-        if (set.contains(root.value)) {
-
-            if (p != null) {
-                if (p.left == root) {
-                    p.left = null;
-                } else {
-                    p.right = null;
-                }
-            }
-
-            delete(root.left, null, set, res);
-            delete(root.right, null, set, res);
-        } else {
-            delete(root.left, root, set, res);
-            delete(root.right, root, set, res);
-        }
+       if(root==null) return;
+       if(set.contains(root.value)){
+           if(p!=null){
+               if(p.left==root){
+                   p.left=null;
+               }
+               else{
+                   p.right = null;
+               }
+           }
+           delete(root.left, null, set, res);
+           delete(root.right, null, set, res);
+       }
+       else{
+           if(p==null) {
+               res.add(root);
+           }
+           delete(root.left, root, set, res);
+           delete(root.right, root, set, res);
+       }
     }
 
     /**
