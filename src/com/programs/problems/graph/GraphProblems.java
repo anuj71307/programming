@@ -12,10 +12,61 @@ public class GraphProblems {
     public static void main(String[] args) {
         GraphProblems gp = new GraphProblems();
 
-        int[][] arr = {{1,3}, {0,2}, {1,3}, {0,2}};
-        System.out.println(gp.isBipartiteDfs(arr));
+        int[][] arr = {{1,1,1,1,1,1,1,0}};
+        System.out.println(gp.closedIsland(arr));
     }
 
+
+    /**
+     * https://leetcode.com/problems/number-of-closed-islands/
+     * Leetcode 1254
+     * First traverse all the boundry of matrix and mark it visited if its 0. if we can not modify input array then
+     * use a seperate array to check if its visited or not
+     * Once all the boundry and its childs are marked. we simply visit rest of the matrix where value is 0.
+     * @param grid
+     * @return
+     */
+    public int closedIsland(int[][] grid) {
+        int res = 0;
+        int rows = grid.length;
+        int cols = grid[0].length;
+        for(int i =0;i<rows;i++){
+            if(grid[i][0]==0){
+                dfs(grid, i, 0);
+            }
+            if(grid[i][cols-1]==0){
+                dfs(grid, i, cols-1);
+            }
+        }
+
+        for(int i =0;i<cols;i++){
+            if(grid[0][i]==0 ){
+                dfs(grid, 0, i);
+            }
+            if(grid[rows-1][i]==0 ){
+                dfs(grid, rows-1, i);
+            }
+        }
+
+        for (int i =0; i<rows;i++){
+            for (int j = 0;j<cols;j++){
+                if(grid[i][j]==0){
+                    dfs(grid, i, j);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    private void dfs(int[][] grid, int row, int col) {
+        if(row<0 || col<0 || row>=grid.length || col>=grid[0].length || grid[row][col]>0) return;
+        grid[row][col] = 2;
+        dfs(grid, row, col+1);
+        dfs(grid, row, col-1);
+        dfs(grid, row+1, col);
+        dfs(grid, row-1, col);
+    }
 
     /**
      * https://leetcode.com/problems/is-graph-bipartite/
