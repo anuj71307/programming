@@ -45,6 +45,66 @@ public class ArrayProblems {
     }
 
     /**
+     * https://leetcode.com/problems/number-of-good-pairs/
+     * Leetcode 1512
+     * Time complexity - O(N)
+     * @param nums
+     * @return
+     */
+    public int numIdenticalPairs(int[] nums) {
+        if(nums==null || nums.length<2) return 0;
+        int ans = 0;
+        int res[] = new int[101];
+        for(int i =0;i<nums.length;i++){
+            ans+=res[nums[i]];
+            res[nums[i]]++;
+
+        }
+        return ans;
+    }
+
+    /**
+     * https://leetcode.com/problems/number-of-good-pairs/
+     * Leetcode 1512
+     * @param nums
+     * Time complexity - O(NLogN)
+     * Space Complexity - O(1)
+     * @return
+     */
+    public int numIdenticalPairsNLogN(int[] nums) {
+        if(nums==null || nums.length<2) return 0;
+        int ans = 0;
+        Arrays.sort(nums);
+        for(int i=0;i<nums.length;){
+            int j = i+1;
+            for(int k =1; j<nums.length && nums[j]==nums[i];j++,k++){
+                ans+=k;
+            }
+            i =j;
+        }
+        return ans;
+    }
+
+    /**
+     * https://leetcode.com/problems/number-of-good-pairs/
+     * Leetcode 1512
+     * @param nums
+     * Time complexity - O(N^2)
+     * Space Complexity - O(1)
+     * @return
+     */
+    public int numIdenticalPairsNSquare(int[] nums) {
+        if(nums==null || nums.length<2) return 0;
+        int ans = 0;
+        for(int i =0;i<nums.length;i++){
+            for(int j =i+1;j<nums.length;j++){
+                if(nums[i]==nums[j]) ans++;
+            }
+        }
+        return ans;
+    }
+
+    /**
      * https://leetcode.com/problems/k-diff-pairs-in-an-array/
      * Leetcode 532
      * For sorting check findPairsSorting
