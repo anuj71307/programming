@@ -34,6 +34,32 @@ public class StringProblems {
     }
 
     /**
+     * https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/
+     * Leetcode 395
+     * @param s
+     * @param k
+     * @return
+     */
+    public int longestSubstring(String s, int k) {
+        return longestSubstring(s, 0, s.length()-1, k);
+    }
+
+    public int longestSubstring(String str, int start, int end , int k){
+        if(start>end || end-start+1<k) return 0;
+        int[] map = new int[26];
+        for(int i =start; i<=end;i++){
+            map[str.charAt(i)-'a']++;
+        }
+        for(int mid =start; mid<=end;mid++){
+            int i = str.charAt(mid)-'a';
+            if(map[i]>0 && map[i]<k){
+                return Math.max(longestSubstring(str, start, mid-1, k), longestSubstring(str, mid+1, end, k));
+            }
+        }
+        return end-start+1;
+    }
+
+    /**
      * https://leetcode.com/problems/simplify-path/
      * Leetcode - 71
      * @param path
